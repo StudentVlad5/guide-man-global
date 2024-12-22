@@ -1,0 +1,58 @@
+@import './mixins';
+
+.homePage {
+    margin-top: 95px;
+    margin-bottom: 190px;
+  
+    @include onMobile {
+      margin-top: 85px;
+      margin-bottom: 175px;
+    }
+  
+    & .page:first-child {
+      margin-top: 0;
+    }
+  
+    & .page:last-child {
+        margin-bottom: 0;
+      }
+    
+  
+    &__title {
+      margin-bottom: 86px;
+  
+      @include onMobile {
+        margin-bottom: 14.5px;
+      }
+    }
+  
+    &__questions {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+  
+      @include onMobile {
+        gap: 30px;
+        padding: 0 16px;
+      }
+    }
+  
+    &__allButton {
+      @include onMobile {
+        height: 33px;
+      }
+    }
+  
+    &__explanation {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 25px;
+      row-gap: 72px;
+  
+      @include onMobile {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+    }
+  }

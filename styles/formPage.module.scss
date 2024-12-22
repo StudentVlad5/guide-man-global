@@ -1,0 +1,39 @@
+@import './mixins';
+
+.formPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    &__form {
+      width: 70%;
+      text-align: center;
+
+      &__button {
+        width: 400px;
+        height: 85px;
+        box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
+        border-radius: 13.376px;
+        border: none;
+        font-family: 'Montserrat';
+        font-size: 33.44px;
+        line-height: 43px;
+
+        @include onMobile {
+          font-size: 12.44px;
+          line-height: 130%;
+          border-radius: 4.976px;
+
+          width: 200px;
+          height: 40px;
+        }
+      }
+  
+      @include onMobile {
+        width: 100%;
+      }
+    }
+
+    
+  }
+  

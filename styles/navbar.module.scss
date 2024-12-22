@@ -1,0 +1,156 @@
+@import './mixins';
+@import "./variables";
+
+.navbar {
+    display: grid;
+    grid-template-columns: 2fr 6fr 4fr;
+    align-items: center;
+    font-size: 16px;
+    z-index: 100;
+  
+    @include onLaptop {
+      font-size: 14px;
+      position: relative;
+    }
+  
+    @include onMobile {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 30%;                        
+      width: 70vw;
+        
+      height: 100vh;
+      background-color: #fff;
+  
+      padding: 40px;
+      font-size: 16px;
+  
+      transform: translateX(100%);
+      transition: $transition-speed;
+    }
+  
+    &__item {
+      padding-right: 40px;
+  
+      &:last-child {
+        padding-right: 0;
+      }
+  
+      &__account {
+        color: $white2;
+        background-color: $dark;
+        padding: 8px 20px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+      }
+  
+      @include onSmallDesktop {
+        padding-right: 20px;
+      }
+     
+      @include onLaptop {
+        padding-right: 10px;
+      }
+  
+      @include onMobile {
+        line-height: inherit;
+        padding-right: 0;
+        padding-bottom: 50px;
+  
+        &:last-child {
+          padding-bottom: 70px;
+        }
+      }
+    }
+    
+  
+    &__link {
+      white-space: nowrap;
+      display: block;
+  
+      &__active {
+        border-bottom: 1px solid;
+        padding-bottom: 0;
+  
+        @include onMobile {
+          border: none;
+        }
+      }
+    }
+  
+    &__container {
+      display: flex;
+      list-style-type: none;
+      align-items: center;
+  
+      &__between {
+        width: 15px;
+      }
+  
+      @include onMobile{
+        flex-direction: column;
+        align-items: flex-start;
+  
+  
+        &:first-child {
+          align-self: center;
+          margin-bottom: 50px;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
+  
+        &:nth-child(2) {
+          margin-bottom: 80px;
+          width: 100%;
+        }
+      }
+  
+      &__large {
+        justify-content: end;
+  
+        @include onMobile {
+          display: none;
+        }
+      }
+  
+      &__small {
+        display: none;
+        @include onMobile {
+          display: block;
+          width: 100%;
+          z-index: 100;
+  
+          & .navbar__link {
+            border-bottom: 1px solid;
+            width: max-content;
+          }
+        }
+      }
+  
+    }
+  
+    &__cross {
+      cursor: pointer;
+    }
+
+    
+
+    &__logout {
+      background: none;
+      border: none;
+      width: 100%;
+      font-family: inherit;
+      font-size: inherit;
+      
+      @include onMobile {
+        border-bottom: 1px solid #000;
+        width: max-content;
+      }
+    }
+  }

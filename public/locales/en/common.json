@@ -1,0 +1,137 @@
+{  
+      "head": {
+        "home": {
+          "title": "legal portal for foreign citizens",
+          "description": "Legal portal 【Global Guide Service】 for foreigners☝️ Legal advice and assistance to foreigners in Ukraine✔️ Legal advice⚡ Global Chat⭐ Legal advice and support",
+          "h1": "Global Guide Service"
+        },
+
+        "news": {
+          "new": "News",
+          "inSite": "on the site globalguide.com"
+        },
+
+        "post": {
+          "title": "blog article",
+          "desc": "Related article"
+        },
+        "service": {
+          "title": "consultations and legal assistance in Ukraine",
+          "desc1": "registration with the help of 【Global Guide Service】 ➤➤➤",
+          "desc2": "legal assistance⚡ Accompanying a lawyer✔️ Assistance in collecting documents✍ Minimum processing time⌚️"
+        } 
+      },
+
+      "header": {
+        "search": "Search"
+      },
+ 
+      "navbar": {
+        "services": "Services",
+        "chat": "Global chat",
+        "about": "About GGS",
+        "news": "News",
+        "explanations": "Links",
+        "register": "Register",
+        "cabinet": "Login to account",
+        "login": "Login",
+        "register_mobile": "Register",
+        "account": " Account"
+      },
+
+      "homePage": {
+        "banner": {
+          "h1": "Services for foreigners",
+          "label_title1": "Choose a service",
+          "label_title2": "Type of service",
+
+          "bannerDropdown": {
+            "title1": "Select",
+            "title2": "Specify service type"
+          },
+
+          "go": "Go"
+        },
+        "faq": "Frequently asked questions",
+        "aq": "All questions",
+        "knowMore": "Learn more",
+
+        "questions": {
+          "home": "Go to Home"
+        }
+      },
+      "explanations": {
+        "readMore": "Read more",
+        "explanations": "Links",
+        "allExplanations": "All links"
+      },
+
+      "pageNavigation": {
+        "main": "Home",
+        "sitemap": "Site Map"
+      },
+
+      "footer": {
+        "content": "LLC «GLOBAL GUIDE SERVICE» is the guarantor of your legal security in Ukraine.",
+        "support": "Support"
+      },
+
+      "services": {
+        "citizens": "Ukrainian citizens",
+        "foreigners": "Foreigners",
+
+        "borderControl": "Border control",
+        "customControl": "Customs control",
+        "ban": "Ban on entry into Ukraine",
+        "deportation": "Deportation from Ukraine",
+        "legalization": "Legalization in Ukraine",
+        "document": "Document service",
+        "monitoring": "Monitoring",
+
+        "allServices": "All services"
+      },
+
+      "citizenship":{
+        "title": "Legalization in Ukraine: citizenship",
+        "button": "Questions of citizenship"
+      },
+
+      "newsPage": {
+        "button": "Latest news"
+      },
+
+      "chatPage": {
+        "button": "Go to chat"
+      },
+
+      "form": {
+        "entry": "LogIn",
+        "register": "Register",
+        "phone": "Phone Number",
+        "password": "Password", 
+        "rememberMe": "Remember me",
+        "signUp": "SignUp",
+        "logIn": "LogIn",
+        "forget": "Forgot password?"
+      },
+
+      "validForm": {
+        "fillField": "*  Fill in the field, please!",
+        "phoneNomber": "* Phone number entered incorrectly!",
+        "email": "* Email entered incorrectly!",
+        "password": "* The password must contain at least 6 digits!"
+      },
+
+      "logOut": "LogOut",
+
+      "microdatas": {
+        "newsAbout": "Law news for foreigners",
+        "explanationsAbout": "Links on the Global Guide Service website"
+      },
+
+      "errorPage": {
+        "h2": "Sorry, this page is not available",
+        "p": "You may have used an invalid link or this page has been removed",
+        "button": "Return to previous page"
+      }
+  }

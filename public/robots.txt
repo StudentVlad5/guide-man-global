@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /adminPanel
+
+User-agent: *
+Disallow: /account
+
+User-agent: *
+Disallow: /registration
+
+User-agent: *
+Allow: /
+
+Sitemap: https://global-guide.vercel.app/sitemap.xml
+Sitemap: https://global-guide.vercel.app/sitemap_image.xml

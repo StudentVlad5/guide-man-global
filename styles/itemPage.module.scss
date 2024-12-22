@@ -1,0 +1,138 @@
+@import "./variables";
+@import './mixins';
+
+.itemPage {
+    display: flex;
+    flex-direction: column;
+  
+    &__img {
+      height: 240px;
+      margin-bottom: 45px;
+  
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+  
+      @include onMobile {
+        height: 160px;
+        margin-bottom: 15px;
+      }
+    }
+  
+    &__title {
+      margin-bottom: 45px;
+  
+      @include onMobile {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #000;
+  
+        margin-bottom: 25px;
+      }
+    }
+    & table, td, th {
+      border: 1px solid $dark;
+      border-collapse:collapse;
+      padding: 5px;
+      font-size: inherit;
+  
+      @include onLaptop {
+        font-size: 14px;
+      }
+  
+      @include onMobile {
+        font-size: 12px;
+        line-height: 150%;
+      }
+    }
+  
+    & table {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    & p {
+      color: $dark;
+    }
+    &__text {
+      font-size: 20px;
+      line-height: 200%;
+      letter-spacing: -0.75px;
+  
+      margin-bottom: 45px;
+  
+      & p {
+        margin-bottom: 20px;
+      }
+  
+      & ul, ol {
+        padding-left: 15px;
+        margin-bottom: 20px;
+  
+        & ol {
+          padding: 0;
+          list-style-type: lower-latin;
+          padding-left: 25px;
+        }
+        
+        & p {
+          margin-bottom: 10px;
+        }
+      }
+  
+      & h3 {
+        font-size: 22px;
+        line-height: 150%;
+        letter-spacing: -0.75px;
+        font-weight: 700;
+        margin-bottom: 15px;
+  
+    
+        @include onMobile {
+          font-size: 16px;
+          line-height: 151%;
+          letter-spacing: -0.41167px;
+        }
+      }
+      & h4 {
+        font-size: 20px;
+        line-height: 150%;
+        letter-spacing: -0.75px;
+        font-weight: 700;
+        margin-bottom: 15px;
+  
+    
+        @include onMobile {
+          font-size: 14px;
+          line-height: 151%;
+          letter-spacing: -0.41167px;
+        }
+      }
+  
+      @include onMobile {
+        font-size: 16px;
+        line-height: 188%;
+  
+        margin-bottom: 30px;
+      }
+  
+      &:nth-last-child(2) {
+        margin-bottom: 68px;
+  
+        margin-bottom: 33px;
+      }
+    }
+  
+    &__underline {
+      text-decoration: underline;
+    }
+  
+    & a {
+      color: $gray;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }

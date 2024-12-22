@@ -1,0 +1,18 @@
+@mixin onMobile {
+    @media (max-width: 768px) {
+      @content;
+    }
+  }
+  
+  @mixin onLaptop {
+    @media (max-width: 1000px) {
+      @content;
+    }
+  }
+  
+  @mixin onSmallDesktop {
+    @media (max-width: 1200px) {
+      @content;
+    }
+  }
+  

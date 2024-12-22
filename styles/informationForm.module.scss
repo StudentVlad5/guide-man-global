@@ -1,0 +1,171 @@
+@import './mixins';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.image {
+  position: relative;
+  width: 500px;
+
+  @include onMobile {
+    width: 250px;
+  }
+
+  &__img {
+    height: 150px;
+    border-radius: 8px;
+    object-fit: cover;
+    width: 100%;
+
+    @include onMobile {
+      height: 75px;
+    }
+  } 
+}
+
+.file {
+  position: absolute;
+  opacity: 0;
+  top: 80px;
+  left: 475px;
+  height: 40px;
+  width: 40px;
+
+  @include onMobile {
+    top: 15px;
+    left: 225px;
+  }
+
+}
+
+.addPhoto {
+  position: absolute;
+  top: 80px;
+  left: 475px;
+
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 100;
+
+  @include onMobile {
+    top: 15px;
+    left: 225px;
+  }
+
+  & img {
+    height: 25px;
+  }
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+
+    &__button {
+      color: #fff;
+      border: none;
+      background: none;
+      width: 70px;
+     
+      font-family: inherit;
+
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding-top: 5px;
+      
+      &__active {
+        background: #897E7E;
+      }
+    }
+
+    &__body {
+      background: #897E7E;
+      padding: 10px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      &__right {
+        border-top-right-radius: 8px;
+      }
+
+      &__left {
+        border-top-left-radius: 8px;
+      }
+
+      &__center {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+
+      & textarea {
+        height: 90px;
+        resize: none;
+        font-family: Roboto, serif;
+
+        font-family: Montserrat;
+        font-size: 14px;
+  
+        &::placeholder {
+          font-family: Montserrat;
+          font-size: 14px;
+        }
+      }
+
+    }
+}
+
+.input {
+  width: 100%;
+  outline: none;
+  border-radius: 8px;
+  height: 40px;
+  padding: 10px;
+  border: none;
+  font-family: Montserrat;
+  font-size: 14px;
+
+  &::placeholder {
+    font-family: Montserrat;
+    font-size: 14px;
+  }
+}
+
+.ReactQuill {
+  background: #fff;
+  border-radius: 8px;
+  border: none;
+}
+
+.label {
+ 
+
+  &__p {
+    margin-bottom: 5px;
+     color: #fff;
+  }
+}
+
+.submitButton {
+  background: #897E7E;
+  border-radius: 8px;
+  border: none;
+  width: 50%;
+  margin: 0 auto;
+  height: 40px;
+}
+
+.serviceType {
+  color: #fff;
+}

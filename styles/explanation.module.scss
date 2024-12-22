@@ -1,0 +1,66 @@
+@import './mixins';
+@import "./variables";
+
+.explanation {
+    height: max-content;
+    padding-left: 42px;
+    padding-right: 30px;
+  
+    @include onMobile {
+      padding-left: 20px;
+      padding-right: 10px;
+    }
+  
+      &:hover {
+        background: $white1;
+        padding-top: 30px ;
+  
+        & div {
+          margin-bottom: 15px;
+        }
+        
+  
+        @include onMobile {
+          padding-top: 10px;
+        }
+  
+        & button {
+          display: block;
+          
+          @include onMobile {
+            width: 93px;
+            height: 19px;
+          }
+        }
+      }
+  
+    &__title {
+      margin-bottom: 15px;
+  
+      @include onMobile {
+        margin-bottom: 10px;
+      }
+    }
+  
+    &__text {
+      font-size: 18px;
+      line-height: 183%;
+      letter-spacing: -0.75px;
+      color: $gray;
+  
+      @include onMobile {
+        font-size: 12px;
+        line-height: 125%;
+        letter-spacing: -0.540432px;
+      }
+    }
+  
+    &__button {
+      margin-bottom: 22px;
+      display: none;
+  
+      @include onMobile {
+        margin-bottom: 10px;
+      }
+    }
+  }

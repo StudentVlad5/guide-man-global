@@ -1,0 +1,32 @@
+@import "./variables";
+
+.inputSearchDropdown {
+    position: absolute;
+    left: 0;
+    top: 40px;
+    width: 100%;
+    background: $white2;
+    border-bottom: 1px solid $gray;
+    border-left: 1px solid $gray;
+    border-right: 1px solid $gray;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    height: auto;
+    overflow: auto;
+    padding-top: 5px;
+    z-index: 150;
+  
+    &__item {
+      padding: 0 10px 10px 10px;
+      color: $gray;
+  
+      &:hover {
+        background: $gray;
+        cursor: pointer;
+        color: $dark;
+        transition: all $transition-speed;
+      }
+    }
+  }

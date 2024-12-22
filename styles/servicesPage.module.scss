@@ -1,0 +1,41 @@
+@import './mixins';
+
+.servisesPage {
+    &__content {
+      display: grid;
+      grid-template-columns: 2fr 4fr 4fr;
+      gap: 75px;
+  
+      & div:first-child {
+        & label:first-child {
+          margin-top: 10px;
+        }
+      }
+  
+      @include onSmallDesktop {
+        gap: 30px;
+      }
+  
+      @include onLaptop {
+        gap: 20px;
+      }
+  
+      @include onMobile {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+      }
+    }
+  
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  
+      @include onMobile {
+        &:first-child {
+          margin-bottom: 33px;
+        }
+      }
+    }
+  }

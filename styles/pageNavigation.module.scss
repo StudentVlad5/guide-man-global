@@ -1,0 +1,36 @@
+@import './mixins';
+@import "./variables";
+
+.pageNavigation {
+    display: flex;
+    font-size: 15px;
+    letter-spacing: -0.75px;
+    list-style-type: none;
+    height: 2rem;
+   
+    white-space: nowrap;
+    
+    margin-top: 40px;
+  
+    & li {
+      padding-right: 5px;
+  
+      &:last-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  
+    & p {
+      display: inline;
+    }
+  
+    @include onMobile {
+      margin-top: 20px;
+      font-size: 12px;
+    }
+  
+    &__navigation {
+      border-bottom: 1px solid $dark;
+    }
+  }

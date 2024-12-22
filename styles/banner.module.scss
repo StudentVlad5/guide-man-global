@@ -1,0 +1,104 @@
+@import './mixins';
+
+.banner {
+    height: 360px;
+    background: linear-gradient(180deg, rgba(55, 81, 255, 0.74) 0%, rgba(255, 235, 55, 0.3) 100%);
+    padding-top: 60px;
+    font-size: 22px;
+    line-height: 150%;
+    letter-spacing: -0.75px;
+  
+    @include onSmallDesktop {
+      font-size: 18px;
+      line-height: 200%;
+    }
+  
+    @include onLaptop {
+      font-size: 16px;
+    }
+  
+    @include onMobile {
+      font-size: 15px;
+      padding-top: 40px;
+      height: max-content;
+    }
+  
+  
+    &__title {
+      text-align: center;
+      text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+      font-size: 43px;
+      line-height: 77%;
+      letter-spacing: -0.75px;
+      font-weight: 400;
+  
+      margin-bottom: 85px;
+  
+      @include onMobile {
+        margin-bottom: 36.5px;
+        font-size: 25px;
+        line-height: 105%;
+      }
+    }
+    
+  
+    &__label {
+      @include onMobile {
+        margin-bottom: 20px;
+  
+        &:nth-child(2) {
+          margin-bottom: 30px;
+        }
+      }
+  
+      &__title {
+        font-size: 22px;
+        line-height: 150%;
+        letter-spacing: -0.75px;
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+  
+        margin-bottom: 35px;
+
+        &__tulp {
+          opacity: 0;
+        }
+  
+        @include onLaptop {
+          font-size: 20px;
+          line-height: 33px;
+        }
+  
+        @include onMobile {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  
+    &__dropdowns {
+      display: grid;
+      grid-template-columns: 4fr 5.5fr 2fr;
+      gap: 28px;
+  
+      @include onMobile {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+  
+      & button {
+        align-self: start;
+      }
+    }
+  
+    &__button {
+      height: 80px;
+      font-size: 22px;
+      line-height: 150%;
+  
+      @include onMobile {
+        height: 43px;
+        width: 100%;
+        margin-bottom: auto;
+      }
+    }
+  }

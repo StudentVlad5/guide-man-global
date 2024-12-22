@@ -1,0 +1,53 @@
+{
+  "name": "global_guide",
+  "homepage": "https://Julia2063.github.io/global_guide",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@svgr/webpack": "^8.0.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "clsx": "^1.2.1",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.0.3",
+    "firebase": "^9.18.0",
+    "gh-pages": "^5.0.0",
+    "i18next": "^24.2.0",
+    "next": "^13.3.3",
+    "next-i18next": "^13.2.2",
+    "nextjs-progressbar": "^0.0.16",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^15.2.0",
+    "react-quill": "^2.0.0",
+    "swiper": "^9.2.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.4",
+    "sass": "^1.62.1"
+  }
+}

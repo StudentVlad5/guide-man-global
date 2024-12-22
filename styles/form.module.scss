@@ -1,0 +1,232 @@
+@import './mixins';
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: Montserrat;
+    color: #000;
+    font-family: 'Montserrat';
+    font-weight: 400;
+    font-size: 27px;
+    line-height: 169%; 
+  
+    @include onMobile {
+      font-size: 10px;
+    }
+    
+    &__buttons {
+      height: 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 8.36px;
+      gap: 16.7px;
+      background: #EFEFEF;
+      border-radius: 13.376px;
+      margin-bottom: 55.7px;
+  
+      @include onMobile {
+        height: 38px;
+        border-radius: 4.976px;
+  
+        margin-bottom: 32px;
+      }
+    }
+  
+    &__toggle__button {
+      border: none;
+      border-radius: 13.376px;
+      font-size: 33.44px;
+      line-height: 43px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+       @include onMobile {
+        font-size: 12.44px;
+        line-height: 130%;
+        border-radius: 4.976px;
+      }
+  
+      &__active {
+        background: #FFFFFF;
+        box-shadow: 1.6719999313354492px 1.6719999313354492px 6.687999725341797px 0px rgba(0, 0, 0, 0.1);
+      }
+    }
+  
+    &__inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 47px;
+  
+      margin-bottom: 56px;
+  
+      @include onMobile {
+        gap: 10px;
+  
+        margin-bottom: 16px;
+      }
+    }
+  
+    &__input {
+      height: 65px;
+      border: none;
+      border-bottom: 1.672px solid rgba(8, 9, 11, 0.5);
+      background: none;
+      outline: none;
+      font-size: 26.752px;
+      line-height: 169%;
+      width: 100%;
+
+     
+      @include onMobile {
+        font-size: 12px;
+        line-height: 169%;  
+        border-bottom: 0.764px solid rgba(8, 9, 11, 0.5);;
+        
+        height: 40px;
+      }
+  
+      &::placeholder {
+        font-weight: 400;
+        font-size: 26.752px;
+        line-height: 169%;
+        color: #08090B;
+        font-family:  Montserrat;
+  
+        @include onMobile {
+          font-size: 12px;
+        }
+      }
+    }
+
+    &__input__danger {
+
+      height: 65px;
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 26.752px;
+      line-height: 169%;
+      border-bottom: 1.672px solid red;
+      width: 100%;
+      color: red;
+     
+      @include onMobile {
+        font-size: 12px;
+        line-height: 169%;  
+        border-bottom: 0.764px solid red;
+        
+        height: 40px;
+      }
+      
+
+      &::placeholder {
+        font-weight: 400;
+        font-size: 26.752px;
+        line-height: 169%;
+        color: red;
+        font-family:  Montserrat;
+  
+        @include onMobile {
+          font-size: 12px;
+        }
+      }
+    }
+
+    
+  
+    &__checkbox__label {
+      align-self: start;
+      margin-bottom: 47px;
+      display: flex;
+      position: relative;
+      padding-left: 46px;
+      cursor: pointer;
+  
+      @include onMobile {
+        margin-bottom: 43px;
+        padding-left: 24px;
+      }
+  
+      & input {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+  
+        &:checked+span::before {
+          background-color: #000000;
+        }
+      }
+  
+      & span {
+        display: inline-flex;
+        align-items: center;
+        user-select: none;
+  
+        &::before {
+        content: "";
+        width: 26.75px;
+        height: 28.72px;
+        border: 1.67px solid rgba(8, 9, 11, 1);
+        border-radius: 3.344px;
+    
+        position: absolute;
+        top: 9px;
+        left: 0;
+  
+        @include onMobile {
+          width: 13.5px;
+          height: 14.5px;
+  
+          top: 0;
+        }
+        }
+      }
+    }
+    
+    &__button {
+      font-weight: 700;
+      font-size: 26.752px;
+      line-height: 169%;
+      padding: 28px 0;
+      border-radius: 6.688px;
+  
+      margin-bottom: 30px;
+  
+      @include onMobile {
+        font-size: 9.952px;
+        line-height: 12px;
+        padding: 10.5px 0;
+        border-radius: 2.5px;
+  
+        margin-bottom: 11px;
+      }
+    }
+  
+    &__forget {
+      border: none;
+      background: none;
+      font-size: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      color: inherit;
+    }
+
+    &__validError {
+      color: red;
+      font-size: 16px;
+      position: absolute;
+      top: 65px;
+      left: 0;
+
+      @include onMobile {
+        top: 40px;
+        font-size: 8px;
+      }
+    }
+
+    &__inputContainer {
+      position: relative;
+    }
+  }

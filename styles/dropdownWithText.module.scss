@@ -1,0 +1,66 @@
+@import './mixins';
+@import "./variables";
+
+.dropdownWithText {
+    &__body {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+  
+      @include onMobile {
+        gap: 12.35px;
+      }
+  
+      &__open {
+        margin-bottom: 40px;
+  
+        @include onMobile {
+          margin-bottom: 8.5px;
+        }
+      }
+    }
+  
+    &__button {
+      background: inherit;
+      border: none;
+  
+      @include onMobile {
+        & img {
+          width: 6px;
+          height: 5px;
+        }
+      }
+    }
+  
+    &__icon__rotate {
+      transform: rotate(180deg);
+  
+    }
+  
+    &__text {
+      width: 68%;
+      font-size: 18px;
+      line-height: 167%;
+      color: $gray;
+  
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+  
+      @include onMobile {
+        font-size: 12px;
+        line-height: 125%;
+        gap: 30px;
+      }
+  
+  
+      &__button {
+        width: 216px;
+  
+        @include onMobile {
+          width: 93px;
+        }
+      }
+    }
+  }
+
