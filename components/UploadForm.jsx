@@ -1,59 +1,63 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 
-const UploadForm = () => {
-  const [fileUrl, setFileUrl] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+export default function Home() {
+  const [signerEmail, setSignerEmail] = useState("");
+  const [signerName, setSignerName] = useState("");
+  const [ccEmail, setCcEmail] = useState("");
+  const [ccName, setCcName] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const res = await fetch("/api/docusign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ signerEmail, signerName, ccEmail, ccName }),
+    });
 
-    try {
-      const response = await axios.post("/api/docusign", {
-        fileUrl,
-        name,
-        email,
-      });
-      alert(`Документ отправлен, ID: ${response.data.envelopeId}`);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при отправке документа");
+    const data = await res.json();
+    if (res.ok) {
+      setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
+    } else {
+      setMessage(`Error: ${data.error}`);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Имя:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Email:</label>
+    <div>
+      <h1>DocuSign Integration</h1>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Signer Email"
+          value={signerEmail}
+          onChange={(e) => setSignerEmail(e.target.value)}
           required
         />
-      </div>
-      <div>
-        <label>Ссылка на файл:</label>
         <input
-          type="url"
-          value={fileUrl}
-          onChange={(e) => setFileUrl(e.target.value)}
+          type="text"
+          placeholder="Signer Name"
+          value={signerName}
+          onChange={(e) => setSignerName(e.target.value)}
           required
         />
-      </div>
-      <button type="submit">Отправить</button>
-    </form>
+        <input
+          type="email"
+          placeholder="CC Email"
+          value={ccEmail}
+          onChange={(e) => setCcEmail(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="CC Name"
+          value={ccName}
+          onChange={(e) => setCcName(e.target.value)}
+          required
+        />
+        <button type="submit">Send for Signing</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
   );
-};
-
-export default UploadForm;
+}
