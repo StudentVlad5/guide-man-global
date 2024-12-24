@@ -14,8 +14,8 @@ const privateKeyBuffer = Buffer.from(privateKey, 'utf8');
 
 
 const demoDocsPath = path.resolve(
-  "",
-  "https://guide-man-global.vercel.app/demo_documents"
+  __dirname,
+  "../public/demo_documents"
 );
 
 const doc2File = "World_Wide_Corp_Battle_Plan_Trafalgar.docx";
