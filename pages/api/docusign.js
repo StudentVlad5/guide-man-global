@@ -3,8 +3,14 @@ const docusign = require('docusign-esign');
 import fs from 'fs';
 import path from 'path';
 
-const jwtConfig = require('../../jwtConfig.json');
-const demoDocsPath = path.resolve(__dirname, '../../demo_documents');
+const jwtConfig = {
+  dsJWTClientId: process.env.DS_JWT_CLIENT_ID,
+  impersonatedUserGuid: process.env.DS_IMPERSONATED_USER_GUID,
+  privateKeyLocation:  "./private.key",
+  dsOauthServer: process.env.DS_OAUTH_SERVER
+}
+
+const demoDocsPath = path.resolve(__dirname, '../../../../public/demo_documents');
 const doc2File = 'World_Wide_Corp_Battle_Plan_Trafalgar.docx';
 const doc3File = 'World_Wide_Corp_lorem.pdf';
 
