@@ -14,7 +14,7 @@ const privateKeyBuffer = Buffer.from(privateKey, 'utf8');
 
 
 const demoDocsPath = path.resolve(
-  "https://guide-man-global.vercel.app/",
+  "https://guide-man-global.vercel.app",
   "/demo_documents"
 );
 
