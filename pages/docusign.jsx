@@ -18,9 +18,9 @@ export default function DocusignPage({ news }) {
 
   return (
     <Layout
-      type="service page"
-      desctiption={`⭐${t("navbar.news")}⭐ ${t("head.home.description")}`}
-      h1={t("navbar.news")}
+      type="docusign page"
+      desctiption={`⭐${t("navbar.docusign")}⭐ ${t("head.home.description")}`}
+      h1={t("navbar.docusign")}
       script={`
         {
             "@context": "http://schema.org",

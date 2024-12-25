@@ -9,12 +9,12 @@ const Sitemap_EN = () => {
 export const getServerSideProps = async ({ res }) => {
 
   const staticPaths = [
-    [`${BASE_URL}/en/about`, 'about'],
-    [`${BASE_URL}/en/chat`, 'chat'],
-    [`${BASE_URL}/en/explanations`, 'explanations'],
-    [`${BASE_URL}/en/`, 'index'],
-    [`${BASE_URL}/en/news`, 'news'],
-    [`${BASE_URL}/en/services`, 'services'],
+    [`${BASE_URL}/en/about`, "about"],
+    [`${BASE_URL}/en/chat`, "chat"],
+    [`${BASE_URL}/en/explanations`, "explanations"],
+    [`${BASE_URL}/en/`, "index"],
+    [`${BASE_URL}/en/news`, "news"],
+    [`${BASE_URL}/en/services`, "services"],
   ];
 
   const news =  await getCollection('news');

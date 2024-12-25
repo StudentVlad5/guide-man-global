@@ -24,29 +24,32 @@ export const PageNavigation = ({ title }) => {
         const isLast = index === pathnames.length - 1;
         const currentLocation = () => {
           switch (el) {
-          case 'services':
-            return t('navbar.services');
+            case "services":
+              return t("navbar.services");
 
-          case 'chat':
-            return t('navbar.chat');
+            case "docusign":
+              return t("navbar.docusign");
 
-          case 'news':
-            return t('navbar.news');
+            case "chat":
+              return t("navbar.chat");
 
-          case 'about':
-            return t('navbar.about');
+            case "news":
+              return t("navbar.news");
 
-          case  'explanations':
-            return t('navbar.explanations');
+            case "about":
+              return t("navbar.about");
 
-          case 'citizenship':
-            return t('citizenship.button');
+            case "explanations":
+              return t("navbar.explanations");
 
-          case 'sitemap':
-            return t('pageNavigation.sitemap');
+            case "citizenship":
+              return t("citizenship.button");
 
-          default:
-            return ;
+            case "sitemap":
+              return t("pageNavigation.sitemap");
+
+            default:
+              return;
           }
         };
         return isLast ? (
