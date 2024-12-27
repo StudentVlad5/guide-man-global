@@ -74,20 +74,41 @@ async function sendEnvelope(args) {
   const doc2Base64 = await downloadFileAsBase64(envelopeArgs.doc2File);
   const doc3Base64 = await downloadFileAsBase64(envelopeArgs.doc3File);
 
-  const envelopeDefinition = {
+    const signHereTab = {
+    documentId: "1", // documentId 1 corresponds to doc2 (the Word doc)
+    recipientId: "1", // This corresponds to the signer (recipientId 1)
+    tabLabel: "Sign Here",
+    anchorString: "/sn1/", // Position it with an anchor text (optional, can use absolute position)
+    anchorYOffset: "10", // Y offset from anchor text (optional)
+    anchorXOffset: "10", // X offset from anchor text (optional)
+  };
+
+  // Define other tabs if needed (e.g., date fields, initial fields, etc.)
+  const dateSignedTab = {
+    documentId: "1", // documentId 1 corresponds to doc2 (the Word doc)
+    recipientId: "1", // This corresponds to the signer (recipientId 1)
+    tabLabel: "Date Signed",
+    anchorString: "/ds1/", // Anchor to a specific text in the document
+    anchorYOffset: "20", // Y offset (optional)
+    anchorXOffset: "20", // X offset (optional)
+    type: "DateSigned",
+  };
+
+
+ const envelopeDefinition = {
     emailSubject: "Please sign this document",
     documents: [
       {
         documentBase64: doc2Base64,
         name: "Battle Plan",
         fileExtension: "docx",
-        documentId: "1",
+        documentId: "1", // Document ID should match the ID used in tabs
       },
       {
         documentBase64: doc3Base64,
         name: "Lorem Ipsum",
         fileExtension: "pdf",
-        documentId: "2",
+        documentId: "2", // Document ID for second document
       },
     ],
     recipients: {
@@ -95,21 +116,26 @@ async function sendEnvelope(args) {
         {
           email: envelopeArgs.signerEmail,
           name: envelopeArgs.signerName,
-          recipientId: "1",
+          recipientId: "1", // Signer's recipient ID
           routingOrder: "1",
+          tabs: {
+            signHereTabs: [signHereTab],
+            dateSignedTabs: [dateSignedTab], // Add date signed tab if needed
+          },
         },
       ],
       carbonCopies: [
         {
           email: envelopeArgs.ccEmail,
           name: envelopeArgs.ccName,
-          recipientId: "2",
+          recipientId: "2", // CC's recipient ID
           routingOrder: "2",
         },
       ],
     },
     status: envelopeArgs.status, // 'sent' to send the envelope
   };
+
 
   const dsApi = new docusign.ApiClient();
   dsApi.setBasePath(basePath);
