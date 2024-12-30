@@ -1,5 +1,5 @@
 import {format} from 'date-fns';
-export const BASE_URL = 'https://global-guide.vercel.app';
+export const BASE_URL = "https://guide-man-global.vercel.app/";
 
 const Sitemap = () => {
     return null;
