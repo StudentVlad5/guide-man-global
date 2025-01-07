@@ -11,6 +11,8 @@ import { BASE_URL } from "../sitemap.xml";
 import ErrorPage from "../404";
 import { useContext, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
+import styles from "../../styles/form.module.scss";
+import saveCredentials from "../api/userProfile";
 
 const startCredentials = {
   userName: "",
@@ -45,6 +47,14 @@ export default function ProfileItemPage() {
   const { locale, pathname } = useRouter();
   const { user, setUser } = useContext(AppContext);
   const [userCredentials, setUserCredentials] = useState(startCredentials);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const check = saveCredentials(userCredentials);
+    if (check === 1) {
+      setUserCredentials(startCredentials);
+    }
+  };
 
   return user ? (
     <Layout
@@ -83,25 +93,48 @@ export default function ProfileItemPage() {
       </div>
       <div className="page page-bigBottom">
         <div className="container">
-          <ul className="flexWrap">
-            {Object.keys(userCredentials).map((it) => {
-              return (
-                <li key={it}>
-                  <span>{fieldInput[it]}:</span>
-                  <input
-                    type="text"
-                    value={userCredentials[it]}
-                    onChange={(e) =>
-                      setUserCredentials({
-                        ...userCredentials,
-                        [it]: e.currentTarget.value,
-                      })
-                    }
-                  />
-                </li>
-              );
-            })}
-          </ul>
+          <form className={styles.form}>
+            <ul className="flexWrap">
+              {Object.keys(userCredentials).map((it) => {
+                return (
+                  <li key={it}>
+                    <span>{fieldInput[it]}:</span>
+                    <input
+                      className={styles.form__input}
+                      type="text"
+                      value={userCredentials[it]}
+                      onChange={(e) =>
+                        setUserCredentials({
+                          ...userCredentials,
+                          [it]: e.currentTarget.value,
+                        })
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+            <button
+              type="submit"
+              className={`button ${styles.form__button}`}
+              style={{ marginTop: "20px" }}
+              onClick={(e) => handleSubmit(e)}
+              disabled={
+                userCredentials.userName == "" &&
+                userCredentials.userSurname == "" &&
+                userCredentials.userBirdthDay == "" &&
+                userCredentials.userCitizenship == "" &&
+                userCredentials.userPhoneNumber == "" &&
+                userCredentials.userCountry == "" &&
+                userCredentials.userCity == "" &&
+                userCredentials.userAddress_1 == "" &&
+                userCredentials.userINN == "" &&
+                userCredentials.userPassport == ""
+              }
+            >
+              {t("submit")}
+            </button>
+          </form>
         </div>
       </div>
     </Layout>
