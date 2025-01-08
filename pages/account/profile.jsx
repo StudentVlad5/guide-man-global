@@ -15,31 +15,31 @@ import styles from "../../styles/form.module.scss";
 import saveCredentials from "../api/userProfile";
 
 const startCredentials = {
-  userName: "",
-  userSurname: "",
-  userBirdthDay: "",
-  userCitizenship: "",
-  userPhoneNumber: "",
-  userCountry: "",
-  userCity: "",
-  userAddress_1: "",
-  userAddress_2: "",
-  userINN: "",
-  userPassport: "",
+  name: "",
+  surname: "",
+  birthday: "",
+  citizenship: "",
+  phoneNumber: "",
+  country: "",
+  city: "",
+  address_1: "",
+  address_2: "",
+  inn: "",
+  passport: "",
 };
 
 const fieldInput = {
-  userName: "Name",
-  userSurname: "Surname",
-  userBirdthDay: "BirdthDay",
-  userCitizenship: "Citizenship",
-  userPhoneNumber: "PhoneNumber",
-  userCountry: "Country",
-  userCity: "City",
-  userAddress_1: "Address 1",
-  userAddress_2: "Address 2",
-  userINN: "INN",
-  userPassport: "Passport",
+  name: "Name",
+  surname: "Surname",
+  birthday: "BirdthDay",
+  citizenship: "Citizenship",
+  phoneNumber: "PhoneNumber",
+  country: "Country",
+  city: "City",
+  address_1: "Address 1",
+  address_2: "Address 2",
+  inn: "INN",
+  passport: "Passport",
 };
 
 export default function ProfileItemPage() {
@@ -47,10 +47,14 @@ export default function ProfileItemPage() {
   const { locale, pathname } = useRouter();
   const { user, setUser } = useContext(AppContext);
   const [userCredentials, setUserCredentials] = useState(startCredentials);
-
+  console.log("user", user);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const check = saveCredentials(userCredentials);
+    const check = saveCredentials({
+      ...userCredentials,
+      uid: user.uid,
+      email: user.email,
+    });
     if (check === 1) {
       setUserCredentials(startCredentials);
     }
