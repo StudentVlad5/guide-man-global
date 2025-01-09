@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { Layout } from '../../../components/Layout';
 import { BASE_URL } from '../../sitemap.xml';
 import ErrorPage from '../../404';
-import LawyersRequestPage from './requestPage';
+import LawyersRequestPage from '../../../components/requestPage';
 
 export default function RequestItemPage({ requestItem }) {
   const { t } = useTranslation();

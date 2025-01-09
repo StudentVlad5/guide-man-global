@@ -32,28 +32,28 @@ export const AppProvider = ({ children }) => {
 
   const locale = router.locale;
 
-  const getData = async () => {
-    try {
-      const newsTitles = await getTitleOfPosts('news', locale);
-      const questionsTitles = await getTitleOfPosts('questions', locale);
-      const explanationsTitles = await getTitleOfPosts('explanations', locale);
-      const servicesTitles = await getTitleOfServices(locale);
-      const citizenshipTitles = await getTitleOfPosts('citizenship', locale);
-      const requestsTitles = await getTitleOfPosts('requests', locale);
-      setTitleArr([
-        ...newsTitles,
-        ...questionsTitles,
-        ...explanationsTitles,
-        ...servicesTitles,
-        ...requestsTitles,
-        ...citizenshipTitles,
-      ]);
-      setServicesArray(servicesTitles);
-      setRequestsArray(requestsTitles);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const newsTitles = await getTitleOfPosts('news', locale);
+  //     const questionsTitles = await getTitleOfPosts('questions', locale);
+  //     const explanationsTitles = await getTitleOfPosts('explanations', locale);
+  //     const servicesTitles = await getTitleOfServices(locale);
+  //     const citizenshipTitles = await getTitleOfPosts('citizenship', locale);
+  //     const requestsTitles = await getTitleOfPosts('requests', locale);
+  //     setTitleArr([
+  //       ...newsTitles,
+  //       ...questionsTitles,
+  //       ...explanationsTitles,
+  //       ...servicesTitles,
+  //       ...requestsTitles,
+  //       ...citizenshipTitles,
+  //     ]);
+  //     setServicesArray(servicesTitles);
+  //     setRequestsArray(requestsTitles);
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -69,10 +69,35 @@ export const AppProvider = ({ children }) => {
         }
       );
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
-    getData();
+    // getData();
+    (async () => {
+      try {
+        const newsTitles = await getTitleOfPosts('news', locale);
+        const questionsTitles = await getTitleOfPosts('questions', locale);
+        const explanationsTitles = await getTitleOfPosts(
+          'explanations',
+          locale
+        );
+        const servicesTitles = await getTitleOfServices(locale);
+        const citizenshipTitles = await getTitleOfPosts('citizenship', locale);
+        const requestsTitles = await getTitleOfPosts('requests', locale);
+        setTitleArr([
+          ...newsTitles,
+          ...questionsTitles,
+          ...explanationsTitles,
+          ...servicesTitles,
+          ...requestsTitles,
+          ...citizenshipTitles,
+        ]);
+        setServicesArray(servicesTitles);
+        setRequestsArray(requestsTitles);
+      } catch (error) {
+        alert(error);
+      }
+    })();
   }, [locale]);
 
   const contextValue = useMemo(() => {

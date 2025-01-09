@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { getRightData } from '../../../helpers/rightData';
+import { getRightData } from '../helpers/rightData';
 import { useRouter } from 'next/router';
 
-import styles from '../../../styles/itemPage.module.scss';
-import { ButtonUp } from '../../../components/ButtonUp';
+import styles from '../styles/itemPage.module.scss';
+import { ButtonUp } from './ButtonUp';
 import { useTranslation } from 'next-i18next';
 
 import { QRCode } from 'react-qrcode-logo';
 import { useEffect, useState } from 'react';
-import LawyersRequestForm from '../../../components/LawyersRequestsForm';
-import { auth } from '../../../helpers/firebaseControl';
+import LawyersRequestForm from './LawyersRequestsForm';
+import { auth } from '../helpers/firebaseControl';
 
 export default function LawyersRequestPage({ item, buttonName, linkPath }) {
   const { locale } = useRouter();
