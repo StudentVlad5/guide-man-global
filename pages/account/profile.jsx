@@ -14,20 +14,6 @@ import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import saveCredentials from "../api/userProfile";
 
-const startCredentials = {
-  name: "",
-  surname: "",
-  birthday: "",
-  citizenship: "",
-  phoneNumber: "",
-  country: "",
-  city: "",
-  address_1: "",
-  address_2: "",
-  inn: "",
-  passport: "",
-};
-
 const fieldInput = {
   name: "Name",
   surname: "Surname",
@@ -45,9 +31,22 @@ const fieldInput = {
 export default function ProfileItemPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
-  const { user, setUser } = useContext(AppContext);
-  const [userCredentials, setUserCredentials] = useState(startCredentials);
-  console.log("user", user);
+  const { user } = useContext(AppContext);
+  const [userCredentials, setUserCredentials] = useState({
+    name: user?.name ? user.name : "",
+    surname: user?.surname ? user.surname : "",
+    birthday: user?.birthday ? user.birthday : "",
+    citizenship: user?.citizenship ? user.citizenship : "",
+    phoneNumber: user?.phoneNumber ? user.phoneNumber : "",
+    country: user?.country ? user.country : "",
+    city: user?.city ? user.city : "",
+    address_1: user?.address_1 ? user.address_1 : "",
+    address_2: user?.address_2 ? user.address_2 : "",
+    inn: user?.inn ? user.inn : "",
+    passport: user?.passport ? user.passport : "",
+  });
+  const [editStatus, setEditStatus] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const check = saveCredentials({
@@ -56,7 +55,7 @@ export default function ProfileItemPage() {
       email: user.email,
     });
     if (check === 1) {
-      setUserCredentials(startCredentials);
+      setEditStatus(false);
     }
   };
 
@@ -103,41 +102,58 @@ export default function ProfileItemPage() {
                 return (
                   <li key={it}>
                     <span>{fieldInput[it]}:</span>
-                    <input
-                      className={styles.form__input}
-                      type="text"
-                      value={userCredentials[it]}
-                      onChange={(e) =>
-                        setUserCredentials({
-                          ...userCredentials,
-                          [it]: e.currentTarget.value,
-                        })
-                      }
-                    />
+                    {!editStatus ? (
+                      <div className={styles.form__input}>
+                        {userCredentials[it]}
+                      </div>
+                    ) : (
+                      <input
+                        className={styles.form__input}
+                        type="text"
+                        value={userCredentials[it]}
+                        onChange={(e) =>
+                          setUserCredentials({
+                            ...userCredentials,
+                            [it]: e.currentTarget.value,
+                          })
+                        }
+                      />
+                    )}
                   </li>
                 );
               })}
             </ul>
-            <button
-              type="submit"
-              className={`button ${styles.form__button}`}
-              style={{ marginTop: "20px" }}
-              onClick={(e) => handleSubmit(e)}
-              disabled={
-                userCredentials.userName == "" &&
-                userCredentials.userSurname == "" &&
-                userCredentials.userBirdthDay == "" &&
-                userCredentials.userCitizenship == "" &&
-                userCredentials.userPhoneNumber == "" &&
-                userCredentials.userCountry == "" &&
-                userCredentials.userCity == "" &&
-                userCredentials.userAddress_1 == "" &&
-                userCredentials.userINN == "" &&
-                userCredentials.userPassport == ""
-              }
-            >
-              {t("submit")}
-            </button>
+            {!editStatus ? (
+              <button
+                type="submit"
+                className={`button ${styles.form__button}`}
+                style={{ marginTop: "20px" }}
+                onClick={() => setEditStatus(true)}
+              >
+                {t("edit")}
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className={`button ${styles.form__button}`}
+                style={{ marginTop: "20px" }}
+                onClick={(e) => handleSubmit(e)}
+                disabled={
+                  userCredentials.name == "" &&
+                  userCredentials.surname == "" &&
+                  userCredentials.birthday == "" &&
+                  userCredentials.citizenship == "" &&
+                  userCredentials.phoneNumber == "" &&
+                  userCredentials.country == "" &&
+                  userCredentials.city == "" &&
+                  userCredentials.address_1 == "" &&
+                  userCredentials.inn == "" &&
+                  userCredentials.passport == ""
+                }
+              >
+                {t("submit")}
+              </button>
+            )}
           </form>
         </div>
       </div>

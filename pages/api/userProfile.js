@@ -6,10 +6,7 @@ import {
   setDoc,
 } from "firebase/firestore"; // Import required Firestore functions
 
-export default async function saveCredentials(userCredentials) {
-  console.log("userCredentials", userCredentials.uid);
-
-  try {
+export default async function saveCredentials(userCredentials) {  try {
     const userRef = doc(db, "users", userCredentials.uid); // Get a reference to the document using the uid
     const docSnapshot = await getDoc(userRef);
 
