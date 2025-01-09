@@ -68,31 +68,6 @@ export default async function handler(req, res) {
       formData.emblemBase64 = emblemBase64;
 
       // Генеруємо PDF-файли
-      // const pdfBuffer = await generatePDFBuffer(data);
-      // console.log('handler ~ data:', data);
-
-      // // Зберігаємо запит у Firestore
-      // const fileName = `documents/document-${Date.now()}.pdf`;
-      // const fileRef = ref(storage, fileName);
-      // await uploadBytes(fileRef, pdfBuffer);
-
-      // const pdfDocUrl = await getDownloadURL(fileRef);
-      // const pdfStream = await uploadPDFToStorage(pdfBuffer, fileName, storage);
-
-      // const newRequest = await saveRequestToFirestore(
-      //   db,
-      //   userUID,
-      //   data,
-      //   pdfDocUrl,
-      //   pdfStream
-      // );
-
-      // res.status(200).json({
-      //   message: 'PDF saved successfully!',
-      //   request: newRequest,
-      //   pdfDocUrl,
-      //   pdfBase64: pdfBuffer.toString('base64'),
-      // });
       const generatedPDFs = {};
       const lawyersRequestPDF = await generatePDFBuffer(
         <LawyersRequest data={formData} />

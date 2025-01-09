@@ -11,7 +11,10 @@ import ukLocale from 'i18n-iso-countries/langs/uk.json';
 import ruLocale from 'i18n-iso-countries/langs/ru.json';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { useTranslation } from 'react-i18next';
-import { uploadFile } from '../helpers/firebaseControl';
+import {
+  getCollectionWhereKeyValue,
+  uploadFile,
+} from '../helpers/firebaseControl';
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -28,7 +31,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
   const { user } = useContext(AppContext);
+
   const requestEn = request.requestType.ua;
+  const requestRecipient = request.recipient;
 
   const [formData, setFormData] = useState({
     name: '', //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
@@ -48,8 +53,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       }),
     date: { start: '', finish: '' },
     recipient: {
-      name: 'Держ орган',
-      address: 'повна адреса органу',
+      name: '',
+      address: '',
     },
     citizenship: '', //АДПСУ,
     // ПАСПОРТИ
@@ -75,6 +80,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     uid: user?.uid || '',
     request: request,
   });
+
   const [downloadLink, setDownloadLink] = useState(null);
   const [selectedDocuments, setSelectedDocuments] = useState({
     agreement: false,
@@ -149,38 +155,39 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   };
   const visibleFields = filterFieldsByRequestType(requestEn);
 
-  // const generateAndSavePDF = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
+  const getRecipient = async () => {
+    try {
+      const recipient = await getCollectionWhereKeyValue(
+        'recipient',
+        'name',
+        requestRecipient
+      );
 
-  //   try {
-  //     const response = await axios.post('/api/pdf/save-pdf', formData);
-  //     if (response.data.pdfDocUrl) {
-  //       setDownloadLink(response.data.pdfDocUrl);
-  //     }
-  //     if (response.data.pdfBase64) {
-  //       const pdfData = `data:application/pdf;base64,${response.data.pdfBase64}`;
-  //       const pdfWindow = window.open(pdfData, '_blank');
-  //       if (!pdfWindow) {
-  //         throw new Error('Unable to open PDF.');
-  //       }
-  //       pdfWindow.document.write(
-  //         `<html>
-  //         <head><title>Preview PDF</title></head>
-  //         <body>
-  //           <embed src="${pdfData}" type="application/pdf" width="100%" height="100%">
-  //         </body>
-  //       </html>`
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving PDF:', error);
-  //     alert('Failed to save PDF. Verify the data.');
-  //     setError('Failed to save PDF. Verify the data.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      if (!recipient || recipient.length === 0) {
+        console.error(
+          `Recipient with application ${requestRecipient} not found in the database.`
+        );
+        throw new Error(
+          `Recipient with application ${requestRecipient} does not exist.`
+        );
+      }
+
+      const recipientName = recipient[0].application;
+      const recipientAddress = recipient[0].address;
+
+      setFormData(prev => ({
+        ...prev,
+        recipient: { name: recipientName, address: recipientAddress },
+      }));
+
+      return;
+    } catch (error) {
+      console.error('Error saving request to Firestore:', error);
+      throw error;
+    }
+  };
+  getRecipient();
+
   const generatePDFPreview = async type => {
     setIsLoading(true);
     setError(null);
@@ -902,7 +909,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           <button
             type="button"
             className={styles.orderForm__form_button}
-            onClick={() => generatePDFPreview('lawyersRequest')}
+            onClick={() => {
+              // getRecipient();
+              generatePDFPreview('lawyersRequest');
+            }}
           >
             {isLoading
               ? language === 'uk'
@@ -917,24 +927,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               : 'Lawyer`s request generate'}
           </button>
           {error && <p style={{ color: 'red' }}>{error}</p>}
-
-          {/* {downloadLink && (
-            <div className={styles.orderForm__form_file}>
-              <a
-                className={styles.orderForm__form_download}
-                style={{ textDecoration: 'none' }}
-                href={downloadLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {language === 'uk'
-                  ? 'Завантажити PDF'
-                  : language === 'ru'
-                  ? 'Скачать PDF'
-                  : 'Download PDF'}
-              </a>
-            </div>
-          )} */}
 
           <div
             style={{
@@ -971,15 +963,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               Даю згоду на укладання договору про надання правової допомоги
             </label>
           </div>
-
-          {/* {formData.requesterFile && (
-            <div>
-              <p>Файл завантажено: {formData.requesterFile.name}</p>
-              <button type="button" onClick={openFile}>
-                Відкрити файл
-              </button>
-            </div>
-          )} */}
 
           <button
             onClick={e => handleSubmit(e)}
