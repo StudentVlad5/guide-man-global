@@ -1,35 +1,45 @@
-import Head from "next/head";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
-import { useTranslation } from "next-i18next";
+import Head from 'next/head';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { useTranslation } from 'next-i18next';
 
-import styles from "../styles/layout.module.scss";
+import styles from '../styles/layout.module.scss';
 
 export const Layout = ({ children, title, type, desctiption, h1, script }) => {
   const { t } = useTranslation();
   const titleExpression = () => {
     switch (type) {
-      case "home":
+      case 'home':
         return `Global Guide Service - ${title}`;
 
-      case "service page":
+      case 'service page':
         return h1
           ? `${h1} • Global Guide Service`
           : `${title} • Global Guide Service`;
 
-      case "docusign page":
+      case 'docusign page':
         return h1
           ? `${h1} • Global Guide Docusign`
           : `${title} • Global Guide Docusign`;
 
-      case "news page":
-        return `${title} • ${t("head.news.new")} Global Guide Service`;
+      case 'news page':
+        return `${title} • ${t('head.news.new')} Global Guide Service`;
 
-      case "post page":
-        return `${title} • ${t("head.post.title")} Global Guide Service`;
+      case 'post page':
+        return `${title} • ${t('head.post.title')} Global Guide Service`;
 
-      case "serviceItem page":
-        return `${title} • ${t("head.service.title")} | Global Guide Service`;
+      case 'serviceItem page':
+        return `${title} • ${t('head.service.title')} | Global Guide Service`;
+
+      case 'requests page':
+        return h1
+          ? `${h1} • Global Guide Lawyers Requests`
+          : `${title} • Global Guide Lawyers Requests`;
+
+      case 'requestItem page':
+        return `${title} • ${t(
+          'head.request.title'
+        )} | Global Guide Lawyers Requests`;
 
       default:
         return `${title} | Global Guide Service`;
@@ -46,11 +56,11 @@ export const Layout = ({ children, title, type, desctiption, h1, script }) => {
     <>
       <Head>
         <title>{titleExpression()}</title>
-        {type !== "sitemap page" && (
+        {type !== 'sitemap page' && (
           <meta name="description" content={desctiption} />
         )}
 
-        {type === "sitemap page" && (
+        {type === 'sitemap page' && (
           <meta name="robots" content="noindex, follow, noarchive" />
         )}
         {script && (
