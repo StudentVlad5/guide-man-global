@@ -54,7 +54,7 @@ export default function ProfileItemPage() {
       uid: user.uid,
       email: user.email,
     });
-    if (check === 1) {
+    if (check) {
       setEditStatus(false);
     }
   };
@@ -128,7 +128,10 @@ export default function ProfileItemPage() {
                 type="submit"
                 className={`button ${styles.form__button}`}
                 style={{ marginTop: "20px" }}
-                onClick={() => setEditStatus(true)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setEditStatus(true);
+                }}
               >
                 {t("edit")}
               </button>
