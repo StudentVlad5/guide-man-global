@@ -1,15 +1,22 @@
 import { useTranslation } from "next-i18next";
 import { ItemPage } from "../../components/ItemPage";
 import { PageNavigation } from "../../components/PageNavigation";
-import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getRightData, getRightURL } from "../../helpers/rightData";
 import { useRouter } from "next/router";
 import { Layout } from "../../components/Layout";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import "firebase/firestore";
 
 import { BASE_URL } from "../sitemap.xml";
 import ErrorPage from "../404";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import saveCredentials from "../api/userProfile";
@@ -17,6 +24,7 @@ import saveCredentials from "../api/userProfile";
 const fieldInput = {
   name: "Name",
   surname: "Surname",
+  fatherName: "Fathername",
   birthday: "BirdthDay",
   citizenship: "Citizenship",
   phoneNumber: "PhoneNumber",
@@ -32,20 +40,40 @@ export default function ProfileItemPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
-  const [userCredentials, setUserCredentials] = useState({
-    name: user?.name ? user.name : "",
-    surname: user?.surname ? user.surname : "",
-    birthday: user?.birthday ? user.birthday : "",
-    citizenship: user?.citizenship ? user.citizenship : "",
-    phoneNumber: user?.phoneNumber ? user.phoneNumber : "",
-    country: user?.country ? user.country : "",
-    city: user?.city ? user.city : "",
-    address_1: user?.address_1 ? user.address_1 : "",
-    address_2: user?.address_2 ? user.address_2 : "",
-    inn: user?.inn ? user.inn : "",
-    passport: user?.passport ? user.passport : "",
-  });
+
+  const [userCredentials, setUserCredentials] = useState({});
   const [editStatus, setEditStatus] = useState(false);
+  useEffect(() => {
+    const getUserData = async () => {
+      if (user) {
+        const db = getFirestore(); // Initialize Firestore
+        const userCollection = collection(db, "users");
+        const userQuery = query(userCollection, where("uid", "==", user.uid));
+
+        try {
+          const snapshot = await getDocs(userQuery);
+          if (!snapshot.empty) {
+            const userData = snapshot.docs[0].data();
+            const checkData = {};
+            Object.keys(fieldInput).map((it) => {
+              return (checkData[it] = userData[it]);
+            });
+
+            setUserCredentials((prevCredentials) => ({
+              ...prevCredentials,
+              ...checkData,
+            }));
+          } else {
+            console.log("User data not found");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    getUserData();
+  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -143,6 +171,7 @@ export default function ProfileItemPage() {
                 onClick={(e) => handleSubmit(e)}
                 disabled={
                   userCredentials.name == "" &&
+                  userCredentials.fatherName == "" &&
                   userCredentials.surname == "" &&
                   userCredentials.birthday == "" &&
                   userCredentials.citizenship == "" &&
