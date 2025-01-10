@@ -48,7 +48,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
           }}
         />
 
-        {/* {user ? ( */}
+        {user ? (
         <div className={styles.buttonDiv}>
           <button
             type="button"
@@ -81,7 +81,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
             </div>
           )}
         </div>
-        {/* ) : (
+        ) : (
           <div className={styles.buttonDiv}>
             <p className={styles.buttonDiv__text}>
               {locale === "ua"
@@ -102,7 +102,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                 : "Register"}
             </a>
           </div>
-        )} */}
+        )}
 
         <div className={styles.itemPage__iconsWrap}>
           <a href="https://t.me/emigrant_helper_bot" alt="">
