@@ -103,7 +103,7 @@ export default function ProfileItemPage() {
               {Object.keys(userCredentials).map((it) => {
                 return (
                   <li key={it}>
-                    <span>{fieldInput[it]}:</span>
+                    <span>{t(fieldInput[it])}:</span>
                     {!editStatus ? (
                       <div className={styles.form__input}>
                         {userCredentials[it]}
