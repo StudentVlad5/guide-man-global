@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import LawyersRequestForm from './LawyersRequestsForm';
 import { auth } from '../helpers/firebaseControl';
 
+
 export default function LawyersRequestPage({ item, buttonName, linkPath }) {
   const { locale } = useRouter();
   const { t } = useTranslation();

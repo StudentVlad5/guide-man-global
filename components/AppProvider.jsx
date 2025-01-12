@@ -1,10 +1,19 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { auth, getCollectionWhereKeyValue } from '../helpers/firebaseControl';
-import { useRouter } from 'next/router';
+import React, { useState, useMemo, useEffect } from "react";
+import { auth, getCollectionWhereKeyValue } from "../helpers/firebaseControl";
+import { useRouter } from "next/router";
 import {
   getTitleOfPosts,
   getTitleOfServices,
-} from '../helpers/firebaseControl';
+} from "../helpers/firebaseControl";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import "firebase/firestore";
+import { fieldInput } from "../helpers/constant";
 
 export const AppContext = React.createContext({
   user: null,
@@ -25,7 +34,7 @@ export const AppProvider = ({ children }) => {
   const [userRole, setUserRole] = useState(null);
   const [servicesArray, setServicesArray] = useState([]);
   const [requestsArray, setRequestsArray] = useState([]);
-
+  const [userCredentials, setUserCredentials] = useState({});
   // console.log(user);
 
   const router = useRouter();
@@ -56,15 +65,15 @@ export const AppProvider = ({ children }) => {
   // };
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       setUser(user || null);
     });
     if (user) {
-      getCollectionWhereKeyValue('users', 'uid', auth.currentUser.uid).then(
-        res => {
-          if (res[0].role === 'admin') {
+      getCollectionWhereKeyValue("users", "uid", auth.currentUser.uid).then(
+        (res) => {
+          if (res[0].role === "admin") {
             setUserRole(res[0].role);
-            router.push('adminPanel');
+            router.push("adminPanel");
           }
         }
       );
@@ -75,15 +84,15 @@ export const AppProvider = ({ children }) => {
     // getData();
     (async () => {
       try {
-        const newsTitles = await getTitleOfPosts('news', locale);
-        const questionsTitles = await getTitleOfPosts('questions', locale);
+        const newsTitles = await getTitleOfPosts("news", locale);
+        const questionsTitles = await getTitleOfPosts("questions", locale);
         const explanationsTitles = await getTitleOfPosts(
-          'explanations',
+          "explanations",
           locale
         );
         const servicesTitles = await getTitleOfServices(locale);
-        const citizenshipTitles = await getTitleOfPosts('citizenship', locale);
-        const requestsTitles = await getTitleOfPosts('requests', locale);
+        const citizenshipTitles = await getTitleOfPosts("citizenship", locale);
+        const requestsTitles = await getTitleOfPosts("requests", locale);
         setTitleArr([
           ...newsTitles,
           ...questionsTitles,
@@ -100,6 +109,38 @@ export const AppProvider = ({ children }) => {
     })();
   }, [locale]);
 
+  useEffect(() => {
+    const getUserData = async () => {
+      const db = getFirestore(); // Initialize Firestore
+      const userCollection = collection(db, "users");
+      const userQuery = query(userCollection, where("uid", "==", user.uid));
+
+      try {
+        const snapshot = await getDocs(userQuery);
+        if (!snapshot.empty) {
+          const userData = snapshot.docs[0].data();
+          const checkData = {};
+          Object.keys(fieldInput).map((it) => {
+            return (checkData[it] = userData[it]);
+          });
+
+          setUserCredentials((prevCredentials) => ({
+            ...prevCredentials,
+            ...checkData,
+          }));
+        } else {
+          console.log("User data not found");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (user) {
+      getUserData();
+    }
+  }, [user]);
+
   const contextValue = useMemo(() => {
     return {
       user,
@@ -109,8 +150,10 @@ export const AppProvider = ({ children }) => {
       userRole,
       servicesArray,
       requestsArray,
+      userCredentials,
+      setUserCredentials,
     };
-  }, [user, titleArr, userRole, servicesArray, requestsArray]);
+  }, [user, titleArr, userRole, servicesArray, requestsArray, userCredentials]);
 
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>

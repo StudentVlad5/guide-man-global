@@ -74,7 +74,7 @@ async function sendEnvelope(args) {
   const doc2Base64 = await downloadFileAsBase64(envelopeArgs.doc2File);
   const doc3Base64 = await downloadFileAsBase64(envelopeArgs.doc3File);
 
-    const signHereTab = {
+  const signHereTab = {
     documentId: "1", // documentId 1 corresponds to doc2 (the Word doc)
     recipientId: "1", // This corresponds to the signer (recipientId 1)
     tabLabel: "Sign Here",
@@ -94,19 +94,18 @@ async function sendEnvelope(args) {
     type: "DateSigned",
   };
 
-
- const envelopeDefinition = {
+  const envelopeDefinition = {
     emailSubject: "Please sign this document",
     documents: [
       {
         documentBase64: doc2Base64,
-        name: "Battle Plan",
-        fileExtension: "docx",
+        name: "Contract",
+        fileExtension: "pdf",
         documentId: "1", // Document ID should match the ID used in tabs
       },
       {
         documentBase64: doc3Base64,
-        name: "Lorem Ipsum",
+        name: "Agreement",
         fileExtension: "pdf",
         documentId: "2", // Document ID for second document
       },
@@ -123,19 +122,28 @@ async function sendEnvelope(args) {
             dateSignedTabs: [dateSignedTab], // Add date signed tab if needed
           },
         },
+        {
+          email: "vlad_np@ukr.net",
+          name: "VVVVVVVVVVV",
+          recipientId: "2", // Signer's recipient ID
+          routingOrder: "2",
+          tabs: {
+            signHereTabs: [signHereTab],
+            dateSignedTabs: [dateSignedTab], // Add date signed tab if needed
+          },
+        },
       ],
       carbonCopies: [
         {
           email: envelopeArgs.ccEmail,
           name: envelopeArgs.ccName,
-          recipientId: "2", // CC's recipient ID
-          routingOrder: "2",
+          recipientId: "3", // CC's recipient ID
+          routingOrder: "3",
         },
       ],
     },
     status: envelopeArgs.status, // 'sent' to send the envelope
   };
-
 
   const dsApi = new docusign.ApiClient();
   dsApi.setBasePath(basePath);
@@ -155,9 +163,21 @@ export default async function handler(req, res) {
 
   try {
     // Extract the required parameters from the request body
-    const { signerEmail, signerName, ccEmail, ccName } = req.body;
+    const {
+      signerEmail,
+      signerName,
+      ccEmail,
+      ccName,
+      doc2File,
+      doc3File,
+    } = req.body;
 
-    if (!signerEmail || !signerName || !ccEmail || !ccName) {
+    if (
+      !signerEmail ||
+      !signerName ||
+      !ccEmail ||
+      !ccName | !doc2File | !doc3File
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -170,10 +190,8 @@ export default async function handler(req, res) {
       ccEmail,
       ccName,
       status: "sent",
-      doc2File:
-        "https://guide-man-global.vercel.app/demo_documents/World_Wide_Corp_Battle_Plan_Trafalgar.docx",
-      doc3File:
-        "https://guide-man-global.vercel.app/demo_documents/World_Wide_Corp_lorem.pdf",
+      doc2File,
+      doc3File,
     };
 
     const args = {

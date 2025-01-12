@@ -5,74 +5,21 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getRightData, getRightURL } from "../../helpers/rightData";
 import { useRouter } from "next/router";
 import { Layout } from "../../components/Layout";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import "firebase/firestore";
 
 import { BASE_URL } from "../sitemap.xml";
 import ErrorPage from "../404";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import saveCredentials from "../api/userProfile";
+import { fieldInput, placeHolder, patternInput } from "../../helpers/constant";
 
 export default function ProfileItemPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
-  const { user } = useContext(AppContext);
-  const fieldInput = {
-    name: t("Name"),
-    surname: t("Surname"),
-    fatherName: t("Fathername"),
-    birthday: t("BirdthDay"),
-    citizenship: t("Citizenship"),
-    phoneNumber: t("PhoneNumber"),
-    country: t("Country"),
-    city: t("City"),
-    address_1: t("AddressRegistration"),
-    address_2: t("AdressLiving"),
-    inn: t("INN"),
-    passport: t("Passport"),
-  };
-  const [userCredentials, setUserCredentials] = useState({});
+  const { user, userCredentials, setUserCredentials } = useContext(AppContext);
   const [editStatus, setEditStatus] = useState(false);
-  
-  useEffect(() => {
-    const getUserData = async () => {
-      if (user) {
-        const db = getFirestore(); // Initialize Firestore
-        const userCollection = collection(db, "users");
-        const userQuery = query(userCollection, where("uid", "==", user.uid));
-
-        try {
-          const snapshot = await getDocs(userQuery);
-          if (!snapshot.empty) {
-            const userData = snapshot.docs[0].data();
-            const checkData = {};
-            Object.keys(fieldInput).map((it) => {
-              return (checkData[it] = userData[it]);
-            });
-
-            setUserCredentials((prevCredentials) => ({
-              ...prevCredentials,
-              ...checkData,
-            }));
-          } else {
-            console.log("User data not found");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      }
-    };
-
-    getUserData();
-  }, [user]);
+  const [validateStatus, setValidateStatus] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,6 +31,34 @@ export default function ProfileItemPage() {
     if (check) {
       setEditStatus(false);
     }
+  };
+
+  const handleInputChangeBirthday = (e) => {
+    const input = e.target.value;
+
+    // Remove all non-numeric characters
+    const numericValue = input.replace(/\D/g, "");
+
+    // Format the string as "DD-MM-YYYY"
+    let formattedValue = numericValue;
+    if (numericValue.length > 2) {
+      formattedValue = `${numericValue.slice(0, 2)}-${numericValue.slice(2)}`;
+    }
+    if (numericValue.length > 4) {
+      formattedValue = `${numericValue.slice(0, 2)}-${numericValue.slice(
+        2,
+        4
+      )}-${numericValue.slice(4)}`;
+    }
+
+    // Limit to 10 characters ("DD-MM-YYYY")
+    if (formattedValue.length > 10) {
+      formattedValue = formattedValue.slice(0, 10);
+    }
+    let check = { ...userCredentials };
+    check.birthday = formattedValue;
+    console.log(formattedValue);
+    setUserCredentials(check);
   };
 
   return user ? (
@@ -134,17 +109,51 @@ export default function ProfileItemPage() {
                         {userCredentials[it]}
                       </div>
                     ) : (
-                      <input
-                        className={styles.form__input}
-                        type="text"
-                        value={userCredentials[it]}
-                        onChange={(e) =>
-                          setUserCredentials({
-                            ...userCredentials,
-                            [it]: e.currentTarget.value,
-                          })
-                        }
-                      />
+                      <>
+                        <input
+                          // className={styles.form__input}
+                          className={
+                            patternInput[it] &&
+                            !patternInput[it].test(userCredentials[it])
+                              ? styles.form__input__danger
+                              : styles.form__input
+                          }
+                          type="text"
+                          id={it}
+                          name={it}
+                          value={userCredentials[it]}
+                          pattern={patternInput[it].source}
+                          placeholder={placeHolder[it]}
+                          onChange={(e) => {
+                            if (
+                              patternInput[it] &&
+                              !patternInput[it].test(e.target.value)
+                            ) {
+                              setValidateStatus(true);
+                            } else {
+                              setValidateStatus(false);
+                            }
+                            if (it === "birthday") {
+                              handleInputChangeBirthday(e);
+                            } else {
+                              setUserCredentials({
+                                ...userCredentials,
+                                [it]: e.currentTarget.value,
+                              });
+                            }
+                          }}
+                        />
+                        <span
+                          className={
+                            patternInput[it] &&
+                            !patternInput[it].test(userCredentials[it])
+                              ? styles.form__validate
+                              : styles.form__validate__hide
+                          }
+                        >
+                          Please use pattern: {placeHolder[it]}
+                        </span>
+                      </>
                     )}
                   </li>
                 );
@@ -168,9 +177,7 @@ export default function ProfileItemPage() {
                 className={`button ${styles.form__button}`}
                 style={{ marginTop: "20px" }}
                 onClick={(e) => handleSubmit(e)}
-                disabled={
-                  Object.keys(userCredentials).map(it => {if(it ===""){return true}})
-                }
+                disabled={validateStatus}
               >
                 {t("submit")}
               </button>
