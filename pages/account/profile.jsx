@@ -21,28 +21,27 @@ import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import saveCredentials from "../api/userProfile";
 
-const fieldInput = {
-  name: "Name",
-  surname: "Surname",
-  fatherName: "Fathername",
-  birthday: "BirdthDay",
-  citizenship: "Citizenship",
-  phoneNumber: "PhoneNumber",
-  country: "Country",
-  city: "City",
-  address_1: "Address 1",
-  address_2: "Address 2",
-  inn: "INN",
-  passport: "Passport",
-};
-
 export default function ProfileItemPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
-
+  const fieldInput = {
+    name: t("Name"),
+    surname: t("Surname"),
+    fatherName: t("Fathername"),
+    birthday: t("BirdthDay"),
+    citizenship: t("Citizenship"),
+    phoneNumber: t("PhoneNumber"),
+    country: t("Country"),
+    city: t("City"),
+    address_1: t("AddressRegistration"),
+    address_2: t("AdressLiving"),
+    inn: t("INN"),
+    passport: t("Passport"),
+  };
   const [userCredentials, setUserCredentials] = useState({});
   const [editStatus, setEditStatus] = useState(false);
+  
   useEffect(() => {
     const getUserData = async () => {
       if (user) {
@@ -170,17 +169,7 @@ export default function ProfileItemPage() {
                 style={{ marginTop: "20px" }}
                 onClick={(e) => handleSubmit(e)}
                 disabled={
-                  userCredentials.name == "" &&
-                  userCredentials.fatherName == "" &&
-                  userCredentials.surname == "" &&
-                  userCredentials.birthday == "" &&
-                  userCredentials.citizenship == "" &&
-                  userCredentials.phoneNumber == "" &&
-                  userCredentials.country == "" &&
-                  userCredentials.city == "" &&
-                  userCredentials.address_1 == "" &&
-                  userCredentials.inn == "" &&
-                  userCredentials.passport == ""
+                  Object.keys(userCredentials).map(it => {if(it ===""){return true}})
                 }
               >
                 {t("submit")}
