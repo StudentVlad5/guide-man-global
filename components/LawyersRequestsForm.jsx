@@ -141,6 +141,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const filterFieldsByRequestType = (requestEn) => {
     const typeKey = requestNameToKeyMap[requestEn] || "";
+    console.log(typeKey);
+    
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEn);
@@ -311,9 +313,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    localStorage.setItem("formData", JSON.stringify(formData));
-    // Перенаправляємо на сторінку Payment
-    window.location.href = "/payment";
     const dataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value instanceof File) {
