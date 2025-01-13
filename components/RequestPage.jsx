@@ -94,7 +94,8 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                 ? "Чтобы заказать услугу необходимо зарегистрироваться."
                 : "To order the service you need to register."}
             </p>
-            <a
+            
+            <Link
               href="/registration"
               className={styles.buttonDiv__button}
               style={{ textDecoration: "none" }}
@@ -104,7 +105,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                 : locale === "ru"
                 ? "Зарегистрироваться"
                 : "Register"}
-            </a>
+            </Link>
           </div>
         )}
 
