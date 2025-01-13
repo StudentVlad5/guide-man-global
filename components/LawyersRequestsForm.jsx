@@ -11,7 +11,19 @@ import ukLocale from "i18n-iso-countries/langs/uk.json";
 import ruLocale from "i18n-iso-countries/langs/ru.json";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { useTranslation } from "react-i18next";
-import { uploadFile } from "../helpers/firebaseControl";
+import {
+  getCollectionWhereKeyValue,
+  uploadFile,
+} from "../helpers/firebaseControl";
+
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import "firebase/firestore";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -25,10 +37,43 @@ const Agreement = dynamic(() => import("./Agreement"), { ssr: false });
 const Contract = dynamic(() => import("./Contract"), { ssr: false });
 
 export default function LawyersRequestForm({ currentLanguage, request }) {
+  const [userData, setUserData] = useState(null);
+  const [statusRenewUser, setStatusRenewUser] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const getUserData = async () => {
+      if (user) {
+        const db = getFirestore(); // Initialize Firestore
+        const userCollection = collection(db, "users");
+        const userQuery = query(userCollection, where("uid", "==", user.uid));
+
+        try {
+          const snapshot = await getDocs(userQuery);
+          if (!snapshot.empty) {
+            const userData = snapshot.docs[0].data();
+            setUserData(userData);
+            handleDocuSign(userData);
+          } else {
+            console.log("User data not found");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    if (statusRenewUser) {
+      getUserData(), setStatusRenewUser(false);
+    }
+  }, [statusRenewUser]);
+
   const language = currentLanguage === "ua" ? "uk" : currentLanguage;
   const { t } = useTranslation();
   const { user } = useContext(AppContext);
+
   const requestEn = request.requestType.ua;
+  const requestRecipient = request.recipient;
 
   const [formData, setFormData] = useState({
     uid: user?.uid || "",
@@ -40,6 +85,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     requesterBirthday: "", //РАЦС
     requesterName: "", //РАЦС
     requesterFile: [], //РАЦС
+    // name: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // email: "example@example.com", //????
+    // birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
+    // requesterBirthday: "", //РАЦС
+    // requesterName: "", //РАЦС
+    // requesterFile: "", //РАЦС
     deathDay: "", //РАЦС
     dateCreating: new Date() //ВСІ ФОРМИ
       .toLocaleDateString("ru-RU", {
@@ -65,6 +118,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     couplePIB2: "", //РАЦС
     // (дату надання довідки про місце проживання)
     dateResidence: "", //РАЦС
+    // tckName: "", //МОУ і ТЦК
+    // tckAddress: "", //МОУ і ТЦК
+    // tckEmail: "", //МОУ і ТЦК
     eventDate: "", //ГУНП
     eventTime: "", //ГУНП
     eventPlace: "", //ГУНП
@@ -72,6 +128,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     propertyAddress: "", //ВПО
     request: request,
   });
+
   const [downloadLink, setDownloadLink] = useState(null);
   const [selectedDocuments, setSelectedDocuments] = useState({
     agreement: false,
@@ -113,6 +170,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "birthday",
       "recipient.name",
       "recipient.address",
+      // "tckName",
+      // "tckAddress",
+      // "tckEmail",
     ],
     МВС: [
       "name",
@@ -142,17 +202,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const filterFieldsByRequestType = (requestEn) => {
     const typeKey = requestNameToKeyMap[requestEn] || "";
     console.log(typeKey);
-    
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEn);
-
-  const getNestedValue = (obj, path) => {
-    return path
-      .split(".")
-      .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
-  };
-
+  
   const isFormValid = () => {
     // console.log(visibleFields);
     return visibleFields.every((field) => {
@@ -166,42 +219,88 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         return value.size > 0;
       }
 
-      return typeof value === "string" ? value.trim() !== "" : Boolean(value);
+      return typeof value === "string"
+        ? value.trim() !== ""
+        : Boolean(value);
     });
   };
 
-  // const generateAndSavePDF = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
+  useEffect(() => {
+    const getRecipient = async () => {
+      try {
+        const recipient = await getCollectionWhereKeyValue(
+          "recipient",
+          "name",
+          requestRecipient
+        );
 
-  //   try {
-  //     const response = await axios.post('/api/pdf/save-pdf', formData);
-  //     if (response.data.pdfDocUrl) {
-  //       setDownloadLink(response.data.pdfDocUrl);
-  //     }
-  //     if (response.data.pdfBase64) {
-  //       const pdfData = `data:application/pdf;base64,${response.data.pdfBase64}`;
-  //       const pdfWindow = window.open(pdfData, '_blank');
-  //       if (!pdfWindow) {
-  //         throw new Error('Unable to open PDF.');
-  //       }
-  //       pdfWindow.document.write(
-  //         `<html>
-  //         <head><title>Preview PDF</title></head>
-  //         <body>
-  //           <embed src="${pdfData}" type="application/pdf" width="100%" height="100%">
-  //         </body>
-  //       </html>`
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving PDF:', error);
-  //     alert('Failed to save PDF. Verify the data.');
-  //     setError('Failed to save PDF. Verify the data.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+        const getNestedValue = (obj, path) => {
+          return path
+            .split(".")
+            .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
+        };
+
+       
+
+        // const generateAndSavePDF = async () => {
+        //   setIsLoading(true);
+        //   setError(null);
+
+        //   try {
+        //     const response = await axios.post('/api/pdf/save-pdf', formData);
+        //     if (response.data.pdfDocUrl) {
+        //       setDownloadLink(response.data.pdfDocUrl);
+        //     }
+        //     if (response.data.pdfBase64) {
+        //       const pdfData = `data:application/pdf;base64,${response.data.pdfBase64}`;
+        //       const pdfWindow = window.open(pdfData, '_blank');
+        //       if (!pdfWindow) {
+        //         throw new Error('Unable to open PDF.');
+        //       }
+        //       pdfWindow.document.write(
+        //         `<html>
+        //         <head><title>Preview PDF</title></head>
+        //         <body>
+        //           <embed src="${pdfData}" type="application/pdf" width="100%" height="100%">
+        //         </body>
+        //       </html>`
+        //       );
+        //     }
+        //   } catch (error) {
+        //     console.error('Error saving PDF:', error);
+        //     alert('Failed to save PDF. Verify the data.');
+        //     setError('Failed to save PDF. Verify the data.');
+        //   } finally {
+        //     setIsLoading(false);
+        //   }
+        // };
+        if (!recipient || recipient.length === 0) {
+          console.error(
+            `Recipient with application ${requestRecipient} not found in the database.`
+          );
+          throw new Error(
+            `Recipient with application ${requestRecipient} does not exist.`
+          );
+        }
+
+        const recipientName = recipient[0].application;
+        const recipientAddress = recipient[0].address;
+
+        setFormData((prev) => ({
+          ...prev,
+          recipient: { name: recipientName, address: recipientAddress },
+        }));
+
+        return;
+      } catch (error) {
+        console.error("Error saving request to Firestore:", error);
+        throw error;
+      }
+    };
+    getRecipient();
+  }, []);
+
+
   const generatePDFPreview = async (type) => {
     setIsLoading(true);
     setError(null);
@@ -254,6 +353,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   };
 
   const handleChange = async (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
 
     // setFormData({
@@ -283,6 +383,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   };
 
   const handleChangeForFile = async (e) => {
+    e.preventDefault();
     const { name, files } = e.target;
 
     if (name === "requesterFile" && files.length > 0) {
@@ -327,17 +428,45 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       body: dataToSend,
     })
       .then((response) => response.json())
-      .then((data) =>{
-        console.log("Success:", data);
-        // Зберігаємо formData в LocalStorage
-        localStorage.setItem("formData", JSON.stringify(formData));
-        // Перенаправляємо на сторінку Payment
-        window.location.href = "/payment";
-      })
+      .then((data) => console.log("success", data))
       .catch((error) => console.error("Error", error));
 
     savePDF();
+    setStatusRenewUser(true);
   };
+
+  const handleDocuSign = async (userData) => {
+    const res = await fetch("/api/docusign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        signerEmail: userData?.email,
+        signerName: userData?.name,
+        ccEmail: "vlad_np@ukr.net",
+        ccName: "vlad",
+        doc2File: userData.requests[0].pdfAgreement,
+        doc3File: userData.requests[0].pdfContract,
+      }),
+    });
+
+    const data = await res.json();
+    console.log("setMessage", data);
+    if (res.ok) {
+      setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
+    } else {
+      setMessage(`Error: ${data.error}`);
+    }
+  };
+  // const openFile = () => {
+  //   const file = formData.requesterFile;
+
+  //   if (file) {
+  //     const fileURL = URL.createObjectURL(file);
+  //     window.open(fileURL, "_blank");
+  //   } else {
+  //     alert("Файл не завантажений.");
+  //   }
+  // };
 
   const getCountriesByLanguage = (lang) => {
     return Object.entries(countries.getNames(lang)).map(([code, name]) => ({
@@ -386,7 +515,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 className={styles.orderForm__form_select}
                 name="citizenship"
                 value={formData.citizenship}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               >
                 <option value="" disabled>
@@ -423,7 +552,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="surname"
                 name="surname"
                 value={formData.surname}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -446,7 +575,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="name"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -468,7 +597,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="fatherName"
                 name="fatherName"
                 value={formData.fatherName}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
               />
             </label>
           )}
@@ -489,7 +618,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="birthday"
                 id="birthday"
                 value={formData.birthday}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -512,7 +641,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="requesterName"
                 name="requesterName"
                 value={formData.requesterName}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -534,7 +663,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="requesterFile"
                 name="requesterFile"
                 // value={formData.requesterFile}
-                onChange={handleChangeForFile}
+                onChange={(e) => handleChangeForFile(e)}
                 required
               />
             </label>
@@ -556,7 +685,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="requesterBirthday"
                 name="requesterBirthday"
                 value={formData.requesterBirthday}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -578,7 +707,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="deathDay"
                 id="deathDay"
                 value={formData.deathDay}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -604,7 +733,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                   id="passportNum"
                   name="passportNum"
                   value={formData.passportNum}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   required
                 />
               </label>
@@ -626,7 +755,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="abroadPassnum"
                 name="abroadPassnum"
                 value={formData.abroadPassnum}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
               />
             </label>
           )}
@@ -651,7 +780,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                   id="pmjNum"
                   name="pmjNum"
                   value={formData.pmjNum}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   required
                 />
               </label>
@@ -673,7 +802,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="dateBorderCrossingStart"
                 id="dateBorderCrossingStart"
                 value={formData.dateBorderCrossingStart}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -695,7 +824,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="dateBorderCrossingEnd"
                 id="dateBorderCrossingEnd"
                 value={formData.dateBorderCrossingEnd}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -719,7 +848,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                   id="couplePIB1"
                   name="couplePIB1"
                   value={formData.couplePIB1}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   required
                   style={{ marginBottom: 15 }}
                 />
@@ -730,7 +859,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                   id="couplePIB2"
                   name="couplePIB2"
                   value={formData.couplePIB2}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
                   required
                 />
               </label>
@@ -752,7 +881,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="dateResidence"
                 id="dateResidence"
                 value={formData.dateResidence}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -775,13 +904,36 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 id="recipientName"
                 name="recipient.name"
                 value={formData.recipient.name}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
           )}
 
           {visibleFields.includes("recipient.address") && (
+            <label className={styles.orderForm__form_lable}>
+              <span className={styles.orderForm__form_span}>
+                {language === "uk"
+                  ? "Адреса ТЦК:"
+                  : language === "ru"
+                  ? "Адрес ТЦК:"
+                  : "Address of the Territorial Recruitment Centers:"}
+                <span className={styles.orderForm__form_required}>*</span>
+              </span>
+              <input
+                className={styles.orderForm__form_input}
+                placeholder="м.Київ, вул.Вулиця 1"
+                type="text"
+                id="recipientAddress"
+                name="tckAddress"
+                value={formData.recipient.address}
+                onChange={(e) => handleChange(e)}
+                required
+              />
+            </label>
+          )}
+
+          {visibleFields.includes("tckEmail") && (
             <label className={styles.orderForm__form_lable}>
               <span className={styles.orderForm__form_span}>
                 {language === "uk"
@@ -793,11 +945,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </span>
               <input
                 className={styles.orderForm__form_input}
+                placeholder="test@gmail.com"
                 type="email"
-                id="recipientAddress"
-                name="recipient.address"
-                value={formData.recipient.address}
-                onChange={handleChange}
+                id="tckEmail"
+                name="tckEmail"
+                value={formData.tckEmail}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -819,7 +972,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="eventDate"
                 id="eventDate"
                 value={formData.eventDate}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -841,7 +994,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="eventTime"
                 id="eventTime"
                 value={formData.eventTime}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -864,7 +1017,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="eventPlace"
                 id="eventPlace"
                 value={formData.eventPlace}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -887,7 +1040,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="ipn"
                 id="ipn"
                 value={formData.ipn}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -910,7 +1063,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 name="propertyAddress"
                 id="propertyAddress"
                 value={formData.propertyAddress}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 required
               />
             </label>
@@ -919,7 +1072,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           <button
             type="button"
             className={styles.orderForm__form_button}
-            onClick={() => generatePDFPreview("lawyersRequest")}
+            onClick={() => {
+              // getRecipient();
+              generatePDFPreview("lawyersRequest");
+            }}
           >
             {isLoading
               ? language === "uk"

@@ -148,5 +148,19 @@
     "h2": "Sorry, this page is not available",
     "p": "You may have used an invalid link or this page has been removed",
     "button": "Return to previous page"
-  }
+  },
+  "Name": "Name",
+  "Surname": "Surname",
+  "Fathername": "Fathername",
+  "BirdthDay": "BirdthDay",
+  "Citizenship": "Citizenship",
+  "PhoneNumber": "Phone Number",
+  "Country": "Country",
+  "City": "City|locality",
+  "Address 1": "Address registration",
+  "Address_2": "Address living",
+  "INN": "INN",
+  "Passport": "Passport number",
+  "submit": "Submit",
+  "edit": "Edit"
 }

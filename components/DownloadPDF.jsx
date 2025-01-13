@@ -194,9 +194,6 @@ export const LawyersRequest = ({ data }) => {
             <Text style={styles.textNoIndent}>
               До {getValue(data.recipient?.name)}
             </Text>
-            <Text style={styles.textNoIndent}>
-              Адреса: {getValue(data.recipient?.address)}
-            </Text>
           </View>
         </View>
         <View style={styles.sectionTitle}>

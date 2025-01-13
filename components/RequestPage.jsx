@@ -34,13 +34,15 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
     <div className={styles.itemPage}>
       <div className={styles.itemPage__body}>
         <h1 className={`page__title ${styles.itemPage__title}`}>
-          {item.type === "request"
-            ? `${item.requestType[locale]}: ${getRightData(
-                item,
-                locale,
-                "title"
-              )}`
-            : getRightData(item, locale, "title")}
+          {item.type === "request" ? (
+            <>
+              {item.requestType[locale]}:
+              <br />
+              {getRightData(item, locale, "title")}
+            </>
+          ) : (
+            getRightData(item, locale, "title")
+          )}
         </h1>
         <article
           className={styles.itemPage__text}
