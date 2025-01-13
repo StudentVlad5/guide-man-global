@@ -76,14 +76,23 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const requestRecipient = request.recipient;
 
   const [formData, setFormData] = useState({
-    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    email: "example@example.com", //????
-    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
+    uid: user?.uid || "",
+    name: user?.name || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    surname: user?.surname || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    fatherName: user?.fatherName || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    email: user?.email || "example@example.com", //????
+    birthday: user?.birthday || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
     requesterBirthday: "", //РАЦС
     requesterName: "", //РАЦС
-    requesterFile: "", //РАЦС
+    requesterFile: [], //РАЦС
+    // name: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    // email: "example@example.com", //????
+    // birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
+    // requesterBirthday: "", //РАЦС
+    // requesterName: "", //РАЦС
+    // requesterFile: "", //РАЦС
     deathDay: "", //РАЦС
     dateCreating: new Date() //ВСІ ФОРМИ
       .toLocaleDateString("ru-RU", {
@@ -93,8 +102,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       }),
     date: { start: "", finish: "" },
     recipient: {
-      name: "",
-      address: "",
+      name: "", //МОУ і ТЦК
+      address: "", //МОУ і ТЦК
     },
     citizenship: "", //АДПСУ,
     // ПАСПОРТИ
@@ -109,15 +118,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     couplePIB2: "", //РАЦС
     // (дату надання довідки про місце проживання)
     dateResidence: "", //РАЦС
-    tckName: "", //МОУ і ТЦК
-    tckAddress: "", //МОУ і ТЦК
-    tckEmail: "", //МОУ і ТЦК
+    // tckName: "", //МОУ і ТЦК
+    // tckAddress: "", //МОУ і ТЦК
+    // tckEmail: "", //МОУ і ТЦК
     eventDate: "", //ГУНП
     eventTime: "", //ГУНП
     eventPlace: "", //ГУНП
     ipn: "", //ПФУ і ДПСУ
     propertyAddress: "", //ВПО
-    uid: user?.uid || "",
     request: request,
   });
 
@@ -160,9 +168,11 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "surname",
       "fatherName",
       "birthday",
-      "tckName",
-      "tckAddress",
-      "tckEmail",
+      "recipient.name",
+      "recipient.address",
+      // "tckName",
+      // "tckAddress",
+      // "tckEmail",
     ],
     МВС: [
       "name",
@@ -194,6 +204,30 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEn);
+
+  const getNestedValue = (obj, path) => {
+    return path
+      .split(".")
+      .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
+  };
+
+  const isFormValid = () => {
+    // console.log(visibleFields);
+    return visibleFields.every((field) => {
+      const value = getNestedValue(formData, field);
+
+      if (field === "fatherName") {
+        return true;
+      }
+
+      if (value instanceof File) {
+        return value.size > 0;
+      }
+
+      return typeof value === "string" ? value.trim() !== "" : Boolean(value);
+    });
+  };
+
   useEffect(() => {
     const getRecipient = async () => {
       try {
@@ -203,6 +237,38 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           requestRecipient
         );
 
+        // const generateAndSavePDF = async () => {
+        //   setIsLoading(true);
+        //   setError(null);
+
+        //   try {
+        //     const response = await axios.post('/api/pdf/save-pdf', formData);
+        //     if (response.data.pdfDocUrl) {
+        //       setDownloadLink(response.data.pdfDocUrl);
+        //     }
+        //     if (response.data.pdfBase64) {
+        //       const pdfData = `data:application/pdf;base64,${response.data.pdfBase64}`;
+        //       const pdfWindow = window.open(pdfData, '_blank');
+        //       if (!pdfWindow) {
+        //         throw new Error('Unable to open PDF.');
+        //       }
+        //       pdfWindow.document.write(
+        //         `<html>
+        //         <head><title>Preview PDF</title></head>
+        //         <body>
+        //           <embed src="${pdfData}" type="application/pdf" width="100%" height="100%">
+        //         </body>
+        //       </html>`
+        //       );
+        //     }
+        //   } catch (error) {
+        //     console.error('Error saving PDF:', error);
+        //     alert('Failed to save PDF. Verify the data.');
+        //     setError('Failed to save PDF. Verify the data.');
+        //   } finally {
+        //     setIsLoading(false);
+        //   }
+        // };
         if (!recipient || recipient.length === 0) {
           console.error(
             `Recipient with application ${requestRecipient} not found in the database.`
@@ -283,10 +349,31 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const handleChange = async (e) => {
     e.preventDefault();
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    // setFormData({
+    //   ...formData,
+    //   [name]: value,
+    //   recipient: {
+    //     ...formData.recipient,
+    //     [name]: value,
+    //   },
+    // });
+
+    if (name.startsWith("recipient.")) {
+      const key = name.split(".")[1];
+      setFormData((formData) => ({
+        ...formData,
+        recipient: {
+          ...formData.recipient,
+          [key]: value,
+        },
+      }));
+    } else {
+      setFormData((formData) => ({
+        ...formData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleChangeForFile = async (e) => {
@@ -305,9 +392,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     const { name, checked } = e.target;
     setSelectedDocuments((prev) => ({ ...prev, [name]: checked }));
 
-    if (checked) {
-      generatePDFPreview(name);
-    }
+    // if (checked) {
+    //   generatePDFPreview(name);
+    // }
   };
 
   const handleRecipientChange = (e) => {
@@ -320,6 +407,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(formData);
     const dataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value instanceof File) {
@@ -388,6 +476,11 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   useEffect(() => {
     setCountryList(getCountriesByLanguage(language));
   }, [language]);
+
+  const isAgreementValid = selectedDocuments.agreement;
+  const isContractValid = selectedDocuments.contract;
+  const isSubmitDisabled =
+    !isFormValid() || !isAgreementValid || !isContractValid;
 
   return (
     <>
@@ -788,7 +881,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             </label>
           )}
 
-          {visibleFields.includes("tckName") && (
+          {visibleFields.includes("recipient.name") && (
             <label className={styles.orderForm__form_lable}>
               <span className={styles.orderForm__form_span}>
                 {language === "uk"
@@ -802,16 +895,16 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 className={styles.orderForm__form_input}
                 placeholder="ТЦК Приклад"
                 type="text"
-                id="tckName"
-                name="tckName"
-                value={formData.tckName}
+                id="recipientName"
+                name="recipient.name"
+                value={formData.recipient.name}
                 onChange={(e) => handleChange(e)}
                 required
               />
             </label>
           )}
 
-          {visibleFields.includes("tckAddress") && (
+          {visibleFields.includes("recipient.address") && (
             <label className={styles.orderForm__form_lable}>
               <span className={styles.orderForm__form_span}>
                 {language === "uk"
@@ -825,9 +918,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 className={styles.orderForm__form_input}
                 placeholder="м.Київ, вул.Вулиця 1"
                 type="text"
-                id="tckAddress"
+                id="recipientAddress"
                 name="tckAddress"
-                value={formData.tckAddress}
+                value={formData.recipient.address}
                 onChange={(e) => handleChange(e)}
                 required
               />
@@ -992,49 +1085,94 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           </button>
           {error && <p style={{ color: "red" }}>{error}</p>}
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-              marginTop: 20,
-            }}
-          >
-            <label
-              htmlFor="agreement-checkbox"
-              onClick={() => generatePDFPreview("agreement")}
-              style={{ cursor: "pointer", textDecoration: "underline" }}
-            >
-              <input
-                type="checkbox"
-                name="agreement"
-                checked={selectedDocuments.agreement}
-                onChange={handleCheckboxChange}
-              />
-              Даю згоду на обробку персональних даних
-            </label>
-            <label
-              htmlFor="contract-checkbox"
-              onClick={() => generatePDFPreview("contract")}
-              style={{ cursor: "pointer", textDecoration: "underline" }}
-            >
-              <input
-                type="checkbox"
-                name="contract"
-                checked={selectedDocuments.contract}
-                onChange={handleCheckboxChange}
-              />
-              Даю згоду на укладання договору про надання правової допомоги
-            </label>
+          {/* {downloadLink && (
+            <div className={styles.orderForm__form_file}>
+              <a
+                className={styles.orderForm__form_download}
+                style={{ textDecoration: 'none' }}
+                href={downloadLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {language === 'uk'
+                  ? 'Завантажити PDF'
+                  : language === 'ru'
+                  ? 'Скачать PDF'
+                  : 'Download PDF'}
+              </a>
+            </div>
+          )} */}
+
+          <div className={styles.checkbox_wrapper_29}>
+            <div>
+              <label>
+                <input
+                  className={styles.checkbox__input}
+                  type="checkbox"
+                  name="agreement"
+                  checked={selectedDocuments.agreement}
+                  onChange={handleCheckboxChange}
+                />
+                <span className={styles.checkbox__label}></span>
+              </label>
+
+              <label
+                className={styles.label}
+                htmlFor="agreement-checkbox"
+                onClick={() => generatePDFPreview("agreement")}
+              >
+                {language === "uk"
+                  ? "Даю згоду на обробку персональних даних"
+                  : language === "ru"
+                  ? "Соглашаюсь на обработку персональных данных"
+                  : "I consent to the processing of personal data"}
+              </label>
+            </div>
+
+            <div>
+              <label>
+                <input
+                  className={styles.checkbox__input}
+                  type="checkbox"
+                  name="contract"
+                  checked={selectedDocuments.contract}
+                  onChange={handleCheckboxChange}
+                />
+                <span className={styles.checkbox__label}></span>
+              </label>
+
+              <label
+                className={styles.label}
+                htmlFor="contract-checkbox"
+                onClick={() => generatePDFPreview("contract")}
+              >
+                {language === "uk"
+                  ? "Даю згоду на укладання договору про надання правової допомоги"
+                  : language === "ru"
+                  ? "Даю согласие на заключение договора о предоставлении правовой помощи"
+                  : "I consent to the conclusion of a legal assistance agreement."}
+              </label>
+            </div>
           </div>
 
           <button
-            onClick={(e) => handleSubmit(e)}
-            disabled={isLoading}
+            // onClick={(e) => handleSubmit(e)}
+            disabled={isLoading || isSubmitDisabled}
+            // disabled={isLoading}
             type="submit"
             className={styles.orderForm__form_button}
           >
-            {isLoading ? "Saving..." : "Зберегти всі документи"}
+            {isLoading
+              ? language === "uk"
+                ? "Збереження..."
+                : language === "ru"
+                ? "Сохранение..."
+                : "Saving..."
+              : language === "uk"
+              ? "Зберегти всі документи"
+              : language === "ru"
+              ? "Сохранить все документы"
+              : "Save all documents"}
           </button>
         </form>
       </div>

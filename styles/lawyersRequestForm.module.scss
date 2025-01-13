@@ -137,6 +137,11 @@
         border: 1px solid #202020;
         background-color: transparent;
       }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     }
 
     & a {
@@ -187,4 +192,95 @@
       font-size: 25px;
     }
   }
+}
+
+.checkbox_wrapper_29 {
+  --size: 1rem;
+  --background: #f5f5f5;
+  font-size: var(--size);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.checkbox_wrapper_29 *,
+.checkbox_wrapper_29 *::after,
+.checkbox_wrapper_29 *::before {
+  box-sizing: border-box;
+}
+
+.checkbox_wrapper_29 .checkbox__input[type="checkbox"] {
+  visibility: hidden;
+  display: none;
+  position: relative;
+}
+
+.checkbox_wrapper_29 .checkbox__label {
+  width: var(--size);
+  position: relative;
+  margin-right: 20px;
+}
+
+.checkbox_wrapper_29 .checkbox__label:before {
+  content: " ";
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  position: absolute;
+  top: calc(var(--size) * 0.125);
+  left: 0;
+  background: var(--background);
+}
+
+.checkbox_wrapper_29 .checkbox__label:after {
+  content: " ";
+  display: block;
+  height: var(--size);
+  width: var(--size);
+  border: calc(var(--size) * 0.14) solid #000;
+  transition: 200ms;
+  position: absolute;
+  top: calc(var(--size) * 0.125);
+  left: 0;
+  background: var(--background);
+}
+
+.checkbox_wrapper_29 .checkbox__label:after {
+  transition: 100ms ease-in-out;
+}
+
+.checkbox_wrapper_29 .checkbox__input:checked ~ .checkbox__label:after {
+  border-top-style: none;
+  border-right-style: none;
+  -ms-transform: rotate(-45deg); /* IE9 */
+  transform: rotate(-45deg);
+  height: calc(var(--size) * 0.5);
+  border-color: green;
+}
+
+.checkbox_wrapper_29 .checkbox {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.checkbox_wrapper_29 .checkbox__label:after:hover,
+.checkbox_wrapper_29 .checkbox__label:after:active {
+  border-color: green;
+}
+
+.label {
+  color: #202020;
+  font-size: 20px;
+  font-family: "Trebuchet MS", sans-serif;
+  border-style: hidden;
+  margin-bottom: 5px;
+  cursor: pointer;
+  @include onMobile {
+    font-size: 16px;
+  }
+
+  text-decoration: underline;
 }
