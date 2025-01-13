@@ -201,11 +201,16 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const filterFieldsByRequestType = (requestEn) => {
     const typeKey = requestNameToKeyMap[requestEn] || "";
-    console.log(typeKey);
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEn);
-  
+
+  const getNestedValue = (obj, path) => {
+    return path
+      .split(".")
+      .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
+  };
+
   const isFormValid = () => {
     // console.log(visibleFields);
     return visibleFields.every((field) => {
@@ -219,9 +224,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         return value.size > 0;
       }
 
-      return typeof value === "string"
-        ? value.trim() !== ""
-        : Boolean(value);
+      return typeof value === "string" ? value.trim() !== "" : Boolean(value);
     });
   };
 
@@ -233,14 +236,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           "name",
           requestRecipient
         );
-
-        const getNestedValue = (obj, path) => {
-          return path
-            .split(".")
-            .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
-        };
-
-       
 
         // const generateAndSavePDF = async () => {
         //   setIsLoading(true);
@@ -299,7 +294,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     };
     getRecipient();
   }, []);
-
 
   const generatePDFPreview = async (type) => {
     setIsLoading(true);
