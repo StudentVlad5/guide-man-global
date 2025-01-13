@@ -117,6 +117,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     eventPlace: '', //ГУНП
     ipn: '', //ПФУ і ДПСУ
     propertyAddress: '', //ВПО
+    uid: user?.uid || '',
     request: request,
   });
 

@@ -324,7 +324,6 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       order: data.numberOrder || '',
       file: data.requesterFile || '',
       userId: uid,
-      // userReference: user.idPost,
       status: 'pending',
     };
 
