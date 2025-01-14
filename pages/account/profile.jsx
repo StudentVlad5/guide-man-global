@@ -11,6 +11,7 @@ import ErrorPage from "../404";
 import { useContext, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
+import styl from "../../styles/lawyersRequestForm.module.scss";
 import saveCredentials from "../api/userProfile";
 import { fieldInput, placeHolder, patternInput } from "../../helpers/constant";
 
@@ -102,22 +103,27 @@ export default function ProfileItemPage() {
             <ul className="flexWrap">
               {Object.keys(userCredentials).map((it) => {
                 return (
-                  <li key={it}>
-                    <span>{t(fieldInput[it])}:</span>
+                  <li key={it} className={styles.form__li}>
+                    <span className={styl.orderForm__form_span}>
+                      {t(fieldInput[it])}:
+                    </span>
                     {!editStatus ? (
-                      <div className={styles.form__input}>
+                      <div
+                        className={styl.orderForm__form_input}
+                        style={{ width: "100%" }}
+                      >
                         {userCredentials[it]}
                       </div>
                     ) : (
                       <>
                         <input
-                          // className={styles.form__input}
                           className={
                             patternInput[it] &&
                             !patternInput[it].test(userCredentials[it])
                               ? styles.form__input__danger
-                              : styles.form__input
+                              : styl.orderForm__form_input
                           }
+                          style={{ width: "100%" }}
                           type="text"
                           id={it}
                           name={it}

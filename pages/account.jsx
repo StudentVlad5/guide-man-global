@@ -40,7 +40,7 @@ export default function AccountPage() {
         const user = userCredential.user;
 
         setUser(user);
-        router.push("/");
+        // router.push("/");
       })
       .catch((error) => {
         setIsModal(true);
