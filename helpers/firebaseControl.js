@@ -142,7 +142,6 @@ export function createNewUser(user, regInfo) {
       phoneNumber: regInfo?.phoneNumber || '',
       dateCreating: format(new Date(), 'dd-MM-yyyy HH:mm'),
       role: 'user',
-      requests: [],
     };
     setDocumentToCollection('users', user_to_firebase_start)
       .then(r => {
@@ -313,7 +312,6 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
     }
 
     const user = users[0];
-    const userRef = doc(db, 'users', user.idPost);
 
     // Формуємо новий запит
     const newRequest = {
@@ -323,16 +321,23 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       pdfLawyersRequest: pdfUrls.lawyersRequest || '',
       pdfAgreement: pdfUrls.agreement || '',
       pdfContract: pdfUrls.contract || '',
-      numberOrder: data.numberOrder || '',
+      order: data.numberOrder || '',
       file: data.requesterFile || '',
+      userId: uid,
+      status: 'pending',
     };
 
-    // Оновлюємо поле `requests` користувача
-    await updateDoc(userRef, {
-      requests: arrayUnion(newRequest),
-    });
+    // // Оновлюємо поле `requests` користувача
+    // const userRef = doc(db, 'users', user.idPost);
+    // await updateDoc(userRef, {
+    //   requests: arrayUnion(newRequest),
+    // });
 
-    console.log('Request added to existing user document');
+    // Зберігаємо новий запит в колекцію "userRequests"
+    const requestRef = doc(db, 'userRequests', newRequest.id);
+    await setDoc(requestRef, newRequest);
+
+    console.log('Request saved successfully ');
     return newRequest;
   } catch (error) {
     console.error('Error saving request to Firestore:', error);

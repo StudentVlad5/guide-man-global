@@ -23,7 +23,7 @@
     },
     "en": {
       "title": "Request for a certificate of no criminal record",
-      "preview": "This request allows the lawyer to obtain a certificate of the presence or absence of a criminal record of the client or another person. Such information is often required to confirm the legal status of a person in legal matters, employment, obtaining licenses, permits, and in migration processes.",
+      "preview": "This request allows a lawyer to obtain a certificate confirming the presence or absence of a criminal record for the client or another individual. Such information is often required to confirm the legal status of an individual in legal cases, employment, licensing, permits, and migration processes.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати довідку про відсутність судимості для [П.І.Б. клієнта]. </p><p> Цей запит подається з метою підтвердження відсутності судимості, що може бути необхідним для судового розгляду, захисту прав і інтересів клієнта, а також у зв'язку з іншими правовими обставинами.</p>"
     }
   },
@@ -52,7 +52,7 @@
     },
     "en": {
       "title": "Request for copies of protocols and documents signed by the driver",
-      "preview": "This request allows the lawyer to obtain copies of all protocols and documents signed by the driver at the scene of the traffic violation. This is necessary to verify the correctness of the documents and compliance with the procedure by law enforcement agencies.",
+      "preview": "This request allows a lawyer to obtain copies of all protocols and documents signed by the driver at the site of the traffic violation. This is necessary to verify the correctness of the documents and ensure procedural compliance by law enforcement agencies.",
       "text": "<p> На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати копії всіх протоколів та інших документів, підписаних [П.І.Б. клієнта] під час фіксації порушення ПДР у [вказати дату та місце події]. Зокрема, прошу надати такі документи: </p> <ul> <li>1. Копії протоколу про порушення ПДР, підписаного водієм. </li> <li>2. Копії всіх інших документів, складених на місці події та підписаних водієм. </li> <li>3. Інформацію про порядок оскарження протоколу, якщо така інформація не була надана водієві на момент складання документів.</li></ul>"
     }
   },
@@ -80,8 +80,8 @@
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати інформацію про можливість отримання компенсації за втрачене майно, що належить [П.І.Б. клієнта], яке розташоване за адресою [вказати адресу майна]. Прошу надати роз`яснення щодо процедури подання заяви, необхідних документів, а також строків та умов отримання компенсації. </p> <p> Цей запит подається з метою забезпечення прав клієнта на відшкодування вартості втраченого майна та отримання повної інформації для підготовки заяви на компенсацію.</p>"
     },
     "en": {
-      "title": "Request for information on compensation for lost property to the Ministry for Reintegration of Temporarily Occupied Territories",
-      "preview": "This request allows the lawyer to obtain information about the procedure for filing an application for compensation for lost property located in the temporarily occupied territories of Ukraine. The request helps to find out what documents are needed to file an application and what is the procedure for receiving compensation.",
+      "title": "Request for information on compensation for lost property to the Ministry for the Reintegration of Temporarily Occupied Territories of Ukraine",
+      "preview": "This request allows a lawyer to obtain information on the procedure for submitting a claim for compensation for lost property located in the temporarily occupied territories of Ukraine. The request helps clarify what documents are required for filing the claim and the procedure for receiving compensation.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати інформацію про можливість отримання компенсації за втрачене майно, що належить [П.І.Б. клієнта], яке розташоване за адресою [вказати адресу майна]. Прошу надати роз`яснення щодо процедури подання заяви, необхідних документів, а також строків та умов отримання компенсації. </p> <p> Цей запит подається з метою забезпечення прав клієнта на відшкодування вартості втраченого майна та отримання повної інформації для підготовки заяви на компенсацію.</p>"
     }
   },
@@ -109,8 +109,8 @@
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати засвідчені копії документів пенсійної справи для [П.І.Б. клієнта], а саме:</p><ul><li>1.Рішення про призначення пенсії, із зазначенням підстав і розрахункових даних.</li><li>2.Рішення про перерахунок пенсії (за наявності), із зазначенням змін і підстав. </li><li>3.Інші документи, які входять до пенсійної справи та можуть мати значення для підтвердження прав клієнта.</li></ul>"
     },
     "en": {
-      "title": "Request for copies of pension documents",
-      "preview": "This request allows the lawyer to obtain copies of documents from the client's pension file, including decisions on the appointment or recalculation of the pension. Such information is necessary to verify the correctness of the pension calculation, determine the client's rights and possibly challenge the decisions of the Pension Fund.",
+      "title": "Request for copies of pension file documents",
+      "preview": "This request allows a lawyer to obtain copies of documents from the client’s pension file, including decisions on pension assignment or recalculation. Such information is necessary to verify the correctness of pension calculations, determine the client’s rights, and potentially appeal Pension Fund decisions.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати засвідчені копії документів пенсійної справи для [П.І.Б. клієнта], а саме:</p><ul><li>1.Рішення про призначення пенсії, із зазначенням підстав і розрахункових даних.</li><li>2.Рішення про перерахунок пенсії (за наявності), із зазначенням змін і підстав. </li><li>3.Інші документи, які входять до пенсійної справи та можуть мати значення для підтвердження прав клієнта.</li></ul>"
     }
   },
@@ -134,12 +134,12 @@
     },
     "ru": {
       "title": "Запрос о предоставлении копий документов личного дела",
-      "preview": "Этот запрос направлен на получение копий документов, содержащихся в личном деле клиента, в частности, приказов о назначении, переводе, увольнении и других кадровых документах. Он необходим для подтверждения служебного статуса, анализа истории карьеры военнослужащего или обжалования кадровых решений, если возникают спорные вопросы, касающиеся его службы.",
+      "preview": "Этот запрос направлен на получение копий документов, содержащихся в личном деле клиента, включая приказы о назначении, переводе, увольнении и другие кадровые документы. Он необходим для подтверждения служебного статуса, анализа истории карьеры военнослужащего или для обжалования кадровых решений, если возникают спорные вопросы относительно его службы.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати засвідчені копії наступних документів з особової справи [П.І.Б. клієнта]:</p><ul><li>1. Наказ про призначення на посаду [П.І.Б. клієнта] та його копію.</li><li>2. Копії наказів про переведення на інші посади, якщо такі переведення мали місце.</li><li>3. Копію наказу про звільнення з військової служби (за наявності).</li><li>4. Інші документи, що стосуються проходження служби, за необхідності.</li></ul>"
     },
     "en": {
       "title": "Request for copies of personal file documents",
-      "preview": "This request is for copies of documents contained in the client's personnel file, including orders of appointment, transfer, dismissal, and other personnel documents. It is required to confirm service status, analyze the service member's career history, or to appeal personnel decisions if there are disputed issues regarding his service.",
+      "preview": "This request is aimed at obtaining copies of documents contained in the client’s personal file, including orders on appointments, transfers, dismissals, and other personnel documents. It is necessary to confirm the service status, analyze the career history of a serviceman, or challenge personnel decisions in case of disputes regarding their service.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу надати засвідчені копії наступних документів з особової справи [П.І.Б. клієнта]:</p><ul><li>1. Наказ про призначення на посаду [П.І.Б. клієнта] та його копію.</li><li>2. Копії наказів про переведення на інші посади, якщо такі переведення мали місце.</li><li>3. Копію наказу про звільнення з військової служби (за наявності).</li><li>4. Інші документи, що стосуються проходження служби, за необхідності.</li></ul>"
     }
   },
@@ -163,12 +163,12 @@
     },
     "ru": {
       "title": "Запрос об изъятии информации из базы данных ГНСУ о временном ограничении в праве выезда из Украины",
-      "preview": "Этот запрос позволяет адвокату обратиться с просьбой об удалении устаревшей или неактуальной информации о временном ограничении права выезда из Украины для конкретного лица. Запрос может быть необходим в случаях, когда ограничение больше не действует, и хранение такой информации в базе данных может отрицательно повлиять на права клиента.",
+      "preview": "Этот запрос позволяет адвокату обратиться с просьбой об удалении устаревшей или неактуальной информации о временном ограничении права выезда из Украины для конкретного лица. Запрос может быть необходим в случаях, когда ограничение больше не действует, и хранение такой информации в базе данных может негативно повлиять на права клиента.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу вилучити інформацію про тимчасове обмеження у праві виїзду з України для [П.І.Б. клієнта] , зважаючи на те, що:</p><ul><li>1.Тимчасове обмеження більше не є актуальним (не чинне) у зв`язку з [підстава для зняття обмеження].</li><li>2. Зберігання цієї інформації може негативно вплинути на права та інтереси клієнта, зокрема його право на свободу пересування.</li></ul>"
     },
     "en": {
-      "title": "Request for removal of information from the database of the State Border Service of Ukraine regarding temporary restrictions on the right to leave Ukraine",
-      "preview": "This request allows a lawyer to request the removal of outdated or irrelevant information regarding a temporary restriction on the right to leave Ukraine for a specific individual. The request may be necessary in cases where the restriction is no longer in effect and retaining such information in the database may adversely affect the client’s rights.",
+      "title": "Request for removal of information from the SBGS database regarding temporary travel restrictions from Ukraine",
+      "preview": "This request allows a lawyer to ask for the removal of outdated or irrelevant information about temporary travel restrictions for a specific individual. The request may be necessary in cases where the restriction is no longer valid, and storing such information in the database may negatively affect the client’s rights.",
       "text": "<p>На підставі Закону України «Про адвокатуру та адвокатську діяльність» та в рамках надання правової допомоги в захисті законних інтересів мого клієнта, прошу вилучити інформацію про тимчасове обмеження у праві виїзду з України для [П.І.Б. клієнта] , зважаючи на те, що:</p><ul><li>1.Тимчасове обмеження більше не є актуальним (не чинне) у зв`язку з [підстава для зняття обмеження].</li><li>2. Зберігання цієї інформації може негативно вплинути на права та інтереси клієнта, зокрема його право на свободу пересування.</li></ul>"
     }
   },
@@ -186,17 +186,17 @@
     },
     "ua": {
       "title": "Запит про надання довідки про зміну імені або прізвища",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати довідку про зміну імені або прізвища конкретної особи. Така інформація може знадобитися для підтвердження змін у персональних даних клієнта, що може бути важливо під час ведення судових справ, відновлення прав на майно, уточнення спадкових прав чи інших юридичних питань.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление справки о смене имени или фамилии",
+      "preview": "Этот запрос позволяет адвокату получить справку о смене имени или фамилии конкретного лица. Такая информация может потребоваться для подтверждения изменений в личных данных клиента, что может быть важно при ведении судебных дел, восстановлении прав на имущество, уточнении наследственных прав или других юридических вопросов.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a certificate of name or surname change",
+      "preview": "This request allows a lawyer to obtain a certificate confirming the change of name or surname of a specific individual. Such information may be required to confirm changes in the client’s personal data, which may be important for court cases, property rights restoration, inheritance rights clarification, or other legal matters.",
       "text": ""
     }
   },
@@ -213,18 +213,18 @@
       "en": "Requests to the Civil Registry Offices (registration of civil status acts)"
     },
     "ua": {
-      "title": "Запит про надання довідки про місце реєстрації проживання",
-      "preview": "",
+      "title": "Запит про надання довідки про місце реєстрації проживання",
+      "preview": "Цей запит дозволяє адвокату отримати довідку про поточне або попереднє місце реєстрації проживання клієнта чи іншої особи. Така інформація може знадобитися для підтвердження адреси проживання у рамках судових розглядів, спадкових справ, майнових спорів, а також у випадках, коли потрібно довести факт проживання в певному місці.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление справки о месте регистрации проживания",
+      "preview": "Этот запрос позволяет адвокату получить справку о текущем или предыдущем месте регистрации проживания клиента или другого лица. Такая информация может потребоваться для подтверждения адреса проживания в рамках судебных разбирательств, наследственных дел, имущественных споров, а также в случаях, когда требуется доказать факт проживания в определенном месте.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a certificate of residence registration",
+      "preview": "This request allows a lawyer to obtain a certificate of the current or previous residence registration of the client or another individual. Such information may be required to confirm the residence address in court proceedings, inheritance cases, property disputes, or situations where proof of residence in a specific location is necessary.",
       "text": ""
     }
   },
@@ -242,17 +242,17 @@
     },
     "ua": {
       "title": "Запит про надання довідки про сімейний стан",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати довідку про сімейний стан особи, що може знадобитися для підтвердження наявності або відсутності зареєстрованих шлюбів. Така інформація важлива під час вирішення питань, пов’язаних зі спадщиною, поділом майна, аліментами або інших ситуаціях, де потрібне офіційне підтвердження сімейного статусу клієнта.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление справки о семейном положении",
+      "preview": "Этот запрос позволяет адвокату получить справку о семейном положении лица, что может потребоваться для подтверждения наличия или отсутствия зарегистрированных браков. Такая информация важна при решении вопросов, связанных с наследством, разделом имущества, алиментами или других ситуациях, где требуется официальное подтверждение статуса семейного положения клиента.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a certificate of marital status",
+      "preview": "This request allows a lawyer to obtain a certificate of an individual’s marital status, which may be necessary to confirm the presence or absence of registered marriages. Such information is crucial when addressing issues related to inheritance, property division, alimony, or other situations requiring official confirmation of the client’s marital status.",
       "text": ""
     }
   },
@@ -270,17 +270,17 @@
     },
     "ua": {
       "title": "Запит про надання копії свідоцтва про народження",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати копію свідоцтва про народження клієнта або іншої особи, що може бути необхідним для підтвердження факту народження, віку, громадянства або інших даних. Така інформація може бути важливою у рамках судових розглядів, встановлення родинних зв’язків, отримання спадщини або оформлення опіки.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление копии свидетельства о рождении",
+      "preview": "Этот запрос позволяет адвокату получить копию свидетельства о рождении клиента или другого лица, что может быть необходимо для подтверждения факта рождения, возраста, гражданства или других данных.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a copy of a birth certificate",
+      "preview": "Such information may be required to confirm the fact and date of the marriage, which is important in property disputes, establishing family ties, inheritance matters, or other legal issues requiring official confirmation of marital status.",
       "text": ""
     }
   },
@@ -298,17 +298,17 @@
     },
     "ua": {
       "title": "Запит про надання копії свідоцтва про розірвання шлюбу",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати копію свідоцтва про розірвання шлюбу, що може бути важливим для підтвердження факту та дати розводу. Така інформація може потребуватися в справах, пов'язаних з розділом майна, алиментами, визначенням батьківських прав або підтвердженням сімейного статусу для інших юридичних цілей.",
       "text": ""
     },
     "ru": {
       "title": "",
-      "preview": "",
+      "preview": "Этот запрос позволяет адвокату получить копию свидетельства о расторжении брака, что может быть важно для подтверждения факта и даты развода. Такая информация может потребоваться в делах, связанных с разделом имущества, алиментами, определением родительских прав или подтверждением семейного статуса для других юридических целей.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a copy of the certificate of dissolution of the love",
+      "preview": "This request allows the attorney to obtain a copy of the divorce certificate, which may be important to verify the fact and date of the divorce. This information may be needed in cases involving property division, alimony, determination of parental rights, or confirmation of marital status for other legal purposes.",
       "text": ""
     }
   },
@@ -326,17 +326,17 @@
     },
     "ua": {
       "title": "Запит про надання копії свідоцтва про смерть",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати копію свідоцтва про смерть, що може бути важливим для підтвердження факту та дати смерті конкретної особи. Така інформація часто потрібна у справах, пов'язаних зі спадщиною, страховими виплатами, а також у випадках, коли потрібно встановити юридичні наслідки, пов'язані з фактом смерті.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос о предоставлении копии свидетельства о смерти",
+      "preview": "Этот запрос позволяет адвокату получить копию свидетельства о смерти, что может быть важно для подтверждения факта и даты смерти конкретного лица. Такая информация часто необходима в делах, связанных с наследством, страховыми выплатами, а также в случаях, когда требуется установить юридические последствия, связанные с фактом смерти.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a copy of a death certificate",
+      "preview": "This request allows the attorney to obtain a copy of the death certificate, which may be important to confirm the fact and date of death of a particular person. Such information is often needed in cases involving inheritance, insurance payments, and in cases where it is necessary to establish the legal consequences associated with the fact of death.",
       "text": ""
     }
   },
@@ -354,17 +354,17 @@
     },
     "ua": {
       "title": "Запит про надання копії свідоцтва про шлюб",
-      "preview": "",
+      "preview": "Цей запит дозволяє адвокату отримати копію свідоцтва про шлюб клієнта чи іншої особи. Така інформація може знадобитися для підтвердження факту та дати укладання шлюбу, що важливо в рамках майнових спорів, встановлення родинних зв'язків, питань спадщини чи інших юридичних питань, де потрібне офіційне підтвердження сімейного статусу.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос о предоставлении копии свидетельства о браке",
+      "preview": "Этот запрос позволяет адвокату получить копию свидетельства о браке клиента или другого лица. Такая информация может потребоваться для подтверждения факта и даты заключения брака, что важно в рамках имущественных споров, установления родственных связей, вопросов наследства или других юридических вопросов, где требуется официальное подтверждение семейного статуса.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for a copy of a marriage certificate",
+      "preview": "This request allows the attorney to obtain a copy of the client's or another person's marriage certificate. Such information may be needed to confirm the fact and date of the marriage, which is important in property disputes, establishing family ties, inheritance issues, or other legal matters where official confirmation of marital status is required.",
       "text": ""
     }
   },
@@ -382,17 +382,17 @@
     },
     "ua": {
       "title": "Запит про надання копій документів, пов'язаних з міграційними процедурами",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати копії документів, які були створені в рамках міграційних процедур для конкретної особи, таких як заяви, рішення про надання або відмову в наданні статусу біженця, видачі дозволу на проживання тощо. Така інформація може бути необхідною для захисту прав клієнта в разі виникнення спорів або необхідності оскарження рішень.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление копий документов, связанных с миграционными процедурами",
+      "preview": "Этот запрос позволяет получить копии документов, созданных в рамках миграционных процедур для конкретного лица, таких как заявления, решения о предоставлении или отказе в предоставлении статуса беженца, выдаче вида на жительство и т.д. Такая информация может быть необходима для защиты прав клиента в случае возникновения споров или необходимости обжалования решений.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for copies of documents related to migration procedures",
+      "preview": "This request allows obtaining copies of documents created within the framework of migration procedures for a specific individual, such as applications, decisions on granting or denying refugee status, residence permits, and more. Such information may be necessary to protect the client’s rights in case of disputes or the need to appeal decisions.",
       "text": ""
     }
   },
@@ -410,45 +410,17 @@
     },
     "ua": {
       "title": "Запит про надання копій документів, пов'язаних з перетином кордону",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати копії документів, які стосуються перетину кордону клієнтом, зокрема, протоколів, постанов чи інших офіційних документів. Це може бути необхідно для вирішення спорів або оскарження рішень прикордонних служб.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос о предоставлении копий документов, связанных с пересечением границы",
+      "preview": "Этот запрос позволяет получить копии документов, связанных с пересечением границы клиентом, включая протоколы, постановления или другие официальные документы. Это может быть необходимо для разрешения споров или обжалования решений пограничных служб.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
-      "text": ""
-    }
-  },
-  {
-    "id": "16",
-    "idPost": "16",
-    "dateCreating": "2024-12-17 17:17",
-    "path": "",
-    "type": "request",
-    "recipient": "dmsu",
-    "requestType": {
-      "ua": "Запити до Державної міграційної служби України (ДМСУ) та адміністрації ДПСУ",
-      "ru": "Запросы в Государственную миграционную службу Украины (ДМСУ) и администрацию ДПСУ",
-      "en": "Requests to the State Migration Service of Ukraine (SMSU) and the Administration of SBGS"
-    },
-    "ua": {
-      "title": "Запит про надання копій документів, пов'язаних з перетином кордону",
-      "preview": "",
-      "text": ""
-    },
-    "ru": {
-      "title": "",
-      "preview": "",
-      "text": ""
-    },
-    "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for copies of documents related to border crossing",
+      "preview": "This request allows obtaining copies of documents related to the client’s border crossing, including protocols, resolutions, or other official documents. This may be necessary for resolving disputes or challenging decisions of border services.",
       "text": ""
     }
   },
@@ -466,17 +438,17 @@
     },
     "ua": {
       "title": "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати інформацію про випадки затримання або відмови у пропуску через державний кордон для конкретної особи. Така інформація може бути необхідною для аналізу підстав і правомірності таких дій, а також для захисту інтересів клієнта у разі виникнення правових спорів або необхідності оскарження дій прикордонних органів.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление информации о задержании или отказе в пропуске через государственную границу",
+      "preview": "Этот запрос позволяет получить информацию о случаях задержания или отказа в пропуске через государственную границу для конкретного лица. Такая информация может быть необходимой для анализа оснований и правомерности таких действий, а также для защиты интересов клиента в случае возникновения правовых споров или необходимости обжалования действий пограничных органов.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for information on detention or refusal to cross the state border",
+      "preview": "This request allows for obtaining information on cases of detention or refusal to cross the state border for a specific individual. Such information may be necessary to analyze the grounds and legitimacy of such actions, as well as to protect the client’s interests in the event of legal disputes or the need to appeal the actions of border authorities.",
       "text": ""
     }
   },
@@ -494,17 +466,17 @@
     },
     "ua": {
       "title": "Запит про надання інформації щодо наявності або відсутності громадянства України у особи",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати інформацію про наявність або відсутність громадянства України у конкретної особи. Така інформація може бути необхідною при вирішенні питань, пов’язаних з громадянством, його набуттям або втратою, а також у випадках, коли необхідно підтвердити правовий статус особи на території України.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление информации о наличии или отсутствии гражданства Украины у лица",
+      "preview": "Этот запрос позволяет получить информацию о наличии или отсутствии гражданства Украины у конкретного лица. Такая информация может быть необходимой при решении вопросов, связанных с гражданством, его приобретением или утратой, а также в случаях, когда необходимо подтвердить правовой статус лица на территории Украины.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for information on the presence or absence of Ukrainian citizenship for a person",
+      "preview": "This request allows obtaining information on whether a specific individual holds Ukrainian citizenship. Such information may be necessary for resolving issues related to citizenship acquisition or loss, as well as confirming a person’s legal status in Ukraine.",
       "text": ""
     }
   },
@@ -522,17 +494,17 @@
     },
     "ua": {
       "title": "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати інформацію про наявність або відсутність заборони на в’їзд в Україну для іноземця або особи без громадянства. Така інформація може бути необхідною для захисту інтересів клієнта, якому можуть бути обмежені права на в’їзд до України, а також для оскарження відповідних рішень.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление информации о наличии или отсутствии запрета на въезд в Украину",
+      "preview": "Этот запрос позволяет получить информацию о наличии или отсутствии запрета на въезд в Украину для иностранца или лица без гражданства. Такая информация может быть необходимой для защиты интересов клиента, которому могут быть ограничены права на въезд в Украину, а также для обжалования соответствующих решений.",
       "text": ""
     },
     "en": {
-      "title": "",
-      "preview": "",
+      "title": "Request for information on the presence or absence of a ban on entry into Ukraine",
+      "preview": "This request allows obtaining information on whether a foreigner or stateless person is banned from entering Ukraine. Such information may be necessary to protect the interests of a client whose entry rights to Ukraine might be restricted, as well as for appealing against relevant decisions.",
       "text": ""
     }
   },
@@ -550,12 +522,12 @@
     },
     "ua": {
       "title": "Запит про надання інформації щодо наявності обмежень на виїзд за кордон",
-      "preview": "",
+      "preview": "Цей запит дозволяє отримати інформацію про наявність обмежень на виїзд за кордон для конкретної особи. Така інформація може бути необхідною для з’ясування, чи існують юридичні підстави, що перешкоджають виїзду особи за межі України, наприклад, через судові рішення або постанови інших органів.",
       "text": ""
     },
     "ru": {
-      "title": "",
-      "preview": "",
+      "title": "Запрос на предоставление информации о наличии ограничений на выезд за границу",
+      "preview": "Этот запрос позволяет получить информацию о наличии ограничений на выезд за границу для конкретного лица. Такая информация может быть необходимой для выяснения, существуют ли юридические основания, препятствующие выезду лица за пределы Украины, например, из-за судебных решений или постановлений других органов.",
       "text": ""
     },
     "en": {
