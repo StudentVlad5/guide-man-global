@@ -11,9 +11,11 @@ import ErrorPage from "../404";
 import { useContext, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
+import s from "../../styles/formPage.module.scss";
 import styl from "../../styles/lawyersRequestForm.module.scss";
 import saveCredentials from "../api/userProfile";
 import { fieldInput, placeHolder, patternInput } from "../../helpers/constant";
+import SideBar from "../../components/SideBar";
 
 export default function ProfileItemPage() {
   const { t } = useTranslation();
@@ -99,96 +101,99 @@ export default function ProfileItemPage() {
       </div>
       <div className="page page-bigBottom">
         <div className="container">
-          <form className={styles.form}>
-            <ul className="flexWrap">
-              {Object.keys(userCredentials).map((it) => {
-                return (
-                  <li key={it} className={styles.form__li}>
-                    <span className={styl.orderForm__form_span}>
-                      {t(fieldInput[it])}:
-                    </span>
-                    {!editStatus ? (
-                      <div
-                        className={styl.orderForm__form_input}
-                        style={{ width: "100%" }}
-                      >
-                        {userCredentials[it]}
-                      </div>
-                    ) : (
-                      <>
-                        <input
-                          className={
-                            patternInput[it] &&
-                            !patternInput[it].test(userCredentials[it])
-                              ? styles.form__input__danger
-                              : styl.orderForm__form_input
-                          }
+          <div className={s.formPage__container}>
+            <SideBar/>
+            <form className={styles.form} style={{ marginLeft: "31px" }}>
+              <ul className="flexWrap">
+                {Object.keys(userCredentials).map((it) => {
+                  return (
+                    <li key={it} className={styles.form__li}>
+                      <span className={styl.orderForm__form_span}>
+                        {t(fieldInput[it])}:
+                      </span>
+                      {!editStatus ? (
+                        <div
+                          className={styl.orderForm__form_input}
                           style={{ width: "100%" }}
-                          type="text"
-                          id={it}
-                          name={it}
-                          value={userCredentials[it]}
-                          pattern={patternInput[it].source}
-                          placeholder={placeHolder[it]}
-                          onChange={(e) => {
-                            if (
-                              patternInput[it] &&
-                              !patternInput[it].test(e.target.value)
-                            ) {
-                              setValidateStatus(true);
-                            } else {
-                              setValidateStatus(false);
-                            }
-                            if (it === "birthday") {
-                              handleInputChangeBirthday(e);
-                            } else {
-                              setUserCredentials({
-                                ...userCredentials,
-                                [it]: e.currentTarget.value,
-                              });
-                            }
-                          }}
-                        />
-                        <span
-                          className={
-                            patternInput[it] &&
-                            !patternInput[it].test(userCredentials[it])
-                              ? styles.form__validate
-                              : styles.form__validate__hide
-                          }
                         >
-                          Please use pattern: {placeHolder[it]}
-                        </span>
-                      </>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-            {!editStatus ? (
-              <button
-                type="submit"
-                className={`button ${styles.form__button}`}
-                style={{ marginTop: "20px" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setEditStatus(true);
-                }}
-              >
-                {t("edit")}
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className={`button ${styles.form__button}`}
-                style={{ marginTop: "20px" }}
-                onClick={(e) => handleSubmit(e)}
-                disabled={validateStatus}
-              >
-                {t("submit")}
-              </button>
-            )}
-          </form>
+                          {userCredentials[it]}
+                        </div>
+                      ) : (
+                        <>
+                          <input
+                            className={
+                              patternInput[it] &&
+                              !patternInput[it].test(userCredentials[it])
+                                ? styles.form__input__danger
+                                : styl.orderForm__form_input
+                            }
+                            style={{ width: "100%" }}
+                            type="text"
+                            id={it}
+                            name={it}
+                            value={userCredentials[it]}
+                            pattern={patternInput[it].source}
+                            placeholder={placeHolder[it]}
+                            onChange={(e) => {
+                              if (
+                                patternInput[it] &&
+                                !patternInput[it].test(e.target.value)
+                              ) {
+                                setValidateStatus(true);
+                              } else {
+                                setValidateStatus(false);
+                              }
+                              if (it === "birthday") {
+                                handleInputChangeBirthday(e);
+                              } else {
+                                setUserCredentials({
+                                  ...userCredentials,
+                                  [it]: e.currentTarget.value,
+                                });
+                              }
+                            }}
+                          />
+                          <span
+                            className={
+                              patternInput[it] &&
+                              !patternInput[it].test(userCredentials[it])
+                                ? styles.form__validate
+                                : styles.form__validate__hide
+                            }
+                          >
+                            Please use pattern: {placeHolder[it]}
+                          </span>
+                        </>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+              {!editStatus ? (
+                <button
+                  type="submit"
+                  className={`button ${styles.form__button}`}
+                  style={{ marginTop: "20px" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEditStatus(true);
+                  }}
+                >
+                  {t("edit")}
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className={`button ${styles.form__button}`}
+                  style={{ marginTop: "20px" }}
+                  onClick={(e) => handleSubmit(e)}
+                  disabled={validateStatus}
+                >
+                  {t("submit")}
+                </button>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </Layout>

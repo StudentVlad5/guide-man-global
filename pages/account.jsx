@@ -17,15 +17,17 @@ import Link from "next/link";
 import { PageNavigation } from "../components/PageNavigation";
 import { getRightData, getRightURL } from "../helpers/rightData";
 import { BASE_URL } from "./sitemap.xml";
+import SideBar from "../components/SideBar";
 
 export default function AccountPage() {
   const [isModal, setIsModal] = useState(false);
   const [errorTitle, setErrorTitle] = useState("Login Error");
   const [errorMessage, setErrorMessage] = useState("");
   const { t } = useTranslation();
-  const { locale, pathname, router } = useRouter();
-
+  const { locale, pathname } = useRouter();
+  const router = useRouter();
   const { user, setUser } = useContext(AppContext);
+
   const handleLogin = (e, regInfo) => {
     e.preventDefault();
 
@@ -40,7 +42,7 @@ export default function AccountPage() {
         const user = userCredential.user;
 
         setUser(user);
-        // router.push("/");
+        router.push("account/profile/");
       })
       .catch((error) => {
         setIsModal(true);
@@ -114,26 +116,17 @@ export default function AccountPage() {
       </div>
       <div className="page page-bigBottom">
         <div className="container">
-          <div className={styles.formPage}>
-            <div className={styles.formPage__form}>
-              {user ? (
-                <ul>
-                  <Link href={`account/profile`}>
-                    <li>Profile</li>
-                  </Link>
-                  <Link href={`account/history`}>
-                    <li>History</li>
-                  </Link>
-                </ul>
-              ) : (
-                <Form
-                  formFunction="account"
-                  handleSubmit={handleLogin}
-                  handleResetPassword={handleResetPassword}
-                />
-              )}
+          {user ? (
+            <div className={styles.formPage__container}>
+              <SideBar />
             </div>
-          </div>
+          ) : (
+            <Form
+              formFunction="account"
+              handleSubmit={handleLogin}
+              handleResetPassword={handleResetPassword}
+            />
+          )}
         </div>
       </div>
 
