@@ -1,39 +1,63 @@
-@import './mixins';
+@import "./mixins";
+@import "./variables";
 
 .formPage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-    &__form {
-      width: 70%;
-      text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-      &__button {
-        width: 400px;
-        height: 85px;
-        box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
-        border-radius: 13.376px;
-        border: none;
-        font-family: 'Montserrat';
-        font-size: 33.44px;
-        line-height: 43px;
+  &__form {
+    width: 70%;
+    text-align: center;
 
-        @include onMobile {
-          font-size: 12.44px;
-          line-height: 130%;
-          border-radius: 4.976px;
+    &__button {
+      width: 400px;
+      height: 85px;
+      box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
+      border-radius: 13.376px;
+      border: none;
+      font-family: "Montserrat";
+      font-size: 33.44px;
+      line-height: 43px;
 
-          width: 200px;
-          height: 40px;
-        }
-      }
-  
       @include onMobile {
-        width: 100%;
+        font-size: 12.44px;
+        line-height: 130%;
+        border-radius: 4.976px;
+
+        width: 200px;
+        height: 40px;
       }
     }
 
-    
+    @include onMobile {
+      width: 100%;
+    }
   }
-  
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__sidebar {
+    display: flex;
+    &__rightLine {
+      border-right: solid 1px $dark;
+      display: flex;
+      flex-direction: column;
+      width: 216px;
+      padding: 38px 31px 38px 0;
+      gap: 24px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19.6px;
+      & li {
+        padding: 12px;
+        display: flex;
+        min-width: 185px;
+        color: #caced8;
+      }
+    }
+  }
+}

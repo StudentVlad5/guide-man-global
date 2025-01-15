@@ -1343,3 +1343,9 @@ swiper-slide {
   flex-direction: column;
   gap: 10px;
 }
+.active {
+  width: 185px;
+  border-radius: 8px;
+  color: $white1 !important;
+  background-color: $dark;
+}
