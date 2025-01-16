@@ -1,27 +1,65 @@
 import { useTranslation } from "next-i18next";
-import { ItemPage } from "../../components/ItemPage";
 import { PageNavigation } from "../../components/PageNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getRightData, getRightURL } from "../../helpers/rightData";
+import { getRightURL } from "../../helpers/rightData";
 import { useRouter } from "next/router";
 import { Layout } from "../../components/Layout";
 
 import { BASE_URL } from "../sitemap.xml";
 import ErrorPage from "../404";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import s from "../../styles/formPage.module.scss";
-import styl from "../../styles/lawyersRequestForm.module.scss";
-import saveCredentials from "../api/userProfile";
-import { fieldInput, placeHolder, patternInput } from "../../helpers/constant";
+import { fieldInput } from "../../helpers/constant";
 import SideBar from "../../components/SideBar";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import "firebase/firestore";
 
 export default function HistoryPage() {
+  const [userRequests, setUserRequests] = useState({});
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
-  const { user, userCredentials, setUserCredentials } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
+  useEffect(() => {
+    const getUserHistory = async () => {
+      const db = getFirestore(); // Initialize Firestore
+      const userCollection = collection(db, "userRequests");
+      const userQuery = query(userCollection, where("uidId", "==", user.uid));
+
+      try {
+        const snapshot = await getDocs(userQuery);
+        if (!snapshot.empty) {
+          const userData = snapshot.docs[0].data();
+          const checkData = {};
+          Object.keys(fieldInput).map((it) => {
+            return (checkData[it] = userData[it]);
+          });
+
+          setUserRequests((prevRequests) => ({
+            ...prevRequests,
+            ...checkData,
+          }));
+        } else {
+          console.log("User requests not found");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (user) {
+      getUserHistory();
+    }
+  }, [user]);
+  console.log("userRequests", userRequests);
   return user ? (
     <Layout
       type="service page"

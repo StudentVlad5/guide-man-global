@@ -1,60 +1,63 @@
-import Link from 'next/link';
-import { useTranslation } from 'next-i18next';
+import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import styles from '../styles/pageNavigation.module.scss';
+import styles from "../styles/pageNavigation.module.scss";
 
 export const PageNavigation = ({ title }) => {
   const { pathname, query } = useRouter();
   const { t } = useTranslation();
+  const pathnames = pathname.split("/").filter((el) => el);
 
-  const pathnames = pathname.split('/').filter(el => el);
   return (
     <ul className={styles.pageNavigation}>
       <li>
         <Link href="/">
-          <p>{t(t('pageNavigation.main'))}</p>
+          <p>{t(t("pageNavigation.main"))}</p>
         </Link>
       </li>
 
       {pathnames.map((el, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames.length - 1;
         const currentLocation = () => {
           switch (el) {
-            case 'services':
-              return t('navbar.services');
+            case "services":
+              return t("navbar.services");
 
-            case 'requests':
-              return t('navbar.requests');
+            case "requests":
+              return t("navbar.requests");
 
-            case 'docusign':
-              return t('navbar.docusign');
+            case "docusign":
+              return t("navbar.docusign");
 
-            case 'account':
-              return t('navbar.account');
+            case "account":
+              return t("navbar.account");
 
-            case 'profile':
-              return t('navbar.profile');
+            case "profile":
+              return t("navbar.profile");
 
-            case 'chat':
-              return t('navbar.chat');
+            case "history":
+              return t("navbar.history");
 
-            case 'news':
-              return t('navbar.news');
+            case "chat":
+              return t("navbar.chat");
 
-            case 'about':
-              return t('navbar.about');
+            case "news":
+              return t("navbar.news");
 
-            case 'explanations':
-              return t('navbar.explanations');
+            case "about":
+              return t("navbar.about");
 
-            case 'citizenship':
-              return t('citizenship.button');
+            case "explanations":
+              return t("navbar.explanations");
 
-            case 'sitemap':
-              return t('pageNavigation.sitemap');
+            case "citizenship":
+              return t("citizenship.button");
+
+            case "sitemap":
+              return t("pageNavigation.sitemap");
 
             default:
               return;
@@ -62,7 +65,7 @@ export const PageNavigation = ({ title }) => {
         };
         return isLast ? (
           <li key={pathname + index}>
-            <p>{' / '}</p>
+            <p>{" / "}</p>
             <p className={styles.pageNavigation__navigation}>
               {Object.values(query).length !== 0
                 ? `${title}`
