@@ -1,0 +1,15 @@
+@import "./variables";
+
+.profile {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    font-size: medium;
+    font-weight: 800;
+    line-height: 110%;
+  }
+  &__item {
+    font-weight: 300;
+    font-size: smaller;
+  }
+}
