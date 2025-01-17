@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/lawyersRequestForm.module.scss";
 import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
   // console.log("Request:", request, "Current Language:", currentLanguage);
@@ -10,7 +10,7 @@ export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const title = request[currentLanguage]?.title;
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   useEffect(() => {
     const initializePayment = async () => {
       try {
@@ -80,7 +80,7 @@ export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
         <input type="hidden" name="data" value={formData.data} />
         <input type="hidden" name="signature" value={formData.signature} />
         <button type="submit" className={styles.orderForm__form_button}>
-          {t("f.pay")}
+          Pay
         </button>
 
         {/* {currentLanguage === "en" ? (
