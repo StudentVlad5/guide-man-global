@@ -168,5 +168,12 @@
   "submit": "Зберегти",
   "edit": "Внести зміни",
   "Profile": "Профайл",
-  "History": "Історія звернень"
+  "History": "Історія звернень",
+  "Request subject": "Тема запиту",
+  "Request": "Запит",
+  "Date": "Дата",
+  "Status": "Статус",
+  "Download Lawyers Request": "Завантажити адвокатський запит",
+  "Download Agreement": "Завантажити погодження",
+  "Download Contract": "Завантажити договір"
 }
