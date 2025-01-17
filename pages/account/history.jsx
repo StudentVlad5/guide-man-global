@@ -10,56 +10,32 @@ import ErrorPage from "../404";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
+import styl from "../../styles/profile.module.scss";
 import s from "../../styles/formPage.module.scss";
-import { fieldInput } from "../../helpers/constant";
 import SideBar from "../../components/SideBar";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
 import "firebase/firestore";
+import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
+import Link from "next/link";
 
 export default function HistoryPage() {
-  const [userRequests, setUserRequests] = useState({});
+  const [userRequests, setUserRequests] = useState([]);
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
 
   useEffect(() => {
-    const getUserHistory = async () => {
-      const db = getFirestore(); // Initialize Firestore
-      const userCollection = collection(db, "userRequests");
-      const userQuery = query(userCollection, where("uidId", "==", user.uid));
-
-      try {
-        const snapshot = await getDocs(userQuery);
-        if (!snapshot.empty) {
-          const userData = snapshot.docs[0].data();
-          const checkData = {};
-          Object.keys(fieldInput).map((it) => {
-            return (checkData[it] = userData[it]);
-          });
-
-          setUserRequests((prevRequests) => ({
-            ...prevRequests,
-            ...checkData,
-          }));
-        } else {
-          console.log("User requests not found");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     if (user) {
-      getUserHistory();
+      getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
+        (res) => {
+          if (res) {
+            setUserRequests(res);
+            console.log(res);
+          }
+        }
+      );
     }
   }, [user]);
-  console.log("userRequests", userRequests);
+
   return user ? (
     <Layout
       type="service page"
@@ -99,10 +75,51 @@ export default function HistoryPage() {
         <div className="container">
           <div className={s.formPage__container}>
             <SideBar />
-            <form className={styles.form} style={{ marginLeft: "31px" }}>
-              <ul>
-                <li>Requests</li>
-              </ul>
+            <form
+              className={styles.form}
+              style={{ marginLeft: "31px", gap: "30px" }}
+            >
+              {userRequests.length > 0 &&
+                userRequests.map((it, ind) => {
+                  return (
+                    <ul key={it.id} className={styl.profile__container}>
+                      {t("Request")} № {ind + 1}
+                      <li className={styl.profile__item}>
+                        <i>
+                          <b>{t("Request subject")}:</b>
+                        </i>{" "}
+                        {it.title}
+                      </li>
+                      <li className={styl.profile__item}>
+                        <i>
+                          <b>{t("Date")}:</b>
+                        </i>{" "}
+                        {it.dateCreating.split(" ")[0]}
+                      </li>
+                      <li className={styl.profile__item}>
+                        <i>
+                          <b>{t("Status")}:</b>
+                        </i>{" "}
+                        {it.status}
+                      </li>
+                      <li className={styl.profile__item}>
+                        <Link href={it.pdfLawyersRequest}>
+                          {t("Download Lawyers Request")}{" "}
+                        </Link>
+                      </li>
+                      <li className={styl.profile__item}>
+                        <Link href={it.pdfAgreement}>
+                          {t("Download Agreement")}{" "}
+                        </Link>
+                      </li>
+                      <li className={styl.profile__item}>
+                        <Link href={it.pdfContract}>
+                          {t("Download Contract")}{" "}
+                        </Link>
+                      </li>
+                    </ul>
+                  );
+                })}
             </form>
           </div>
         </div>
