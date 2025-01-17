@@ -130,6 +130,14 @@ const parseRequestContent = data => {
     .replaceAll('[П.І.Б. клієнта]', PIB(data) || 'невідомий клієнт')
     .replaceAll('[П.І.Б. особи]', PIB(data) || '')
     .replaceAll(
+      '[П.І.Б. особи, в інтересах якої подається запит]',
+      PIB(data) || ''
+    )
+    .replaceAll(
+      '[П.І.Б. військовослужбовця]',
+      PIB(data) || 'військовослужбовця'
+    )
+    .replaceAll(
       '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
       [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
     )
@@ -238,15 +246,20 @@ const parseRequestContent = data => {
         ),
       ].join(', ')
     )
-    .replaceAll(
-      '[дата початку]',
-      data?.dateBorderCrossingStart || 'дата початку невідома'
-    )
+    .replaceAll('[дата початку]', data?.date?.start || 'дата початку невідома')
     .replaceAll(
       '[дата закінчення]',
-      data?.dateBorderCrossingEnd || 'дата закінчення невідома'
+      data?.date?.end || 'дата закінчення невідома'
     )
-    .replaceAll('[вказати дату]', data?.dateCreating || 'невідомо');
+    .replaceAll('[вказати дату]', data?.dateCreating || 'невідомо')
+    .replaceAll(
+      '[вказати ІПН для фізичної особи або код ЄДРПОУ для юридичної особи]',
+      data?.ipn || 'невідомо'
+    )
+    .replaceAll(
+      '[П.І.Б. клієнта, ІПН в інтересах якого подається запит]',
+      [PIB(data) || 'невідомий клієнт', data?.ipn || ''].join(', ')
+    );
 
   // // Видаляємо теги <p>, <ul> і <li>, розділяємо текст і список
   const introTextMatch = parsedContent.split('<ul>')[0] || '';

@@ -76,6 +76,28 @@ export default function LawyersRequests({ requests }) {
     setFilter(t('requests.allRequests'));
   }, [t]);
 
+  const uploadData = async () => {
+    const response = await fetch('/api/upload-json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fileName: 'dataRequests.json',
+        collectionName: 'requests',
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data.message);
+    } else {
+      console.error(data.error);
+    }
+  };
+
+  uploadData();
+
   return (
     <Layout
       type="requests page"

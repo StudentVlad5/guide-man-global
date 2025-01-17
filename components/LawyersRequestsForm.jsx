@@ -84,17 +84,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     email: userCredentials?.email || 'example@example.com', //????
     birthday: userCredentials?.birthday || '', //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
     residence: {
-      address: user?.address_1,
-      city: user?.city,
-      country: user?.country,
+      address: userCredentials?.address_1,
+      city: userCredentials?.city,
+      country: userCredentials?.country,
     }, //РАЦС
     requesterBirthday: '', //РАЦС
     requesterName: '', //РАЦС
-    residence: {
-      address: user?.address_1,
-      city: user?.city,
-      country: user?.country,
-    }, //РАЦС
     requesterFile: [], //РАЦС
     //дані про смерть
     deadName: '', //РАЦС
@@ -107,18 +102,18 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         month: '2-digit',
         day: '2-digit',
       }),
-    date: { start: '', finish: '' }, //АДПСУ,
     recipient: {
       name: '', //МОУ і ТЦК
       address: '', //МОУ і ТЦК
     },
+    rank: '', //МОУ і ТЦК
+    unit: '', //МОУ і ТЦК
     citizenship: '', //АДПСУ,
+    date: { start: '', end: '' }, //АДПСУ, МОУ і ТЦК
     // ПАСПОРТИ
     abroadPassnum: '', //АДПСУ
     passportNum: '', //АДПСУ,
     pmjNum: '', //АДПСУ,
-    dateBorderCrossingStart: '', //АДПСУ,
-    dateBorderCrossingEnd: '', //АДПСУ,
     // Подружжя (дані супругів)
     couplePIB1: '', //РАЦС
     couplePIB2: '', //РАЦС
