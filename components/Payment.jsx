@@ -9,10 +9,14 @@ export const Payment = ({ request, currentLanguage }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const title = request[currentLanguage]?.title;
-  
+  // const title = request[currentLanguage]?.title;
+  const title = request?.[currentLanguage]?.title || "Default Payment Title";
+console.log(title);
+
   // const { t } = useTranslation();
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    
     const initializePayment = async () => {
       try {
         const returnUrl = `${window.location.origin}${router.asPath}`;
