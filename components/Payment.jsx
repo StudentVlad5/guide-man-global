@@ -51,7 +51,7 @@ export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
     };
 
     initializePayment();
-  }, [title, currentLanguage]);
+  }, [title, currentLanguage,router.asPath]);
 
   if (loading) {
     return <div>Loading payment form...</div>;
