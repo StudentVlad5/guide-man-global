@@ -5,12 +5,10 @@
       "description": "Legal portal 【Global Guide Service】 for foreigners☝️ Legal advice and assistance to foreigners in Ukraine✔️ Legal advice⚡ Global Chat⭐ Legal advice and support",
       "h1": "Global Guide Service"
     },
-
     "news": {
       "new": "News",
       "inSite": "on the site globalguide.com"
     },
-
     "post": {
       "title": "blog article",
       "desc": "Related article"
@@ -21,11 +19,9 @@
       "desc2": "legal assistance⚡ Accompanying a lawyer✔️ Assistance in collecting documents✍ Minimum processing time⌚️"
     }
   },
-
   "header": {
     "search": "Search"
   },
-
   "navbar": {
     "services": "Services",
     "requests": "Requests",
@@ -41,24 +37,20 @@
     "profile": "Profile",
     "docusign": "Electronic signature of documents✍"
   },
-
   "homePage": {
     "banner": {
       "h1": "Services for foreigners",
       "label_title1": "Choose a service",
       "label_title2": "Type of service",
-
       "bannerDropdown": {
         "title1": "Select",
         "title2": "Specify service type"
       },
-
       "go": "Go"
     },
     "faq": "Frequently asked questions",
     "aq": "All questions",
     "knowMore": "Learn more",
-
     "questions": {
       "home": "Go to Home"
     }
@@ -68,21 +60,17 @@
     "explanations": "Links",
     "allExplanations": "All links"
   },
-
   "pageNavigation": {
     "main": "Home",
     "sitemap": "Site Map"
   },
-
   "footer": {
     "content": "LLC «GLOBAL GUIDE SERVICE» is the guarantor of your legal security in Ukraine.",
     "support": "Support"
   },
-
   "services": {
     "citizens": "Ukrainian citizens",
     "foreigners": "Foreigners",
-
     "borderControl": "Border control",
     "customControl": "Customs control",
     "ban": "Ban on entry into Ukraine",
@@ -91,10 +79,8 @@
     "document": "Document service",
     "monitoring": "Monitoring",
     "requests": "Lawyer's requests",
-
     "allServices": "All services"
   },
-
   "requests": {
     "civilRegistryOffices": "Requests to the Civil Registry Offices (registration of civil status acts)",
     "ministryOfInternalAffairs": "Requests to the Ministry of Internal Affairs of Ukraine (MIA)",
@@ -102,23 +88,18 @@
     "pensionFund": "Requests to the Pension Fund of Ukraine (PFU) and the State Border Guard Service of Ukraine (SBGS)",
     "ministryOfDefense": "Requests to the Ministry of Defense of Ukraine and Territorial Recruitment Centers (TRCs)",
     "stateMigrationService": "Requests to the State Migration Service of Ukraine (SMSU) and the Administration of SBGS",
-
     "allRequests": "All requests"
   },
-
   "citizenship": {
     "title": "Legalization in Ukraine: citizenship",
     "button": "Questions of citizenship"
   },
-
   "newsPage": {
     "button": "Latest news"
   },
-
   "chatPage": {
     "button": "Go to chat"
   },
-
   "form": {
     "entry": "LogIn",
     "register": "Register",
@@ -129,21 +110,17 @@
     "logIn": "LogIn",
     "forget": "Forgot password?"
   },
-
   "validForm": {
     "fillField": "*  Fill in the field, please!",
     "phoneNomber": "* Phone number entered incorrectly!",
     "email": "* Email entered incorrectly!",
     "password": "* The password must contain at least 6 digits!"
   },
-
   "logOut": "LogOut",
-
   "microdatas": {
     "newsAbout": "Law news for foreigners",
     "explanationsAbout": "Links on the Global Guide Service website"
   },
-
   "errorPage": {
     "h2": "Sorry, this page is not available",
     "p": "You may have used an invalid link or this page has been removed",
@@ -164,5 +141,6 @@
   "submit": "Submit",
   "edit": "Edit",
   "Profile": "Profile",
-  "History": "History"
+  "History": "History",
+  "Pay": "Pay"
 }
