@@ -5,7 +5,6 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "./AppProvider";
 import styles from "../styles/lawyersRequestForm.module.scss";
-
 import countries from "i18n-iso-countries";
 import ukLocale from "i18n-iso-countries/langs/uk.json";
 import ruLocale from "i18n-iso-countries/langs/ru.json";
@@ -21,6 +20,12 @@ import {
   getDocs,
 } from "firebase/firestore";
 import "firebase/firestore";
+import {
+  fieldInput,
+  inputTypes,
+  patternInput,
+  placeHolder,
+} from "../helpers/constant";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -66,19 +71,19 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   }, [statusRenewUser, user]);
 
   const language = currentLanguage === "ua" ? "uk" : currentLanguage;
-  const { t } = useTranslation("f");
-  const { user } = useContext(AppContext);
+  const { t } = useTranslation();
+  const { user, userCredentials } = useContext(AppContext);
 
   const requestEn = request.requestType.ua;
   const requestRecipient = request.recipient;
 
   const [formData, setFormData] = useState({
-    uid: user?.uid || "",
-    name: user?.name || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    surname: user?.surname || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    fatherName: user?.fatherName || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
-    email: user?.email || "example@example.com", //????
-    birthday: user?.birthday || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
+    uid: userCredentials?.uid || "",
+    name: userCredentials?.name || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    surname: userCredentials?.surname || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    fatherName: userCredentials?.fatherName || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП, ПФУ і ДПСУ, ВПО
+    email: userCredentials?.email || "example@example.com", //????
+    birthday: userCredentials?.birthday || "", //АДПСУ, РАЦС, МОУ і ТЦК, ГУНП
     requesterBirthday: "", //РАЦС
     requesterName: "", //РАЦС
     requesterFile: [], //РАЦС
@@ -114,7 +119,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     eventPlace: "", //ГУНП
     ipn: "", //ПФУ і ДПСУ
     propertyAddress: "", //ВПО
-    uid: user?.uid || "",
     request: request,
   });
 
@@ -128,24 +132,25 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const requestTypeMap = {
     РАЦС: [
+      "citizenship",
       "name",
       "surname",
       "fatherName",
+      "birthday",
       "requesterBirthday",
       "requesterName",
       "requesterFile",
-      "birthday",
       "deathDay",
       "couplePIB1",
       "couplePIB2",
       "dateResidence",
     ],
     АДПСУ: [
+      "citizenship",
       "name",
       "surname",
       "fatherName",
       "birthday",
-      "citizenship",
       "passportNum",
       "abroadPassnum",
       "pmjNum",
@@ -153,6 +158,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "dateBorderCrossingEnd",
     ],
     "МОУ і ТЦК": [
+      "citizenship",
       "name",
       "surname",
       "fatherName",
@@ -164,6 +170,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       // "tckEmail",
     ],
     МВС: [
+      "citizenship",
       "name",
       "surname",
       "fatherName",
@@ -172,8 +179,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "eventTime",
       "eventPlace",
     ],
-    "ПФУ і ДПСУ": ["name", "surname", "fatherName", "ipn"],
-    ВПО: ["name", "surname", "fatherName", "propertyAddress"],
+    "ПФУ і ДПСУ": ["citizenship", "name", "surname", "fatherName", "ipn"],
+    ВПО: ["citizenship", "name", "surname", "fatherName", "propertyAddress"],
   };
 
   const requestNameToKeyMap = {
@@ -306,15 +313,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     e.preventDefault();
     const { name, value } = e.target;
 
-    // setFormData({
-    //   ...formData,
-    //   [name]: value,
-    //   recipient: {
-    //     ...formData.recipient,
-    //     [name]: value,
-    //   },
-    // });
-
     if (name.startsWith("recipient.")) {
       const key = name.split(".")[1];
       setFormData((formData) => ({
@@ -431,15 +429,101 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               ? "Сформировать адвокатский запрос:"
               : "Create a lawyer request:"}
           </h1>
+          <ul>
+            {visibleFields.map((field) => {
+              const value = getNestedValue(formData, field) || "";
+              const isDanger =
+                patternInput[field] && !patternInput[field].test(value);
+              const inputType = inputTypes[field] || "text";
+
+              return (
+                <li key={field}>
+                  <label className={styles.orderForm__form_lable}>
+                    <span className={styles.orderForm__form_span}>
+                      {t(fieldInput[field]) || field}:{" "}
+                      <span className={styles.orderForm__form_required}>*</span>
+                    </span>
+
+                    {field === "citizenship" ? (
+                      <select
+                        className={styles.orderForm__form_select}
+                        name={field}
+                        value={value}
+                        onChange={(e) => {
+                          const { name, value } = e.target;
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            [name]: value,
+                          }));
+                        }}
+                        required
+                      >
+                        <option value="" disabled>
+                          {t("Select a country")}
+                        </option>
+                        {countryList.map((country) => (
+                          <option key={country.value} value={country.label}>
+                            {country.label}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        className={
+                          isDanger
+                            ? styles.orderForm__form_input__danger
+                            : styles.orderForm__form_input
+                        }
+                        type={inputType}
+                        name={field}
+                        value={inputType !== "file" ? value : undefined}
+                        pattern={patternInput[field]?.source || undefined}
+                        placeholder={placeHolder[field] || ""}
+                        onChange={(e) => {
+                          const { name, value, files } = e.target;
+
+                          if (name === "requesterFile" && files?.length > 0) {
+                            handleChangeForFile(e);
+                          } else if (name.startsWith("recipient.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              recipient: {
+                                ...prevData.recipient,
+                                [key]: value,
+                              },
+                            }));
+                          } else {
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              [name]: value,
+                            }));
+                          }
+                        }}
+                      />
+                    )}
+                  </label>
+
+                  {isDanger && (
+                    <span
+                      className={
+                        patternInput[field]
+                          ? styles.form__validate
+                          : styles.form__validate__hide
+                      }
+                    >
+                      Please use pattern: {placeHolder[field]}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
 
           {/* {visibleFields.includes("citizenship") && ( */}
-          <label className={styles.orderForm__form_lable}>
+          {/* <label className={styles.orderForm__form_lable}>
             <span className={styles.orderForm__form_span}>
-              {language === "uk"
-                ? "Громадянство:"
-                : language === "ru"
-                ? "Гражданство:"
-                : "Citizenship:"}
+              {t("Citizenship")}
               <span className={styles.orderForm__form_required}>*</span>
             </span>
             <div className={styles.orderForm__form_selectWrapper}>
@@ -464,17 +548,13 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 ))}
               </select>
             </div>
-          </label>
+          </label> */}
           {/* )} */}
 
-          {visibleFields.includes("surname") && (
+          {/* {visibleFields.includes("surname") && (
             <label className={styles.orderForm__form_lable}>
               <span className={styles.orderForm__form_span}>
-                {language === "uk"
-                  ? "Прізвище:"
-                  : language === "ru"
-                  ? "Фамилия:"
-                  : "Surname:"}
+                {t("Surname")}
                 <span className={styles.orderForm__form_required}>*</span>
               </span>
               <input
@@ -999,7 +1079,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 required
               />
             </label>
-          )}
+          )} */}
 
           <button
             type="button"
