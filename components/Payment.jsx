@@ -3,13 +3,14 @@ import styles from "../styles/lawyersRequestForm.module.scss";
 import { useRouter } from "next/router";
 // import { useTranslation } from "react-i18next";
 
-export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
+export const Payment = ({ request, currentLanguage }) => {
   // console.log("Request:", request, "Current Language:", currentLanguage);
   const [formData, setFormData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const title = request[currentLanguage]?.title;
+  
   // const { t } = useTranslation();
   useEffect(() => {
     const initializePayment = async () => {
@@ -33,11 +34,6 @@ export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
               .substr(2, 9)}`,
           }),
         });
-        // console.log(response);
-        
-        if (undefined) {
-          return 0;
-        }
         const data = await response.json();
 
         if (response.ok) {
