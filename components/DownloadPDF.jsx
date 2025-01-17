@@ -170,6 +170,42 @@ const parseRequestContent = data => {
       ].join(', ')
     )
     .replaceAll(
+      '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
+      [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. подружжя, в інтересах яких подається запит]',
+      [data?.couplePIB1 || '', data?.couplePIB2 || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. дати народження подружжя, в інтересах яких подається запит].',
+      [
+        [data?.couplePIB1 || '', data?.coupleBirthday1 || ''].join(', '),
+        [data?.couplePIB2 || '', data?.coupleBirthday2 || ''].join(', '),
+      ].join(' та ')
+    )
+    .replaceAll(
+      '[П.І.Б. дата народження та смерті]',
+      [
+        data?.deadName || 'ім`я невідомо',
+        (data?.deadBirthday || 'невідома дата народження',
+        data?.deadDeathDay || 'невідома дата смерті').join(' - '),
+      ].join(', ')
+    )
+    .replaceAll('[вказати ступінь родинного зв’язку ] ', [
+      data?.deadRelationship || 'невідомо ким',
+    ])
+    .replaceAll(
+      '[П.І.Б. особи, в інтересах якої подається запит, дата народження, місце проживання]',
+      [
+        PIB(data) || 'невідомий клієнт',
+        data?.birthday || '',
+        (data?.residence.address,
+        data?.residence.city,
+        data?.residence.country).join(', ') || '',
+      ].join(', ')
+    )
+    .replaceAll(
       '[вказати адресу майна]',
       data?.propertyAddress || 'адреса невідома'
     )
