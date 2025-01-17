@@ -4,7 +4,7 @@ export default function handler(req, res) {
   if (req.method === "POST") {
     const { data, signature } = req.body;
 
-    const privateKey = process.env.LIQPAY_PRIVATE_KEY; 
+    const privateKey = process.env.NEXT_PUBLIC_LIQPAY_PRIVATE_KEY; 
     const generatedSignature = crypto
       .createHash("sha1")
       .update(privateKey + data + privateKey)
