@@ -150,5 +150,9 @@
   "Download Lawyers Request": "Скачать запрос юриста",
   "Download Agreement": "Скачать соглашение",
   "Download Contract": "Скачать договор",
-  "Pay": "Оплатить"
+  "Pay": "Оплатить",
+  "Document confirming kinship": "Документ подтверждающий родство",
+  "Date of birth (person making the request)": "Дата рождения (человек, делающий запрос)",
+  "Full name (person making the request)": "ФИО (человек, делающий запрос)",
+  "Select a country": "Выберите страну"
 }

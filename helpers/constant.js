@@ -1,4 +1,3 @@
-
 export const fieldInput = {
   name: "Name",
   surname: "Surname",
@@ -11,6 +10,11 @@ export const fieldInput = {
   address_1: "Address 1",
   inn: "INN",
   passport: "Passport",
+  requesterFile: "Document confirming kinship",
+  requesterBirthday: "Date of birth (person making the request)",
+  requesterName: "Full name (person making the request)",
+  couplePIB1: "Spouse's full name (husband's)",
+  couplePIB2: "Spouse's full name (wife's)",
 };
 
 export const patternInput = {
@@ -25,6 +29,11 @@ export const patternInput = {
   address_1: /^[\w\s,.'\-\u00C0-\u024F]{5,100}$/,
   inn: /^\d{6,14}$/,
   passport: /^[A-Z0-9]{6,9}$/,
+  requesterFile: /.+/,
+  requesterBirthday: /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/,
+  requesterName: /^[a-zA-Zа-яА-Я]{2,100}$/,
+  couplePIB1: /^[a-zA-Zа-яА-Я]{2,100}$/,
+  couplePIB2: /^[a-zA-Zа-яА-Я]{2,100}$/,
 };
 
 export const placeHolder = {
@@ -39,4 +48,28 @@ export const placeHolder = {
   address_1: "Obolonskya str 33, 24",
   inn: "123456789",
   passport: "NC456376",
+  requesterFile: "Add a file",
+  requesterBirthday: "03-05-1980",
+  requesterName: "Write a full name",
+  couplePIB1: "Write a full name",
+  couplePIB2: "Write a full name",
+};
+
+export const inputTypes = {
+  name: "text",
+  surname: "text",
+  fatherName: "text",
+  birthday: "text",
+  citizenship: "text",
+  phoneNumber: "number",
+  country: "text",
+  city: "text",
+  address_1: "text",
+  inn: "number",
+  passport: "text",
+  requesterFile: "file",
+  requesterBirthday: "text",
+  requesterName: "text",
+   couplePIB1:"text",
+  couplePIB2:"text"
 };

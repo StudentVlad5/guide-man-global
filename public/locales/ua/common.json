@@ -150,5 +150,9 @@
   "Download Lawyers Request": "Завантажити адвокатський запит",
   "Download Agreement": "Завантажити погодження",
   "Download Contract": "Завантажити договір",
-  "Pay": "Сплатити"
+  "Pay": "Сплатити",
+  "Document confirming kinship": "Документ який підтверджує рідство",
+  "Date of birth (person making the request)": "Дата народження (людина, яка робить запит)",
+  "Full name (person making the request)": "ПІБ (людина, яка робить запит)",
+  "Select a country": "Виберіть країну"
 }

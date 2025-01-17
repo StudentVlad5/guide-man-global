@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/lawyersRequestForm.module.scss";
 import { useRouter } from "next/router";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export const Payment = ({ request, currentLanguage }) => {
   // console.log("Request:", request, "Current Language:", currentLanguage);
@@ -9,18 +9,17 @@ export const Payment = ({ request, currentLanguage }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  // const title = request[currentLanguage]?.title;
   const title = request?.[currentLanguage]?.title || "Default Payment Title";
-console.log(title);
+  // console.log(title);
 
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     const initializePayment = async () => {
       try {
         const returnUrl = `${window.location.origin}${router.asPath}`;
-        console.log(returnUrl);
+        // console.log(returnUrl);
 
         const response = await fetch("/api/liqpay", {
           method: "POST",
@@ -80,7 +79,7 @@ console.log(title);
         <input type="hidden" name="data" value={formData.data} />
         <input type="hidden" name="signature" value={formData.signature} />
         <button type="submit" className={styles.orderForm__form_button}>
-          Pay
+          {t("Pay")}
         </button>
 
         {/* {currentLanguage === "en" ? (
