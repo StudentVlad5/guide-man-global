@@ -2,114 +2,114 @@
 @import './mixins';
 
 .servisesDropdown {
-    &__body {
-      width: 100%;
-      background: $white1;
-      height: 207px;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-      padding-left: 106px;
-      padding-right: 50px;
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 143%;
-      display: flex;
-      align-items: center;
-  
+  &__body {
+    width: 100%;
+    background: $white1;
+    min-height: 107px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    padding-left: 106px;
+    padding-right: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 143%;
+    display: flex;
+    align-items: center;
+
+    @include onMobile {
+      min-height: 50px;
+      font-weight: 400;
+      font-size: 13px;
+      padding-left: 50px;
+    }
+
+    &__active {
+      box-shadow: none;
+      border: 1px solid $dark;
+      min-height: 90px;
+
       @include onMobile {
-        height: 150px;
-        font-weight: 400;
-        font-size: 13px;
-        padding-left: 50px;
-      }
-  
-      &__active {
-        box-shadow: none;
-        border: 1px solid $dark;
-        height: 190px;
-  
-        @include onMobile {
-          height: 150px;
-        }
-      }
-  
-      &:hover {
-        box-shadow: none;
-        border: 1px solid $dark;
+        min-height: 50px;
       }
     }
-    
-    &__label {
-      position: relative;
+
+    &:hover {
+      box-shadow: none;
+      border: 1px solid $dark;
     }
-  
-    &__button {
-      background: $white1;
-      border: none;
-      height: 46px;
-      width: 46px;
-      padding: 0;
-      position: absolute;
-      top: 30px;
-      left: 30px;
+  }
+
+  &__label {
+    position: relative;
+  }
+
+  &__button {
+    background: $white1;
+    border: none;
+    height: 46px;
+    width: 46px;
+    padding: 0;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+
+    & svg {
+      width: 36px;
+    }
+
+    @include onMobile {
+      width: 30px;
+      height: 30px;
+      top: 12px;
+      left: 12px;
 
       & svg {
-        width: 36px;
+        width: 17px;
       }
-  
-      @include onMobile {
-        width: 30px;
-        height: 30px;
-        top: 12px;
-        left: 12px;
+    }
 
-        & svg {
-          width: 17px;
-        }
-      }
-  
-      &__active {
-        top: 25.5px;
-  
-        @include onMobile {
-          top: 12px;
-        }
-      }
-    }
-  
-    &__values {
-      background-color: $white1;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-      width: 100%;
-    }
-  
-    &__item {
-      display: flex;
-      align-items: center;
-      min-height: 40px;
-      padding-left: 44px;
-      padding-right: 20px;
-      font-size: 16px;
-      line-height: 120%;
-      height: max-content;
-  
-      margin-bottom: 10px;
-  
-      &:last-child {
-        margin-bottom: 0;
-      }
-  
+    &__active {
+      top: 25.5px;
+
       @include onMobile {
-        font-size: 13px;
-        line-height: 120%;
-        padding-left: 40px;
-      }
-  
-      &::before {
-        content: "•";
-        display: block;
-        padding-right: 11px;
-        font-size: 16px;
+        top: 12px;
       }
     }
-  
   }
+
+  &__values {
+    background-color: $white1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding-left: 44px;
+    padding-right: 20px;
+    font-size: 16px;
+    line-height: 120%;
+    height: max-content;
+
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include onMobile {
+      font-size: 13px;
+      line-height: 120%;
+      padding-left: 40px;
+    }
+
+    &::before {
+      content: "•";
+      display: block;
+      padding-right: 11px;
+      font-size: 16px;
+    }
+  }
+
+}
