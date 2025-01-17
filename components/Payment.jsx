@@ -33,7 +33,11 @@ export const Payment = ({ request, currentLanguage, onPaymentComplete }) => {
               .substr(2, 9)}`,
           }),
         });
-
+        // console.log(response);
+        
+        if (undefined) {
+          return 0;
+        }
         const data = await response.json();
 
         if (response.ok) {
