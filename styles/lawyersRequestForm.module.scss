@@ -43,9 +43,11 @@
       font-family: "Trebuchet MS", sans-serif;
       transition: all 0.3s ease;
       cursor: pointer;
+      font-size: 18px;
 
       @include onMobile {
         padding: 12px;
+        font-size: 16px;
         width: 100%;
       }
 
@@ -85,11 +87,11 @@
       &::placeholder {
         color: red;
         font-family: "Trebuchet MS", sans-serif;
-        font-size: 18px;
+        font-size: 14px;
 
-        @include onMobile {
-          font-size: 16px;
-        }
+        // @include onMobile {
+        //   font-size: 16px;
+        // }
       }
     }
 

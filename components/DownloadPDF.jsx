@@ -241,7 +241,7 @@ const parseRequestContent = data => {
         data?.citizenship || '',
         PIB(data) || 'невідомий клієнт',
         data?.birthday || '',
-        [data?.abroadPassnum || data?.passportNum || data?.pmjNum || ''].join(
+        [data?.abroadPassnum || data?.passport || data?.pmjNum || ''].join(
           ' '
         ),
       ].join(', ')
@@ -254,11 +254,11 @@ const parseRequestContent = data => {
     .replaceAll('[вказати дату]', data?.dateCreating || 'невідомо')
     .replaceAll(
       '[вказати ІПН для фізичної особи або код ЄДРПОУ для юридичної особи]',
-      data?.ipn || 'невідомо'
+      data?.inn || 'невідомо'
     )
     .replaceAll(
       '[П.І.Б. клієнта, ІПН в інтересах якого подається запит]',
-      [PIB(data) || 'невідомий клієнт', data?.ipn || ''].join(', ')
+      [PIB(data) || 'невідомий клієнт', data?.inn || ''].join(', ')
     );
 
   // // Видаляємо теги <p>, <ul> і <li>, розділяємо текст і список
