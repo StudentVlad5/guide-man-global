@@ -96,7 +96,9 @@ export default function LawyersRequests({ requests }) {
     }
   };
 
-  uploadData();
+  // useEffect(() => {
+  //   uploadData();
+  // }, []);
 
   return (
     <Layout

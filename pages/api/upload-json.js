@@ -65,6 +65,39 @@ export default async function handler(req, res) {
 
     await Promise.all(promises);
 
+    // // Додавання документів із перевіркою на дублювання
+    // const promises = Object.keys(jsonData).map(async key => {
+    //   const data = jsonData[key];
+
+    //   if (data.id) {
+    //     // Перевірка дублювання за полем `id`
+    //     const q = query(collectionRef, where('id', '==', data.id));
+    //     const querySnapshot = await getDocs(q);
+
+    //     if (querySnapshot.empty) {
+    //       // Додавання нового документа з автоматично згенерованим Document ID
+    //       const docRef = await addDoc(collectionRef, { ...data });
+
+    //       // Оновлення поля idPost (Document ID)
+    //       await updateDoc(doc(db, collectionName, docRef.id), {
+    //         idPost: docRef.id,
+    //       });
+    //     } else {
+    //       console.log(`Документ із id "${data.id}" вже існує. Пропускаємо.`);
+    //     }
+    //   } else {
+    //     // Якщо id відсутнє, просто додаємо документ із унікальним Document ID
+    //     const docRef = await addDoc(collectionRef, { ...data });
+
+    //     // Оновлення idPost
+    //     await updateDoc(doc(db, collectionName, docRef.id), {
+    //       idPost: docRef.id,
+    //     });
+    //   }
+    // });
+
+    // await Promise.all(promises);
+
     return res.status(200).json({
       message: `Дані з файлу ${fileName} успішно завантажено в колекцію ${collectionName}`,
     });
