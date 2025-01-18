@@ -128,6 +128,91 @@ const parseRequestContent = data => {
   // Замінюємо плейсхолдери
   const parsedContent = data.request.ua.text
     .replaceAll('[П.І.Б. клієнта]', PIB(data) || 'невідомий клієнт')
+    .replaceAll('[П.І.Б. особи]', PIB(data) || '')
+    .replaceAll(
+      '[П.І.Б. особи, в інтересах якої подається запит]',
+      PIB(data) || ''
+    )
+    .replaceAll(
+      '[П.І.Б. військовослужбовця]',
+      PIB(data) || 'військовослужбовця'
+    )
+    .replaceAll(
+      '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
+      [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. подружжя, в інтересах яких подається запит]',
+      [data?.couplePIB1 || '', data?.couplePIB2 || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. дати народження подружжя, в інтересах яких подається запит].',
+      [
+        [data?.couplePIB1 || '', data?.coupleBirthday1 || ''].join(', '),
+        [data?.couplePIB2 || '', data?.coupleBirthday2 || ''].join(', '),
+      ].join(' та ')
+    )
+    .replaceAll(
+      '[П.І.Б. дата народження та смерті]',
+      [
+        data?.deadName || 'ім`я невідомо',
+        [
+          data?.deadBirthday || 'невідома дата народження',
+          data?.deadDeathDay || 'невідома дата смерті',
+        ].join(' - '),
+      ].join(', ')
+    )
+    .replaceAll('[вказати ступінь родинного зв’язку ] ', [
+      data?.deadRelationship || 'невідомо ким',
+    ])
+    .replaceAll(
+      '[П.І.Б. особи, в інтересах якої подається запит, дата народження, місце проживання]',
+      [
+        PIB(data) || 'невідомий клієнт',
+        data?.birthday || '',
+        [
+          data?.residence.address,
+          data?.residence.city,
+          data?.residence.country,
+        ].join(', ') || '',
+      ].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
+      [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. подружжя, в інтересах яких подається запит]',
+      [data?.couplePIB1 || '', data?.couplePIB2 || ''].join(', ')
+    )
+    .replaceAll(
+      '[П.І.Б. дати народження подружжя, в інтересах яких подається запит].',
+      [
+        [data?.couplePIB1 || '', data?.coupleBirthday1 || ''].join(', '),
+        [data?.couplePIB2 || '', data?.coupleBirthday2 || ''].join(', '),
+      ].join(' та ')
+    )
+    .replaceAll(
+      '[П.І.Б. дата народження та смерті]',
+      [
+        data?.deadName || 'ім`я невідомо',
+        (data?.deadBirthday || 'невідома дата народження',
+        data?.deadDeathDay || 'невідома дата смерті').join(' - '),
+      ].join(', ')
+    )
+    .replaceAll('[вказати ступінь родинного зв’язку ] ', [
+      data?.deadRelationship || 'невідомо ким',
+    ])
+    .replaceAll(
+      '[П.І.Б. особи, в інтересах якої подається запит, дата народження, місце проживання]',
+      [
+        PIB(data) || 'невідомий клієнт',
+        data?.birthday || '',
+        (data?.residence.address,
+        data?.residence.city,
+        data?.residence.country).join(', ') || '',
+      ].join(', ')
+    )
     .replaceAll(
       '[вказати адресу майна]',
       data?.propertyAddress || 'адреса невідома'
@@ -138,6 +223,42 @@ const parseRequestContent = data => {
         data?.eventDate || 'дата невідома',
         data?.eventPlace || 'адреса невідома',
       ].join(' ')
+    )
+    .replaceAll(
+      '[вказати дату та час зупинки]',
+      [
+        data?.eventDate || 'дата невідома',
+        data?.eventTime || 'час невідома',
+      ].join(' ')
+    )
+    .replaceAll(
+      '[вказати дату або поточну дату]',
+      data?.eventDate || data?.dateCreating
+    )
+    .replaceAll(
+      '[Громадянство,П.І.Б.дата народження особи, в інтересах якої подається запит,серія та номер документу]',
+      [
+        data?.citizenship || '',
+        PIB(data) || 'невідомий клієнт',
+        data?.birthday || '',
+        [data?.abroadPassnum || data?.passportNum || data?.pmjNum || ''].join(
+          ' '
+        ),
+      ].join(', ')
+    )
+    .replaceAll('[дата початку]', data?.date?.start || 'дата початку невідома')
+    .replaceAll(
+      '[дата закінчення]',
+      data?.date?.end || 'дата закінчення невідома'
+    )
+    .replaceAll('[вказати дату]', data?.dateCreating || 'невідомо')
+    .replaceAll(
+      '[вказати ІПН для фізичної особи або код ЄДРПОУ для юридичної особи]',
+      data?.ipn || 'невідомо'
+    )
+    .replaceAll(
+      '[П.І.Б. клієнта, ІПН в інтересах якого подається запит]',
+      [PIB(data) || 'невідомий клієнт', data?.ipn || ''].join(', ')
     );
 
   // // Видаляємо теги <p>, <ul> і <li>, розділяємо текст і список
