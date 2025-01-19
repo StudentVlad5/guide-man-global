@@ -108,7 +108,7 @@ const PIB = value =>
     .filter(i => i)
     .join(' ');
 const getPassword = value =>
-  value?.abroadPassnum || value?.passportNum || value?.pmjNum || '';
+  value?.abroadPassnum || value?.passport || value?.pmjNum || '';
 
 export const Agreement = ({ data }) => {
   const buildDataString = () => {
