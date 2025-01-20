@@ -104,7 +104,12 @@ export const Contract = ({ data }) => {
             області, з одного боку,{' '}
           </Text>
           <Text style={styles.text}>
-            <Text style={[styles.bold, { textIndent: '30' }]}>
+            <Text
+              style={[
+                styles.bold,
+                { textIndent: '30', textTransform: 'uppercase' },
+              ]}
+            >
               КЛІЄНТ {PIB(data)}
             </Text>
             , зареєстрований за адресою: {getValue(data.address)}, з другого
