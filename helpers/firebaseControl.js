@@ -327,12 +327,6 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       status: 'pending',
     };
 
-    // // Оновлюємо поле `requests` користувача
-    // const userRef = doc(db, 'users', user.idPost);
-    // await updateDoc(userRef, {
-    //   requests: arrayUnion(newRequest),
-    // });
-
     // Зберігаємо новий запит в колекцію "userRequests"
     const requestRef = doc(db, 'userRequests', newRequest.id);
     await setDoc(requestRef, newRequest);

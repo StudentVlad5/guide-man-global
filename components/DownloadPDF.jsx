@@ -139,28 +139,48 @@ const parseRequestContent = data => {
     )
     .replaceAll(
       '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
-      [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
+      [PIB(data) || 'невідомий клієнт', data?.birthday || '']
+
+        .filter(i => i)
+        .join(', ')
     )
     .replaceAll(
       '[П.І.Б. подружжя, в інтересах яких подається запит]',
-      [data?.couplePIB1 || '', data?.couplePIB2 || ''].join(', ')
+      [data?.couplePIB1 || 'невідомо', data?.couplePIB2 || '']
+        .filter(i => i)
+        .join(', ')
     )
     .replaceAll(
       '[П.І.Б. дати народження подружжя, в інтересах яких подається запит].',
       [
-        [data?.couplePIB1 || '', data?.coupleBirthday1 || ''].join(', '),
-        [data?.couplePIB2 || '', data?.coupleBirthday2 || ''].join(', '),
-      ].join(' та ')
+        [data?.couplePIB1 || 'невідомо', data?.coupleBirthday1 || '']
+
+          .filter(i => i)
+          .join(', '),
+        [data?.couplePIB2 || 'невідомо', data?.coupleBirthday2 || '']
+
+          .filter(i => i)
+          .join(', '),
+      ]
+
+        .filter(i => i)
+        .join(' та ')
     )
     .replaceAll(
       '[П.І.Б. дата народження та смерті]',
       [
-        data?.deadName || 'ім`я невідомо',
+        data?.deadName || 'невідомо',
         [
           data?.deadBirthday || 'невідома дата народження',
           data?.deadDeathDay || 'невідома дата смерті',
-        ].join(' - '),
-      ].join(', ')
+        ]
+
+          .filter(i => i)
+          .join(' - '),
+      ]
+
+        .filter(i => i)
+        .join(', ')
     )
     .replaceAll('[вказати ступінь родинного зв’язку ] ', [
       data?.deadRelationship || 'невідомо ким',
@@ -171,47 +191,17 @@ const parseRequestContent = data => {
         PIB(data) || 'невідомий клієнт',
         data?.birthday || '',
         [
-          data?.residence.address,
-          data?.residence.city,
-          data?.residence.country,
-        ].join(', ') || '',
-      ].join(', ')
-    )
-    .replaceAll(
-      '[П.І.Б. дата народження особи, в інтересах якої подається запит]',
-      [PIB(data) || 'невідомий клієнт', data?.birthday || ''].join(', ')
-    )
-    .replaceAll(
-      '[П.І.Б. подружжя, в інтересах яких подається запит]',
-      [data?.couplePIB1 || '', data?.couplePIB2 || ''].join(', ')
-    )
-    .replaceAll(
-      '[П.І.Б. дати народження подружжя, в інтересах яких подається запит].',
-      [
-        [data?.couplePIB1 || '', data?.coupleBirthday1 || ''].join(', '),
-        [data?.couplePIB2 || '', data?.coupleBirthday2 || ''].join(', '),
-      ].join(' та ')
-    )
-    .replaceAll(
-      '[П.І.Б. дата народження та смерті]',
-      [
-        data?.deadName || 'ім`я невідомо',
-        (data?.deadBirthday || 'невідома дата народження',
-        data?.deadDeathDay || 'невідома дата смерті').join(' - '),
-      ].join(', ')
-    )
-    .replaceAll('[вказати ступінь родинного зв’язку ] ', [
-      data?.deadRelationship || 'невідомо ким',
-    ])
-    .replaceAll(
-      '[П.І.Б. особи, в інтересах якої подається запит, дата народження, місце проживання]',
-      [
-        PIB(data) || 'невідомий клієнт',
-        data?.birthday || '',
-        (data?.residence.address,
-        data?.residence.city,
-        data?.residence.country).join(', ') || '',
-      ].join(', ')
+          data?.residence?.address,
+          data?.residence?.city,
+          data?.residence?.country,
+        ]
+
+          .filter(i => i)
+          .join(', ') || '',
+      ]
+
+        .filter(i => i)
+        .join(', ')
     )
     .replaceAll(
       '[вказати адресу майна]',
@@ -222,14 +212,17 @@ const parseRequestContent = data => {
       [
         data?.eventDate || 'дата невідома',
         data?.eventPlace || 'адреса невідома',
-      ].join(' ')
+      ]
+
+        .filter(i => i)
+        .join(' ')
     )
     .replaceAll(
       '[вказати дату та час зупинки]',
-      [
-        data?.eventDate || 'дата невідома',
-        data?.eventTime || 'час невідома',
-      ].join(' ')
+      [data?.eventDate || 'дата невідома', data?.eventTime || 'час невідома']
+
+        .filter(i => i)
+        .join(' ')
     )
     .replaceAll(
       '[вказати дату або поточну дату]',
@@ -241,10 +234,14 @@ const parseRequestContent = data => {
         data?.citizenship || '',
         PIB(data) || 'невідомий клієнт',
         data?.birthday || '',
-        [data?.abroadPassnum || data?.passport || data?.pmjNum || ''].join(
-          ' '
-        ),
-      ].join(', ')
+        [data?.abroadPassnum || data?.passport || data?.pmjNum || '']
+
+          .filter(i => i)
+          .join(' '),
+      ]
+
+        .filter(i => i)
+        .join(', ')
     )
     .replaceAll('[дата початку]', data?.date?.start || 'дата початку невідома')
     .replaceAll(
@@ -258,20 +255,29 @@ const parseRequestContent = data => {
     )
     .replaceAll(
       '[П.І.Б. клієнта, ІПН в інтересах якого подається запит]',
-      [PIB(data) || 'невідомий клієнт', data?.inn || ''].join(', ')
+      [PIB(data) || 'невідомий клієнт', data?.inn || '']
+
+        .filter(i => i)
+        .join(', ')
     );
 
-  // // Видаляємо теги <p>, <ul> і <li>, розділяємо текст і список
-  const introTextMatch = parsedContent.split('<ul>')[0] || '';
-  const cleanIntroText = introTextMatch.replace(/<\/?p[^>]*>/g, '').trim();
-
-  const listItemsMatch = parsedContent.match(/<li>(.*?)<\/li>/g) || [];
-  const listItems = listItemsMatch.map(item =>
+  // Видаляємо теги <p>, <ul> і <li>, розділяємо текст і список
+  // const introText =
+  //   parsedContent
+  //     .split('<ul>')[0]
+  //     ?.replace(/<\/?p[^>]*>/g, '')
+  //     .trim() || '';
+  // Розділяємо текст із тегами <p>
+  const paragraphs =
+    parsedContent
+      .match(/<p>(.*?)<\/p>/g)
+      ?.map(p => p.replace(/<\/?p[^>]*>/g, '').trim()) || [];
+  const listItems = (parsedContent.match(/<li>(.*?)<\/li>/g) || []).map(item =>
     item.replace(/<\/?li[^>]*>/g, '').trim()
   );
 
   // Повертаємо розділені частини
-  return { introText: cleanIntroText, listItems };
+  return { introText: paragraphs, listItems };
 };
 
 export const LawyersRequest = ({ data }) => {
@@ -340,8 +346,16 @@ export const LawyersRequest = ({ data }) => {
           </Text>
         </View>
 
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.text}>{introText}</Text>
+        </View> */}
+
+        <View style={styles.section}>
+          {introText.map((paragraph, index) => (
+            <Text style={styles.text} key={`paragraph-${index}`}>
+              {paragraph}
+            </Text>
+          ))}
         </View>
 
         {listItems.length > 0 && (
