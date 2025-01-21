@@ -8,7 +8,7 @@ import { Layout } from "../../components/Layout";
 
 import { BASE_URL } from "../sitemap.xml";
 import ErrorPage from "../404";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../components/AppProvider";
 import styles from "../../styles/form.module.scss";
 import s from "../../styles/formPage.module.scss";
@@ -16,6 +16,14 @@ import styl from "../../styles/lawyersRequestForm.module.scss";
 import saveCredentials from "../api/userProfile";
 import { fieldInput, placeHolder, patternInput } from "../../helpers/constant";
 import SideBar from "../../components/SideBar";
+import countries from "i18n-iso-countries";
+import ukLocale from "i18n-iso-countries/langs/uk.json";
+import ruLocale from "i18n-iso-countries/langs/ru.json";
+import enLocale from "i18n-iso-countries/langs/en.json";
+
+countries.registerLocale(ukLocale);
+countries.registerLocale(ruLocale);
+countries.registerLocale(enLocale);
 
 export default function ProfileItemPage() {
   const { t } = useTranslation();
@@ -23,6 +31,7 @@ export default function ProfileItemPage() {
   const { user, userCredentials, setUserCredentials } = useContext(AppContext);
   const [editStatus, setEditStatus] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
+  const language = locale === "ua" ? "uk" : locale;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,6 +73,43 @@ export default function ProfileItemPage() {
     setUserCredentials(check);
   };
 
+  useEffect(() => {
+    const updatedLanguage = locale === "ua" ? "uk" : locale;
+    const newCountryList = getCountriesByLanguage(updatedLanguage);
+    setCountryList(newCountryList);
+
+    const existsInNewList = newCountryList.some(
+      (country) => country.label === selectedCountry
+    );
+
+    if (!existsInNewList) {
+      setSelectedCountry("");
+    }
+  }, [locale]);
+
+  const getCountriesByLanguage = (lang) => {
+    return Object.entries(countries.getNames(lang)).map(([code, name]) => ({
+      value: code,
+      label: name,
+    }));
+  };
+  const [selectedCountry, setSelectedCountry] = useState(
+    userCredentials.citizenship || ""
+  );
+
+  const handleCountryChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedCountry(selectedValue);
+    setUserCredentials({
+      ...userCredentials,
+      citizenship: selectedValue,
+    });
+  };
+
+  const [countryList, setCountryList] = useState(
+    getCountriesByLanguage(language)
+  );
+
   return user ? (
     <Layout
       type="service page"
@@ -102,7 +148,7 @@ export default function ProfileItemPage() {
       <div className="page page-bigBottom">
         <div className="container">
           <div className={s.formPage__container}>
-            <SideBar/>
+            <SideBar />
             <form className={styles.form} style={{ marginLeft: "31px" }}>
               <ul className="flexWrap">
                 {Object.keys(userCredentials).map((it) => {
@@ -111,6 +157,7 @@ export default function ProfileItemPage() {
                       <span className={styl.orderForm__form_span}>
                         {t(fieldInput[it])}:
                       </span>
+
                       {!editStatus ? (
                         <div
                           className={styl.orderForm__form_input}
@@ -120,49 +167,79 @@ export default function ProfileItemPage() {
                         </div>
                       ) : (
                         <>
-                          <input
-                            className={
-                              patternInput[it] &&
-                              !patternInput[it].test(userCredentials[it])
+                          {it === "citizenship" ? (
+                            <select
+                              className={
+                                !selectedCountry
                                 ? styles.form__input__danger
                                 : styl.orderForm__form_input
-                            }
-                            style={{ width: "100%" }}
-                            type="text"
-                            id={it}
-                            name={it}
-                            value={userCredentials[it]}
-                            pattern={patternInput[it].source}
-                            placeholder={placeHolder[it]}
-                            onChange={(e) => {
-                              if (
-                                patternInput[it] &&
-                                !patternInput[it].test(e.target.value)
-                              ) {
-                                setValidateStatus(true);
-                              } else {
-                                setValidateStatus(false);
                               }
-                              if (it === "birthday") {
-                                handleInputChangeBirthday(e);
-                              } else {
-                                setUserCredentials({
-                                  ...userCredentials,
-                                  [it]: e.currentTarget.value,
-                                });
-                              }
-                            }}
-                          />
-                          <span
-                            className={
-                              patternInput[it] &&
-                              !patternInput[it].test(userCredentials[it])
-                                ? styles.form__validate
-                                : styles.form__validate__hide
-                            }
-                          >
-                            Please use pattern: {placeHolder[it]}
-                          </span>
+                              style={{width: '100%'}}
+                              name="citizenship"
+                              value={selectedCountry}
+                              onChange={handleCountryChange}
+                              required
+                            >
+                              <option value="" disabled>
+                                {t("Select a country")}
+                              </option>
+                              {countryList.map((country) => (
+                                <option
+                                  key={country.value}
+                                  value={country.label}
+                                >
+                                  {country.label}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <>
+                              <input
+                                className={
+                                  patternInput[it] &&
+                                  !patternInput[it].test(userCredentials[it])
+                                    ? styles.form__input__danger
+                                    : styl.orderForm__form_input
+                                }
+                                style={{ width: "100%" }}
+                                type="text"
+                                id={it}
+                                name={it}
+                                value={userCredentials[it]}
+                                pattern={patternInput[it].source}
+                                placeholder={placeHolder[it]}
+                                onChange={(e) => {
+                                  if (
+                                    patternInput[it] &&
+                                    !patternInput[it].test(e.target.value)
+                                  ) {
+                                    setValidateStatus(true);
+                                  } else {
+                                    setValidateStatus(false);
+                                  }
+                                  if (it === "birthday") {
+                                    handleInputChangeBirthday(e);
+                                  } else {
+                                    setUserCredentials({
+                                      ...userCredentials,
+                                      [it]: e.currentTarget.value,
+                                    });
+                                  }
+                                }}
+                              />
+
+                              <span
+                                className={
+                                  patternInput[it] &&
+                                  !patternInput[it].test(userCredentials[it])
+                                    ? styles.form__validate
+                                    : styles.form__validate__hide
+                                }
+                              >
+                                {t("Please use pattern")}: {placeHolder[it]}
+                              </span>
+                            </>
+                          )}
                         </>
                       )}
                     </li>
