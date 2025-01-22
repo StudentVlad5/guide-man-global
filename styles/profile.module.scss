@@ -1,15 +1,49 @@
 @import "./variables";
+@import "./mixins";
 
 .profile {
   &__container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     font-size: medium;
     font-weight: 800;
     line-height: 110%;
+    gap: 10px;
+    padding: 23px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #caced8;
+    @include onMobile {
+      flex-direction: column;
+    }
   }
   &__item {
-    font-weight: 300;
-    font-size: smaller;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
   }
+  &__button {
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+.round {
+  width: 20px;
+  height: 20px;
+  background: gray;
+  border-radius: 50%;
+}
+
+.block {
+  width: 25px;
+  height: 6px;
+  background: gray;
+}
+.green {
+  background: #77bb33;
 }

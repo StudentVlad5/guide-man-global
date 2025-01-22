@@ -22,6 +22,15 @@ export default function HistoryPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
+  const [checkInfo, setCheckInfo] = useState([]);
+
+  useEffect(() => {
+    let arr = [];
+    for (let i = 0; i < userRequests.length; i++) {
+      arr.push(false);
+      setCheckInfo(arr);
+    }
+  }, [userRequests]);
 
   useEffect(() => {
     if (user) {
@@ -76,48 +85,124 @@ export default function HistoryPage() {
           <div className={s.formPage__container}>
             <SideBar />
             <form
-              className={styles.form}
-              style={{ marginLeft: "31px", gap: "30px" }}
+              className={`${styles.form} history`}
             >
               {userRequests.length > 0 &&
                 userRequests.map((it, ind) => {
                   return (
-                    <ul key={it.id} className={styl.profile__container}>
-                      {t("Request")} № {ind + 1}
-                      <li className={styl.profile__item}>
-                        <i>
-                          <b>{t("Request subject")}:</b>
-                        </i>{" "}
-                        {it.title}
+                    <div key={it.id}>
+                      <ul className={styl.profile__container}>
+                        {/* {t("Request")} № {ind + 1} */}
+                        <li
+                          className={styl.profile__item}
+                          style={{ gap: "8px", maxWidth: "225px" }}
+                        >
+                          <i>
+                            <b>{t("Subject")}:</b>
+                          </i>{" "}
+                          {it.title}
+                        </li>
+                        <li className={styl.profile__item}>
+                          <div
+                            className={
+                              it.status === "pending" ||
+                              it.status === "paid" ||
+                              it.status === "sign" ||
+                              it.status === "done"
+                                ? `${styl.round} ${styl.green}`
+                                : styl.round
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "paid" ||
+                              it.status === "sign" ||
+                              it.status === "done"
+                                ? `${styl.green} ${styl.block}`
+                                : styl.block
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "paid" ||
+                              it.status === "sign" ||
+                              it.status === "done"
+                                ? `${styl.round} ${styl.green}`
+                                : styl.round
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "sign" || it.status === "done"
+                                ? `${styl.green} ${styl.block}`
+                                : styl.block
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "sign" || it.status === "done"
+                                ? `${styl.round} ${styl.green}`
+                                : styl.round
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "done"
+                                ? `${styl.green} ${styl.block}`
+                                : styl.block
+                            }
+                          ></div>
+                          <div
+                            className={
+                              it.status === "done"
+                                ? `${styl.round} ${styl.green}`
+                                : styl.round
+                            }
+                          ></div>
+                        </li>
+                        <li
+                          className={styl.profile__item}
+                          style={{ gap: "8px" }}
+                        >
+                          {it.dateCreating
+                            .split(" ")[0]
+                            .split("-")
+                            .reverse()
+                            .join(".")}
+                        </li>
+                      </ul>
+                      <li
+                        className={styl.profile__button}
+                        onClick={() => {
+                          let x = [...checkInfo];
+                          x[ind] = !checkInfo[ind];
+                          setCheckInfo(x);
+                        }}
+                      >
+                        more info
                       </li>
-                      <li className={styl.profile__item}>
-                        <i>
-                          <b>{t("Date")}:</b>
-                        </i>{" "}
-                        {it.dateCreating.split(" ")[0]}
-                      </li>
-                      <li className={styl.profile__item}>
-                        <i>
-                          <b>{t("Status")}:</b>
-                        </i>{" "}
-                        {it.status}
-                      </li>
-                      <li className={styl.profile__item}>
-                        <Link href={it.pdfLawyersRequest}>
-                          {t("Download Lawyers Request")}{" "}
-                        </Link>
-                      </li>
-                      <li className={styl.profile__item}>
-                        <Link href={it.pdfAgreement}>
-                          {t("Download Agreement")}{" "}
-                        </Link>
-                      </li>
-                      <li className={styl.profile__item}>
-                        <Link href={it.pdfContract}>
-                          {t("Download Contract")}{" "}
-                        </Link>
-                      </li>
-                    </ul>
+                      {checkInfo[ind] && (
+                        <ul>
+                          <li className={styl.profile__item}>
+                            <Link href={it.pdfLawyersRequest}>
+                              {t("Download Lawyers Request")}
+                            </Link>
+                          </li>
+
+                          <li className={styl.profile__item}>
+                            <Link href={it.pdfAgreement}>
+                              {t("Download Agreement")}
+                            </Link>
+                          </li>
+
+                          <li className={styl.profile__item}>
+                            <Link href={it.pdfContract}>
+                              {t("Download Contract")}
+                            </Link>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
                   );
                 })}
             </form>

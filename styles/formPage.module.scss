@@ -38,6 +38,17 @@
   &__container {
     display: flex;
     flex-direction: row;
+    @include onMobile {
+      flex-direction: column;
+    }
+  }
+  &__container ul li {
+    @include onMobile {
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 100% !important;
+    }
   }
 
   &__sidebar {

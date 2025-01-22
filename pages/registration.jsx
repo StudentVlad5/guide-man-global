@@ -1,49 +1,48 @@
-import { useContext, useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { Form } from '../components/Form';
-import { Modal } from '../components/Modal';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Layout } from '../components/Layout';
-import { useTranslation } from 'next-i18next';
+import { useContext, useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Form } from "../components/Form";
+import { Modal } from "../components/Modal";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { Layout } from "../components/Layout";
+import { useTranslation } from "next-i18next";
 
-import styles from '../styles/formPage.module.scss';
-import { auth, createNewUser } from '../helpers/firebaseControl';
-import { AppContext } from '../components/AppProvider';
-import { useRouter } from 'next/router'
+import styles from "../styles/formPage.module.scss";
+import { auth, createNewUser } from "../helpers/firebaseControl";
+import { AppContext } from "../components/AppProvider";
+import { useRouter } from "next/router";
 
-export default function RegistrationPage () {
+export default function RegistrationPage() {
   const [isModal, setIsModal] = useState(false);
-  const [errorTitle, setErrorTitle] = useState('Register Error');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorTitle, setErrorTitle] = useState("Register Error");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { setUser } = useContext(AppContext);
 
-  const router = useRouter()
+  const router = useRouter();
 
-
-  const { t }  = useTranslation();
+  const { t } = useTranslation();
 
   const handleRegister = (e, regInfo) => {
     e.preventDefault();
 
-    if (Object.values(regInfo).some(el => el.length === 0)) {
+    if (Object.values(regInfo).some((el) => el.length === 0)) {
       setIsModal(true);
       setErrorMessage("All form fields must be filled!");
       return;
-    };
-    
+    }
+
     createUserWithEmailAndPassword(auth, regInfo.email, regInfo.password)
       .then((userCredential) => {
         const user = userCredential.user;
         createNewUser(user, regInfo);
         setUser(user);
-        router.push('/')
+        router.push("account/profile/");
       })
       .catch((error) => {
         setIsModal(true);
         setErrorMessage(error.message);
-      });;
-  }; 
+      });
+  };
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -51,9 +50,9 @@ export default function RegistrationPage () {
 
   return (
     <Layout
-      type='service page'
-      desctiption={`⭐${t('navbar.register')}⭐ ${t('head.home.description')}`  }
-      h1={t('navbar.register')}
+      type="service page"
+      desctiption={`⭐${t("navbar.register")}⭐ ${t("head.home.description")}`}
+      h1={t("navbar.register")}
     >
       <div className="page page-bigBottom">
         <div className="container">
@@ -62,27 +61,28 @@ export default function RegistrationPage () {
               <Form
                 formFunction="registration"
                 isRegistration={true}
-                handleSubmit={handleRegister} />
+                handleSubmit={handleRegister}
+              />
             </div>
           </div>
         </div>
       </div>
-      
+
       {isModal && (
-        <Modal 
-          title={errorTitle} 
+        <Modal
+          title={errorTitle}
           message={errorMessage}
-          handleModal={handleModal} 
+          handleModal={handleModal}
         />
       )}
     </Layout>
   );
-};
+}
 
 export async function getStaticProps({ locale }) {
-	return {
-		props: {
-			...(await serverSideTranslations(locale, ['common'])),
-		},
-	}
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }
