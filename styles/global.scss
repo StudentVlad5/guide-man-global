@@ -1349,3 +1349,10 @@ swiper-slide {
   color: $white1 !important;
   background-color: $dark;
 }
+.history {
+  margin-left: 31px;
+  gap: 30px;
+  @include onMobile {
+    margin-left: 0px;
+  }
+}

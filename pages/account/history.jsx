@@ -85,8 +85,7 @@ export default function HistoryPage() {
           <div className={s.formPage__container}>
             <SideBar />
             <form
-              className={styles.form}
-              style={{ marginLeft: "31px", gap: "30px" }}
+              className={`${styles.form} history`}
             >
               {userRequests.length > 0 &&
                 userRequests.map((it, ind) => {

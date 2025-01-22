@@ -1,4 +1,5 @@
 @import "./variables";
+@import "./mixins";
 
 .profile {
   &__container {
@@ -13,6 +14,9 @@
     background: #ffffff;
     border-radius: 8px;
     border: 1px solid #caced8;
+    @include onMobile {
+      flex-direction: column;
+    }
   }
   &__item {
     font-weight: 700;
