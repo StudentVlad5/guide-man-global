@@ -695,8 +695,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       'Запит про наявність тимчасового обмеження у праві виїзду за кордон',
   };
 
-  const filterFieldsByRequestType = requestEnTitle => {
-    const typeKey = requestNameToKeyMap[requestEnTitle] || '';
+  const filterFieldsByRequestType = requestEn => {
+    const typeKey = requestNameToKeyMap[requestEn] || '';
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEnTitle);
