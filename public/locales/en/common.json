@@ -188,6 +188,9 @@
   "Generating...": "Generating...",
   "Lawyer`s request generate": "Lawyer`s request generate",
   "Please use pattern": "Please use pattern",
-  "Subject":"Subject",
-  "Lawyer`s request":"Lawyer`s request"
+  "Subject": "Subject",
+  "Lawyer`s request": "Lawyer`s request",
+  "Start date": "Start date",
+  "End date": "End date",
+  "Full name of serviceman": "Full name of serviceman"
 }

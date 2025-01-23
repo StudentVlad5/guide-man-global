@@ -50,7 +50,7 @@ export const fieldInputForForm = {
   eventTime: "Event time",
   eventPlace: "Event location",
   propertyAddress: "Property address",
-  servicemanPIB: "Full name of serviceman ", //
+  servicemanPIB: "Full name of serviceman", //
 };
 
 export const patternInput = {
