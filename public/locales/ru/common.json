@@ -189,5 +189,8 @@
   "Lawyer`s request generate": "Сформировать запрос",
   "Please use pattern": "Пожалуйста, используйте шаблон",
   "Subject": "Тема",
-  "Lawyer`s request": "Адвокатский запрос"
+  "Lawyer`s request": "Адвокатский запрос",
+  "Start date": "Дата начала",
+  "End date": "Дата окончания",
+  "Full name of serviceman": "Полное имя военнослужащего"
 }
