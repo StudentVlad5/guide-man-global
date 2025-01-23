@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { getCollectionWhereKeyValue } from '../../../helpers/firebaseControl';
-import { sendEmail, prepareAttachments } from '../../../helpers/sendEmail';
+import { prepareAttachments } from '../../../helpers/prepareAttachments';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -11,6 +11,7 @@ export default async function handler(req, res) {
   const { uid, recipient } = req.body;
 
   try {
+    // Завантаження файлів із Firestore
     const userRequests = await getCollectionWhereKeyValue(
       'userRequests',
       'userId',
@@ -30,17 +31,21 @@ export default async function handler(req, res) {
       { name: 'agreement.pdf', url: pdfAgreement },
       { name: 'file.pdf', url: file },
       { name: 'order.pdf', url: order },
-    ].filter(file => file.url);
+      {
+        name: 'certificate.pdf',
+        path: path.join(process.cwd(), 'public', 'images', 'certificate.pdf'),
+      },
+    ].filter(f => f.url || f.path);
 
-    const certificatePath = path.join(
-      process.cwd(),
-      'public',
-      'images',
-      'certificate.pdf'
-    );
-    if (fs.existsSync(certificatePath)) {
-      pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
-    }
+    // const certificatePath = path.join(
+    //   process.cwd(),
+    //   'public',
+    //   'images',
+    //   'certificate.pdf'
+    // );
+    // if (fs.existsSync(certificatePath)) {
+    //   pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
+    // }
 
     if (pdfFiles.length === 0) {
       return res.status(404).json({ error: 'PDF-файли не знайдено' });
@@ -48,12 +53,27 @@ export default async function handler(req, res) {
 
     const attachments = await prepareAttachments(pdfFiles);
 
-    const info = await sendEmail({
+    // Налаштування Nodemailer
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    // Налаштування листа
+    const mailOptions = {
+      from: process.env.SMTP_EMAIL,
       to: recipient.address,
       subject: `${title} (REQ${id})`,
       text: `Вітаю, направляю ${title} у вкладенні.`,
       attachments,
-    });
+    };
+
+    const info = await transporter.sendMail(mailOptions);
 
     return res.status(200).json({
       success: true,

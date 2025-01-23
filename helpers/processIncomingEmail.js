@@ -1,5 +1,5 @@
 import { getCollectionWhereKeyValue } from './firebaseControl';
-import sendEmail from '../pages/api/sendEmail';
+import { sendEmail } from './prepareAttachments';
 
 export const processIncomingEmail = async email => {
   try {
@@ -12,7 +12,7 @@ export const processIncomingEmail = async email => {
     const match = subject.match(regex) || body.match(regex);
 
     if (!match) {
-      console.log('Запит не знайдено в темі або вмісті.');
+      console.log('Ідентифікатор запиту не знайдено.');
       return;
     }
 
@@ -49,6 +49,6 @@ export const processIncomingEmail = async email => {
 
     console.log(`Лист із запитом ${requestId} успішно відправлено.`);
   } catch (error) {
-    console.error('Error processing email:', error);
+    console.error('Помилка під час обробки листа:', error);
   }
 };

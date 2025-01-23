@@ -50,7 +50,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         res => {
           if (res) {
             setUserRequests(res);
-            console.log(res);
+            // console.log(res);
           }
         }
       );
@@ -963,12 +963,13 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setError(null);
 
     try {
-      const response = await fetch('/api/pdf/sendEmail', {
+      const response = await fetch('/api/pdf/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           uid: formData.uid,
-          // recipient: { address: formData.recipient.address },
+          // recipient: formData.recipient,
+          // // recipient: { address: formData.recipient.address },
           recipient: { address: 'julia.j.shcherban@gmail.com' },
         }),
       });
@@ -1143,23 +1144,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             {isLoading ? t('Generating...') : t('Lawyer`s request generate')}
           </button>
           {error && <p style={{ color: 'red' }}>{error}</p>}
-          {/* {downloadLink && (
-            <div className={styles.orderForm__form_file}>
-              <a
-                className={styles.orderForm__form_download}
-                style={{ textDecoration: 'none' }}
-                href={downloadLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {language === 'uk'
-                  ? 'Завантажити PDF'
-                  : language === 'ru'
-                  ? 'Скачать PDF'
-                  : 'Download PDF'}
-              </a>
-            </div>
-          )} */}
 
           <div className={styles.checkbox_wrapper_29}>
             <div>
