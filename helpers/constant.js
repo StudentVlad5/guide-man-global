@@ -38,8 +38,8 @@ export const fieldInputForForm = {
   "recipient.address": "Email of the Territorial Recruitment Centers",
   rank: "Rank",
   unit: "Military unit number",
-  "date.start": "Start date", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
-  "date.end": "End date", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
+  "date.start": "Start date",
+  "date.end": "End date",
   abroadPassnum: "Series and number of the international passport",
   pmjNum: "Residence permit",
   coupleBirthday1: "Husband's date of birth",
@@ -50,11 +50,11 @@ export const fieldInputForForm = {
   eventTime: "Event time",
   eventPlace: "Event location",
   propertyAddress: "Property address",
-  servicemanPIB: "Full name of serviceman", //
+  servicemanPIB: "Full name of serviceman",
 };
 
 export const patternInput = {
-  email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+  email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,100}$/,
   name: /^[a-zA-Zа-яА-ЯіІїЇ]{2,30}$/,
   surname: /^[a-zA-Zа-яА-ЯіІїЇ]{2,30}$/,
   fatherName: /^[a-zA-Zа-яА-ЯіІїЇ]{2,30}$/,

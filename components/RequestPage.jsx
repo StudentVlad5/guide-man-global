@@ -11,7 +11,6 @@ import { QRCode } from "react-qrcode-logo";
 import { useEffect, useState } from "react";
 import LawyersRequestForm from "./LawyersRequestsForm";
 import { auth } from "../helpers/firebaseControl";
-import PaymentPage from "../pages/payment";
 
 export default function LawyersRequestPage({ item, buttonName, linkPath }) {
   const { locale } = useRouter();
@@ -81,7 +80,6 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
             {isActiveForm && (
               <div style={{ marginTop: 60, marginBottom: 60 }}>
                 <LawyersRequestForm currentLanguage={locale} request={item} />
-                <PaymentPage currentLanguage={locale} request={item} />
               </div>
             )}
           </div>

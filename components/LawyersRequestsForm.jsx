@@ -25,6 +25,7 @@ import {
   patternInput,
   placeHolder,
 } from "../helpers/constant";
+import { Payment } from "./Payment";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -87,10 +88,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
 
-  const requestEn = request.requestType.ua;
+  // const requestEn = request.requestType.ua;
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
-  console.log(requestEnTitle);
+  const title = request?.[currentLanguage]?.title || "Default Payment Title";
 
   const [formData, setFormData] = useState({
     uid: user?.uid || "",
@@ -936,6 +937,84 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setStatusRenewUser(true);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log(formData);
+
+  //   try {
+  //     const dataToSend = new FormData();
+  //     Object.entries(formData).forEach(([key, value]) => {
+  //       if (value instanceof File) {
+  //         dataToSend.append(key, value, value.name);
+  //       } else {
+  //         dataToSend.append(key, value);
+  //       }
+  //     });
+
+  //     const submitResponse = await fetch("/submit", {
+  //       method: "POST",
+  //       body: dataToSend,
+  //     });
+
+  //     if (!submitResponse.ok) {
+  //       throw new Error("Error submitting the form");
+  //     }
+
+  //     const submitResult = await submitResponse.json();
+  //     console.log("Form submission success:", submitResult);
+
+  //     const paymentResponse = await fetch("/api/liqpay", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           amount: "0.1",
+  //           currency: "UAH",
+  //           description: title || "Payment",
+  //           currentLanguage: currentLanguage,
+  //           returnUrl,
+  //           order_id: `order_${Date.now()}_${Math.random()
+  //             .toString(36)
+  //             .substr(2, 9)}`,
+  //         }),
+  //     });
+
+  //     if (!paymentResponse.ok) {
+  //       throw new Error("Error initializing payment");
+  //     }
+
+  //     const paymentData = await paymentResponse.json();
+  //     console.log("Payment initialized:", paymentData);
+
+  //     const paymentForm = document.createElement("form");
+  //     paymentForm.method = "POST";
+  //     paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+  //     paymentForm.acceptCharset = "utf-8";
+
+  //     const inputData = document.createElement("input");
+  //     inputData.type = "hidden";
+  //     inputData.name = "data";
+  //     inputData.value = paymentData.data;
+
+  //     const inputSignature = document.createElement("input");
+  //     inputSignature.type = "hidden";
+  //     inputSignature.name = "signature";
+  //     inputSignature.value = paymentData.signature;
+
+  //     paymentForm.appendChild(inputData);
+  //     paymentForm.appendChild(inputSignature);
+
+  //     document.body.appendChild(paymentForm);
+  //     paymentForm.submit();
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     alert("An error occurred. Please try again.");
+  //   } finally {
+  //     savePDF();
+  //     setStatusRenewUser(true);
+  //   }
+  // };
   const handleDocuSign = async (userData) => {
     const res = await fetch("/api/docusign", {
       method: "POST",
@@ -1174,7 +1253,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </label>
             </div>
           </div>
-
+          {/* <Payment request={request} currentLanguage={currentLanguage} /> */}
           <button
             // onClick={(e) => handleSubmit(e)}
             disabled={isLoading || isSubmitDisabled}
