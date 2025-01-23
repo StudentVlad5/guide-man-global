@@ -324,6 +324,7 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       order: data.numberOrder || '',
       file: data.requesterFile || '',
       userId: uid,
+      userEmail: data.email,
       status: 'pending',
     };
 
@@ -331,7 +332,7 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
     const requestRef = doc(db, 'userRequests', newRequest.id);
     await setDoc(requestRef, newRequest);
 
-    console.log('Request saved successfully ');
+    console.log('Request saved successfully:', newRequest);
     return newRequest;
   } catch (error) {
     console.error('Error saving request to Firestore:', error);
