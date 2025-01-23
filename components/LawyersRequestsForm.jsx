@@ -41,6 +41,20 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userData, setUserData] = useState(null);
   const [statusRenewUser, setStatusRenewUser] = useState(false);
   const [message, setMessage] = useState("");
+  const [userRequests, setUserRequests] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
+        (res) => {
+          if (res) {
+            setUserRequests(res);
+            console.log(res);
+          }
+        }
+      );
+    }
+  }, [user]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -125,7 +139,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     eventDate: "", //МВС
     eventTime: "", //МВС
     eventPlace: "", //МВС
-    inn: userCredentials?.inn ||"", //ПФУ і ДПСУ
+    inn: userCredentials?.inn || "", //ПФУ і ДПСУ
     propertyAddress: "", //ВПО
     request: request,
   });
@@ -346,7 +360,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       setIsLoading(false);
     }
   };
-
 
   const handleChangeForFile = async (e) => {
     e.preventDefault();
