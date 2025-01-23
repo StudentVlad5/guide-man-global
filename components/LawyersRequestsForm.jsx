@@ -25,6 +25,7 @@ import {
   patternInput,
   placeHolder,
 } from "../helpers/constant";
+import { Payment } from "./Payment";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -87,8 +88,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
 
-  const requestEn = request.requestType.ua;
+  // const requestEn = request.requestType.ua;
+  const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
+  const title = request?.[currentLanguage]?.title || "Default Payment Title";
 
   const [formData, setFormData] = useState({
     uid: user?.uid || "",
@@ -121,6 +124,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       name: "", //МОУ і ТЦК
       address: "", //МОУ і ТЦК
     },
+    servicemanPIB: "", //МОУ і ТЦК
     rank: "", //МОУ і ТЦК
     unit: "", //МОУ і ТЦК
     date: { start: "", end: "" }, //АДПСУ, МОУ і ТЦК
@@ -152,32 +156,161 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // const requestTypeMap = {
+  //   РАЦС: [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "residence.address",
+  //     "residence.city",
+  //     "residence.country",
+  //     "birthday",
+  //     "requesterBirthday", // ніде не використовується
+  //     "requesterName",// ніде не використовується
+  //     "requesterFile",// ніде не використовується
+  //     "deadName",
+  //     "deadDeathDay",
+  //     "deadBirthday",
+  //     "deadRelationship",
+  //     "couplePIB1",
+  //     "couplePIB2",
+  //     "coupleBirthday1",
+  //     "coupleBirthday2",
+  //     "dateResidence", // ніде не використовується
+  //     "placeResidence", // ніде не використовується
+  //   ],
+  //   АДПСУ: [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "birthday",
+  //     "passport",
+  //     "abroadPassnum",
+  //     "pmjNum",
+  //     "date.start",
+  //     "date.end",
+  //   ],
+  //   "МОУ і ТЦК": [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "birthday",
+  //     "recipient.name",// ніде не використовується
+  //     "recipient.address",// ніде не використовується
+  //     "rank",
+  //     "unit",
+  //     "date.start",
+  //     "date.end",
+  //   ],
+  //   МВС: [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "birthday",
+  //     "eventDate",
+  //     "eventTime",
+  //     "eventPlace",
+  //   ],
+  //   "ПФУ і ДПСУ": [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "inn",
+  //   ],
+  //   ВПО: [
+  //     "citizenship",
+  //     "email",
+  //     "name",
+  //     "surname",
+  //     "fatherName",
+  //     "propertyAddress",
+  //   ],
+  // };
+
   const requestTypeMap = {
-    РАЦС: [
-      "citizenship",
+    // ДРАЦС /РАЦС(на рус)
+    "Запит про надання довідки про зміну імені або прізвища": [
       "email",
       "name",
       "surname",
       "fatherName",
+    ],
+    "Запит про надання довідки про місце реєстрації проживання": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання довідки про сімейний стан": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
       "residence.address",
       "residence.city",
       "residence.country",
+    ],
+    "Запит про надання копії свідоцтва про народження": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання копії свідоцтва про розірвання шлюбу": [
+      "email",
+      "couplePIB1",
+      "couplePIB2",
+    ],
+    "Запит про надання копії свідоцтва про смерть": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
       "birthday",
-      "requesterBirthday",
-      "requesterName",
-      "requesterFile",
       "deadName",
-      "deadDeathDay",
       "deadBirthday",
+      "deadDeathDay",
       "deadRelationship",
+    ],
+    "Запит про надання копії свідоцтва про шлюб": [
       "couplePIB1",
       "couplePIB2",
       "coupleBirthday1",
       "coupleBirthday2",
-      "dateResidence",
-      "placeResidence",
     ],
-    АДПСУ: [
+    // АДПСУ / адміністрації ДПСУ
+    "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання копій документів, пов'язаних з міграційними процедурами":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання копій документів, пов'язаних з перетином кордону": [
       "citizenship",
       "email",
       "name",
@@ -185,27 +318,291 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "fatherName",
       "birthday",
       "passport",
-      "abroadPassnum",
-      "pmjNum",
-      "date.start",
-      "date.end",
     ],
-    "МОУ і ТЦК": [
+    "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання інформації щодо наявності або відсутності громадянства України у особи":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання інформації щодо наявності обмежень на виїзд за кордон": [
       "citizenship",
       "email",
       "name",
       "surname",
       "fatherName",
       "birthday",
-      "recipient.name",
-      "recipient.address",
+      "passport",
+    ],
+    "Запит про надання інформації щодо перетину державного кордону особою": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
+      "date.start",
+      "date.end",
+    ],
+    "Запит про надання інформації щодо реєстрації місця проживання або перебування особи":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання інформації щодо рішень про депортацію або примусове видворення":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про надання інформації щодо стану розгляду заяв або клопотань": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
+    ],
+    "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
+      ],
+    "Запит про наявність тимчасового обмеження у праві виїзду за кордон": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
+    ],
+    // МОУ і ТЦК
+    "Запит про надання копій документів особової справи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+    ],
+    "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації з питань мобілізації": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+    ],
+    "Запит про надання інформації щодо дисциплінарних стягнень": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
       "rank",
       "unit",
       "date.start",
       "date.end",
     ],
-    МВС: [
-      "citizenship",
+    "Запит про надання інформації щодо надання відстрочки або звільнення від призову":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації щодо нарахування та виплати грошового забезпечення":
+      [
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "rank",
+        "unit",
+        "date.start",
+        "date.end",
+      ],
+    "Запит щодо медичної документації": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
+    ],
+    "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)":
+      [
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "servicemanPIB",
+        "rank",
+        "unit",
+      ],
+    "Запит щодо наказів про мобілізацію та військову службу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит щодо підтвердження правового статусу особи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+    ],
+    "Запит щодо результатів службового розслідування": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+    ],
+    "Запит щодо розміру та видів грошового забезпечення, премій та надбавок": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
+    ],
+    "Запит щодо рішень, які прийняті за рапортами військовослужбовця": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "servicemanPIB",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
+    ],
+    // ПФУ і ДПСУ
+    "Запит про надання копій документів пенсійної справи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання справки про відсутність заборгованості по податках": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
+    ],
+    "Запит про надання інформації щодо заборгованості по виплаті пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо застосування пільгового стажу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо нарахування та виплати пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо перерахунку пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо призначення пенсії по інвалідності": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника":
+      ["email", "name", "surname", "fatherName"],
+    "Запит про надання інформації щодо підтвердження страхового стажу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит про надання інформації щодо стану податкової заборгованості": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
+    ],
+    "Запит про повернення або зарахування переплачених податків": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
+    ],
+    // МВС
+    "Запит про надання довідки про відсутність судимості": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+    ],
+    "Запит на надання копій протоколів та документів, підписаних водієм": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "eventDate",
+      "eventTime",
+      "eventPlace",
+    ],
+    "Запит про надання показань свідків або інших учасників події": [
       "email",
       "name",
       "surname",
@@ -215,41 +612,175 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       "eventTime",
       "eventPlace",
     ],
-    "ПФУ і ДПСУ": [
-      "citizenship",
-      "email",
-      "name",
-      "surname",
-      "fatherName",
-      "inn",
-    ],
-    ВПО: [
-      "citizenship",
-      "email",
-      "name",
-      "surname",
-      "fatherName",
-      "propertyAddress",
-    ],
+    "Запит про надання інформації щодо правових підстав для зупинки автомобіля":
+      [
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "eventDate",
+        "eventTime",
+        "eventPlace",
+      ],
+    "Запит про надання інформації щодо стану та калібрування вимірювальних приладів":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    // ВПО
+    "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "propertyAddress",
+      ],
+    "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "propertyAddress",
+      ],
+    "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій":
+      ["citizenship", "email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС":
+      [
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "propertyAddress",
+      ],
   };
 
   const requestNameToKeyMap = {
-    "Запити до органів ДРАЦС (реєстрація актів цивільного стану)": "РАЦС",
-    "Запити до Державної міграційної служби України (ДМСУ) та адміністрації ДПСУ":
-      "АДПСУ",
-    "Запити до Міністерства оборони України (МОУ) та територіальних центрів комплектування (ТЦК)":
-      "МОУ і ТЦК",
-    "Запити до Міністерства внутрішніх справ України (МВС)": "МВС",
-    "Запити до Пенсійного фонду України (ПФУ) та Державної прикордонної служби України (ДПСУ)":
-      "ПФУ і ДПСУ",
-    "Запити, пов’язані з внутрішньо переміщеними особами (ВПО)": "ВПО",
+    //МОУ і ТЦК
+    "Запит про надання копій документів особової справи":
+      "Запит про надання копій документів особової справи",
+    "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації":
+      "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації",
+    "Запит про надання інформації з питань мобілізації":
+      "Запит про надання інформації з питань мобілізації",
+    "Запит про надання інформації щодо дисциплінарних стягнень":
+      "Запит про надання інформації щодо дисциплінарних стягнень",
+    "Запит про надання інформації щодо надання відстрочки або звільнення від призову":
+      "Запит про надання інформації щодо надання відстрочки або звільнення від призову",
+    "Запит про надання інформації щодо нарахування та виплати грошового забезпечення":
+      "Запит про надання інформації щодо нарахування та виплати грошового забезпечення",
+    "Запит щодо медичної документації": "Запит щодо медичної документації",
+    "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)":
+      "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)",
+    "Запит щодо наказів про мобілізацію та військову службу":
+      "Запит щодо наказів про мобілізацію та військову службу",
+    "Запит щодо підтвердження правового статусу особи":
+      "Запит щодо підтвердження правового статусу особи",
+    "Запит щодо результатів службового розслідування":
+      "Запит щодо результатів службового розслідування",
+    "Запит щодо розміру та видів грошового забезпечення, премій та надбавок":
+      "Запит щодо розміру та видів грошового забезпечення, премій та надбавок",
+    "Запит щодо рішень, які прийняті за рапортами військовослужбовця":
+      "Запит щодо рішень, які прийняті за рапортами військовослужбовця",
+    // ПФУ і ДПСУ
+    "Запит про надання копій документів пенсійної справи":
+      "Запит про надання копій документів пенсійної справи",
+    "Запит про надання справки про відсутність заборгованості по податках":
+      "Запит про надання справки про відсутність заборгованості по податках",
+    "Запит про надання інформації щодо заборгованості по виплаті пенсії":
+      "Запит про надання інформації щодо заборгованості по виплаті пенсії",
+    "Запит про надання інформації щодо застосування пільгового стажу":
+      "Запит про надання інформації щодо застосування пільгового стажу",
+    "Запит про надання інформації щодо нарахування та виплати пенсії":
+      "Запит про надання інформації щодо нарахування та виплати пенсії",
+    "Запит про надання інформації щодо перерахунку пенсії":
+      "Запит про надання інформації щодо перерахунку пенсії",
+    "Запит про надання інформації щодо призначення пенсії по інвалідності":
+      "Запит про надання інформації щодо призначення пенсії по інвалідності",
+    "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника":
+      "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника",
+    "Запит про надання інформації щодо підтвердження страхового стажу":
+      "Запит про надання інформації щодо підтвердження страхового стажу",
+    "Запит про надання інформації щодо стану податкової заборгованості":
+      "Запит про надання інформації щодо стану податкової заборгованості",
+    "Запит про повернення або зарахування переплачених податків":
+      "Запит про повернення або зарахування переплачених податків",
+    // ДРАЦС /РАЦС(на рус)
+    "Запит про надання довідки про зміну імені або прізвища":
+      "Запит про надання довідки про зміну імені або прізвища",
+    "Запит про надання довідки про місце реєстрації проживання":
+      "Запит про надання довідки про місце реєстрації проживання",
+    "Запит про надання довідки про сімейний стан":
+      "Запит про надання довідки про сімейний стан",
+    "Запит про надання копії свідоцтва про народження":
+      "Запит про надання копії свідоцтва про народження",
+    "Запит про надання копії свідоцтва про розірвання шлюбу":
+      "Запит про надання копії свідоцтва про розірвання шлюбу",
+    "Запит про надання копії свідоцтва про смерть":
+      "Запит про надання копії свідоцтва про смерть",
+    "Запит про надання копії свідоцтва про шлюб":
+      "Запит про надання копії свідоцтва про шлюб",
+    // МВС
+    "Запит про надання довідки про відсутність судимості":
+      "Запит про надання довідки про відсутність судимості",
+    "Запит на надання копій протоколів та документів, підписаних водієм":
+      "Запит на надання копій протоколів та документів, підписаних водієм",
+    "Запит про надання показань свідків або інших учасників події":
+      "Запит про надання показань свідків або інших учасників події",
+    "Запит про надання інформації щодо правових підстав для зупинки автомобіля":
+      "Запит про надання інформації щодо правових підстав для зупинки автомобіля",
+    "Запит про надання інформації щодо стану та калібрування вимірювальних приладів":
+      "Запит про надання інформації щодо стану та калібрування вимірювальних приладів",
+    "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР":
+      "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР",
+    // ВПО
+    "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій":
+      "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій",
+    "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій":
+      "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій",
+    "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій":
+      "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій",
+    "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС":
+      "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС",
+    // АДПСУ / адміністрації ДПСУ
+    "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України":
+      "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України",
+    "Запит про надання копій документів, пов'язаних з міграційними процедурами":
+      "Запит про надання копій документів, пов'язаних з міграційними процедурами",
+    "Запит про надання копій документів, пов'язаних з перетином кордону":
+      "Запит про надання копій документів, пов'язаних з перетином кордону",
+    "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон":
+      "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон",
+    "Запит про надання інформації щодо наявності або відсутності громадянства України у особи":
+      "Запит про надання інформації щодо наявності або відсутності громадянства України у особи",
+    "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну":
+      "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну",
+    "Запит про надання інформації щодо наявності обмежень на виїзд за кордон":
+      "Запит про надання інформації щодо наявності обмежень на виїзд за кордон",
+    "Запит про надання інформації щодо перетину державного кордону особою":
+      "Запит про надання інформації щодо перетину державного кордону особою",
+    "Запит про надання інформації щодо реєстрації місця проживання або перебування особи":
+      "Запит про надання інформації щодо реєстрації місця проживання або перебування особи",
+    "Запит про надання інформації щодо рішень про депортацію або примусове видворення":
+      "Запит про надання інформації щодо рішень про депортацію або примусове видворення",
+    "Запит про надання інформації щодо стану розгляду заяв або клопотань":
+      "Запит про надання інформації щодо стану розгляду заяв або клопотань",
+    "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства":
+      "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства",
+    "Запит про наявність тимчасового обмеження у праві виїзду за кордон":
+      "Запит про наявність тимчасового обмеження у праві виїзду за кордон",
   };
 
-  const filterFieldsByRequestType = (requestEn) => {
-    const typeKey = requestNameToKeyMap[requestEn] || "";
+  const filterFieldsByRequestType = (requestEnTitle) => {
+    const typeKey = requestNameToKeyMap[requestEnTitle] || "";
     return requestTypeMap[typeKey] || [];
   };
-  const visibleFields = filterFieldsByRequestType(requestEn);
+  const visibleFields = filterFieldsByRequestType(requestEnTitle);
 
   const getNestedValue = (obj, path) => {
     return path
@@ -406,6 +937,84 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setStatusRenewUser(true);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log(formData);
+
+  //   try {
+  //     const dataToSend = new FormData();
+  //     Object.entries(formData).forEach(([key, value]) => {
+  //       if (value instanceof File) {
+  //         dataToSend.append(key, value, value.name);
+  //       } else {
+  //         dataToSend.append(key, value);
+  //       }
+  //     });
+
+  //     const submitResponse = await fetch("/submit", {
+  //       method: "POST",
+  //       body: dataToSend,
+  //     });
+
+  //     if (!submitResponse.ok) {
+  //       throw new Error("Error submitting the form");
+  //     }
+
+  //     const submitResult = await submitResponse.json();
+  //     console.log("Form submission success:", submitResult);
+
+  //     const paymentResponse = await fetch("/api/liqpay", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           amount: "0.1",
+  //           currency: "UAH",
+  //           description: title || "Payment",
+  //           currentLanguage: currentLanguage,
+  //           returnUrl,
+  //           order_id: `order_${Date.now()}_${Math.random()
+  //             .toString(36)
+  //             .substr(2, 9)}`,
+  //         }),
+  //     });
+
+  //     if (!paymentResponse.ok) {
+  //       throw new Error("Error initializing payment");
+  //     }
+
+  //     const paymentData = await paymentResponse.json();
+  //     console.log("Payment initialized:", paymentData);
+
+  //     const paymentForm = document.createElement("form");
+  //     paymentForm.method = "POST";
+  //     paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+  //     paymentForm.acceptCharset = "utf-8";
+
+  //     const inputData = document.createElement("input");
+  //     inputData.type = "hidden";
+  //     inputData.name = "data";
+  //     inputData.value = paymentData.data;
+
+  //     const inputSignature = document.createElement("input");
+  //     inputSignature.type = "hidden";
+  //     inputSignature.name = "signature";
+  //     inputSignature.value = paymentData.signature;
+
+  //     paymentForm.appendChild(inputData);
+  //     paymentForm.appendChild(inputSignature);
+
+  //     document.body.appendChild(paymentForm);
+  //     paymentForm.submit();
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     alert("An error occurred. Please try again.");
+  //   } finally {
+  //     savePDF();
+  //     setStatusRenewUser(true);
+  //   }
+  // };
   const handleDocuSign = async (userData) => {
     const res = await fetch("/api/docusign", {
       method: "POST",
@@ -466,7 +1075,11 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                   <label className={styles.orderForm__form_lable}>
                     <span className={styles.orderForm__form_span}>
                       {t(fieldInputForForm[field]) || field}:{" "}
-                      <span className={styles.orderForm__form_required}>*</span>
+                      {field !== "fatherName" && (
+                        <span className={styles.orderForm__form_required}>
+                          *
+                        </span>
+                      )}
                     </span>
 
                     {field === "citizenship" ? (
@@ -640,7 +1253,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </label>
             </div>
           </div>
-
+          {/* <Payment request={request} currentLanguage={currentLanguage} /> */}
           <button
             // onClick={(e) => handleSubmit(e)}
             disabled={isLoading || isSubmitDisabled}

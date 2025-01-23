@@ -81,20 +81,6 @@ export const Payment = ({ request, currentLanguage }) => {
         <button type="submit" className={styles.orderForm__form_button}>
           {t("Pay")}
         </button>
-
-        {/* {currentLanguage === "en" ? (
-          <input
-            type="image"
-            src="//static.liqpay.ua/buttons/payEn.png"
-            alt="Pay with LiqPay"
-          />
-        ) : (
-          <input
-            type="image"
-            src="//static.liqpay.ua/buttons/payUk.png"
-            alt="Pay with LiqPay"
-          />
-        )} */}
       </form>
     </div>
   );
