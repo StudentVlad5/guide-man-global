@@ -51,6 +51,7 @@ export const prepareAttachments = async pdfFiles => {
 
 export const sendEmail = async ({ to, subject, text, html, attachments }) => {
   try {
+    // Налаштування Nodemailer
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com', // SMTP-сервер Gmail
       port: 465, // Порт SSL
@@ -61,6 +62,7 @@ export const sendEmail = async ({ to, subject, text, html, attachments }) => {
       },
     });
 
+    // Налаштування листа
     const mailOptions = {
       from: process.env.SMTP_EMAIL,
       to,
