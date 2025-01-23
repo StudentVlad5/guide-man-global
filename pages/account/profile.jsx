@@ -161,7 +161,11 @@ export default function ProfileItemPage() {
                       {!editStatus ? (
                         <div
                           className={styl.orderForm__form_input}
-                          style={{ width: "100%" }}
+                          style={{
+                            width: "100%",
+                            padding: "0 16px",
+                            height: "48px",
+                          }}
                         >
                           {userCredentials[it]}
                         </div>
@@ -171,10 +175,15 @@ export default function ProfileItemPage() {
                             <select
                               className={
                                 !selectedCountry
-                                ? styles.form__input__danger
-                                : styl.orderForm__form_input
+                                  ? styles.form__input__danger
+                                  : styl.orderForm__form_input
                               }
-                              style={{width: '100%'}}
+                              style={{
+                                width: "100%",
+                                padding: "0 16px",
+                                height: "48px",
+                                fontSize: "18px",
+                              }}
                               name="citizenship"
                               value={selectedCountry}
                               onChange={handleCountryChange}
@@ -201,7 +210,11 @@ export default function ProfileItemPage() {
                                     ? styles.form__input__danger
                                     : styl.orderForm__form_input
                                 }
-                                style={{ width: "100%" }}
+                                style={{
+                                  width: "100%",
+                                  padding: "0 16px",
+                                  height: "48px",
+                                }}
                                 type="text"
                                 id={it}
                                 name={it}

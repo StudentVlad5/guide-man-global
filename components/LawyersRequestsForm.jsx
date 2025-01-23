@@ -41,6 +41,20 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userData, setUserData] = useState(null);
   const [statusRenewUser, setStatusRenewUser] = useState(false);
   const [message, setMessage] = useState("");
+  const [userRequests, setUserRequests] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
+        (res) => {
+          if (res) {
+            setUserRequests(res);
+            console.log(res);
+          }
+        }
+      );
+    }
+  }, [user]);
 
   useEffect(() => {
     const getUserData = async () => {
