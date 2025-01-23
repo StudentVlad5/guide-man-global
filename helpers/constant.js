@@ -38,8 +38,8 @@ export const fieldInputForForm = {
   "recipient.address": "Email of the Territorial Recruitment Centers",
   rank: "Rank",
   unit: "Military unit number",
-  "date.start": "", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
-  "date.end": "", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
+  "date.start": "Start date", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
+  "date.end": "End date", // В НИХ МАБТЬ БУТИ РІЗНІ НАЗВИ БО ЦЕ ДВА РІЗНІ ЗАПИТИ
   abroadPassnum: "Series and number of the international passport",
   pmjNum: "Residence permit",
   coupleBirthday1: "Husband's date of birth",
@@ -50,6 +50,7 @@ export const fieldInputForForm = {
   eventTime: "Event time",
   eventPlace: "Event location",
   propertyAddress: "Property address",
+  servicemanPIB: "Full name of serviceman ", //
 };
 
 export const patternInput = {
@@ -66,7 +67,7 @@ export const patternInput = {
   inn: /^\d{6,14}$/,
   passport: /^[A-Z0-9]{6,9}$/,
   requesterFile: /.+/,
-  requesterBirthday:  /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+  requesterBirthday: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
   requesterName: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,100}$/,
   couplePIB1: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,100}$/,
   couplePIB2: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,100}$/,
@@ -93,6 +94,7 @@ export const patternInput = {
   eventTime: /^([01]\d|2[0-3]):([0-5]\d)$/,
   eventPlace: /^[\w\s,.'\-\u00C0-\u024F\u0400-\u04FF]{5,}$/,
   propertyAddress: /^[\w\s,.'\-\u00C0-\u024F\u0400-\u04FF]{5,}$/,
+  servicemanPIB: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,100}$/,
 };
 
 export const placeHolder = {
@@ -136,6 +138,7 @@ export const placeHolder = {
   eventTime: "16:49",
   eventPlace: "Obolonskya str 33, 24, Kyiv",
   propertyAddress: "Obolonskya str 33, 24, Kyiv",
+  servicemanPIB: "Write a full name",
 };
 
 export const inputTypes = {
@@ -179,4 +182,5 @@ export const inputTypes = {
   eventTime: "time",
   eventPlace: "text",
   propertyAddress: "text",
+  servicemanPIB: "text",
 };
