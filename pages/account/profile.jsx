@@ -182,6 +182,7 @@ export default function ProfileItemPage() {
                                 width: "100%",
                                 padding: "0 16px",
                                 height: "48px",
+                                fontSize: "18px",
                               }}
                               name="citizenship"
                               value={selectedCountry}

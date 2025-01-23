@@ -19,7 +19,10 @@ export const PageNavigation = ({ title }) => {
       </li>
 
       {pathnames.map((el, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+        let routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+        if (pathnames.includes("account")) {
+          routeTo = routeTo + "/profile";
+        }
         const isLast = index === pathnames.length - 1;
         const currentLocation = () => {
           switch (el) {

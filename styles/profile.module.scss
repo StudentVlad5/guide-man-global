@@ -11,12 +11,17 @@
     line-height: 110%;
     gap: 10px;
     padding: 23px;
-    background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #caced8;
+
     @include onMobile {
       flex-direction: column;
     }
+  }
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #caced8;
   }
   &__item {
     font-weight: 700;
@@ -26,6 +31,12 @@
     justify-items: center;
     align-items: center;
     text-align: center;
+    &_link {
+      font-size: 14px;
+      padding-left: 20px;
+      padding-bottom: 10px;
+      line-height: 100%;
+    }
   }
   &__button {
     font-size: 12px;
