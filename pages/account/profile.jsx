@@ -149,7 +149,7 @@ export default function ProfileItemPage() {
         <div className="container">
           <div className={s.formPage__container}>
             <SideBar />
-            <form className={styles.form} style={{ marginLeft: "31px" }}>
+            <form className={styles.form}>
               <ul className="flexWrap">
                 {Object.keys(userCredentials).map((it) => {
                   return (
@@ -165,6 +165,8 @@ export default function ProfileItemPage() {
                             width: "100%",
                             padding: "0 16px",
                             height: "48px",
+                            display: "flex",
+                            alignItems: "center",
                           }}
                         >
                           {userCredentials[it]}
@@ -183,6 +185,8 @@ export default function ProfileItemPage() {
                                 padding: "0 16px",
                                 height: "48px",
                                 fontSize: "18px",
+                                display: "flex",
+                                alignItems: "center",
                               }}
                               name="citizenship"
                               value={selectedCountry}
@@ -214,6 +218,8 @@ export default function ProfileItemPage() {
                                   width: "100%",
                                   padding: "0 16px",
                                   height: "48px",
+                                  display: "flex",
+                                  alignItems: "center",
                                 }}
                                 type="text"
                                 id={it}
