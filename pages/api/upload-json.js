@@ -26,7 +26,9 @@ export default async function handler(req, res) {
 
     // Завантаження JSON-файлу
     const filePath = path.join(process.cwd(), 'api', fileName);
-
+    console.log('File Name:', fileName);
+    console.log('Collection Name:', collectionName);
+    
     // Перевірка існування файлу
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: `Файл ${fileName} не знайдено` });
