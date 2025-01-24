@@ -1,68 +1,70 @@
-'use client';
-import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { AppContext } from './AppProvider';
-import styles from '../styles/lawyersRequestForm.module.scss';
-import countries from 'i18n-iso-countries';
-import ukLocale from 'i18n-iso-countries/langs/uk.json';
-import ruLocale from 'i18n-iso-countries/langs/ru.json';
-import enLocale from 'i18n-iso-countries/langs/en.json';
-import { useTranslation } from 'react-i18next';
-import { getCollectionWhereKeyValue } from '../helpers/firebaseControl';
+"use client";
+import dynamic from "next/dynamic";
+import PropTypes from "prop-types";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { AppContext } from "./AppProvider";
+import styles from "../styles/lawyersRequestForm.module.scss";
+import countries from "i18n-iso-countries";
+import ukLocale from "i18n-iso-countries/langs/uk.json";
+import ruLocale from "i18n-iso-countries/langs/ru.json";
+import enLocale from "i18n-iso-countries/langs/en.json";
+import { useTranslation } from "react-i18next";
+import { getCollectionWhereKeyValue } from "../helpers/firebaseControl";
 import {
   getFirestore,
   collection,
   query,
   where,
   getDocs,
-} from 'firebase/firestore';
-import 'firebase/firestore';
+} from "firebase/firestore";
+import "firebase/firestore";
 import {
   fieldInputForForm,
   inputTypes,
   patternInput,
   placeHolder,
-} from '../helpers/constant';
-import { Payment } from './Payment';
+} from "../helpers/constant";
+import { Payment } from "./Payment";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
 countries.registerLocale(enLocale);
 
 // Динамічне підключення PDF-компонента
-const LawyersRequest = dynamic(() => import('./DownloadPDF'), {
+const LawyersRequest = dynamic(() => import("./DownloadPDF"), {
   ssr: false,
 });
-const Agreement = dynamic(() => import('./Agreement'), { ssr: false });
-const Contract = dynamic(() => import('./Contract'), { ssr: false });
+const Agreement = dynamic(() => import("./Agreement"), { ssr: false });
+const Contract = dynamic(() => import("./Contract"), { ssr: false });
 
 export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userData, setUserData] = useState(null);
   const [statusRenewUser, setStatusRenewUser] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [userRequests, setUserRequests] = useState([]);
-
   useEffect(() => {
     if (user) {
-      getCollectionWhereKeyValue('userRequests', 'userId', user.uid).then(
-        res => {
+      getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
+        (res) => {
           if (res) {
-            setUserRequests(res);
-            // console.log(res);
+            setUserRequests(
+              res.sort(
+                (a, b) => new Date(a.dateCreating) - new Date(b.dateCreating)
+              )
+            );
           }
         }
       );
     }
-  }, [user]);
+  }, [user, isLoading]);
 
   useEffect(() => {
     const getUserData = async () => {
       if (user) {
         const db = getFirestore(); // Initialize Firestore
-        const userCollection = collection(db, 'users');
-        const userQuery = query(userCollection, where('uid', '==', user.uid));
+        const userCollection = collection(db, "users");
+        const userQuery = query(userCollection, where("uid", "==", user.uid));
 
         try {
           const snapshot = await getDocs(userQuery);
@@ -71,10 +73,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             setUserData(userData);
             handleDocuSign(userData);
           } else {
-            console.log('User data not found');
+            console.log("User data not found");
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         }
       }
     };
@@ -84,67 +86,67 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     }
   }, [statusRenewUser, user]);
 
-  const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
+  const language = currentLanguage === "ua" ? "uk" : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
 
   // const requestEn = request.requestType.ua;
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
-  const title = request?.[currentLanguage]?.title || 'Default Payment Title';
+  const title = request?.[currentLanguage]?.title || "Default Payment Title";
 
   const [formData, setFormData] = useState({
-    uid: user?.uid || '',
-    citizenship: userCredentials?.citizenship || '', //ВСІ ФОРМИ
-    name: userCredentials?.name || '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: userCredentials?.surname || '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: userCredentials?.fatherName || '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: userCredentials?.email || '', //ВСІ ФОРМИ
-    birthday: userCredentials?.birthday || '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    uid: user?.uid || "",
+    citizenship: userCredentials?.citizenship || "", //ВСІ ФОРМИ
+    name: userCredentials?.name || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: userCredentials?.surname || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: userCredentials?.fatherName || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: userCredentials?.email || "", //ВСІ ФОРМИ
+    birthday: userCredentials?.birthday || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
-      address: userCredentials?.address_1 || '',
-      city: userCredentials?.city || '',
-      country: userCredentials?.country || '',
+      address: userCredentials?.address_1 || "",
+      city: userCredentials?.city || "",
+      country: userCredentials?.country || "",
     }, //РАЦС
-    requesterBirthday: '', //РАЦС
-    requesterName: '', //РАЦС
+    requesterBirthday: "", //РАЦС
+    requesterName: "", //РАЦС
     requesterFile: [], //РАЦС
     //дані про смерть
-    deadName: '', //РАЦС
-    deadDeathDay: '', //РАЦС
-    deadBirthday: '', //РАЦС
-    deadRelationship: '', //РАЦС
+    deadName: "", //РАЦС
+    deadDeathDay: "", //РАЦС
+    deadBirthday: "", //РАЦС
+    deadRelationship: "", //РАЦС
     dateCreating: new Date() //ВСІ ФОРМИ
-      .toLocaleDateString('ru-RU', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
+      .toLocaleDateString("ru-RU", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       }),
     recipient: {
-      name: '', //МОУ і ТЦК
-      address: '', //МОУ і ТЦК
+      name: "", //МОУ і ТЦК
+      address: "", //МОУ і ТЦК
     },
-    servicemanPIB: '', //МОУ і ТЦК
-    rank: '', //МОУ і ТЦК
-    unit: '', //МОУ і ТЦК
-    date: { start: '', end: '' }, //АДПСУ, МОУ і ТЦК
+    servicemanPIB: "", //МОУ і ТЦК
+    rank: "", //МОУ і ТЦК
+    unit: "", //МОУ і ТЦК
+    date: { start: "", end: "" }, //АДПСУ, МОУ і ТЦК
     // ПАСПОРТИ
-    abroadPassnum: '', //АДПСУ
-    passport: userCredentials?.passport || '', //АДПСУ, ЗАМІСТЬ passportNum
-    pmjNum: '', //АДПСУ,
+    abroadPassnum: "", //АДПСУ
+    passport: userCredentials?.passport || "", //АДПСУ, ЗАМІСТЬ passportNum
+    pmjNum: "", //АДПСУ,
     // Подружжя (дані супругів)
-    couplePIB1: '', //РАЦС
-    couplePIB2: '', //РАЦС
-    coupleBirthday1: '', //РАЦС
-    coupleBirthday2: '', //РАЦС
+    couplePIB1: "", //РАЦС
+    couplePIB2: "", //РАЦС
+    coupleBirthday1: "", //РАЦС
+    coupleBirthday2: "", //РАЦС
     // (дату надання довідки про місце проживання)
-    dateResidence: '', //РАЦС
-    placeResidence: '', //РАЦС
-    eventDate: '', //МВС
-    eventTime: '', //МВС
-    eventPlace: '', //МВС
-    inn: userCredentials?.inn || '', //ПФУ і ДПСУ
-    propertyAddress: '', //ВПО
+    dateResidence: "", //РАЦС
+    placeResidence: "", //РАЦС
+    eventDate: "", //МВС
+    eventTime: "", //МВС
+    eventPlace: "", //МВС
+    inn: userCredentials?.inn || "", //ПФУ і ДПСУ
+    propertyAddress: "", //ВПО
     request: request,
   });
 
@@ -158,561 +160,561 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const requestTypeMap = {
     // ДРАЦС /РАЦС(на рус)
-    'Запит про надання довідки про зміну імені або прізвища': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання довідки про зміну імені або прізвища": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання довідки про місце реєстрації проживання': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання довідки про місце реєстрації проживання": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання довідки про сімейний стан': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'residence.address',
-      'residence.city',
-      'residence.country',
+    "Запит про надання довідки про сімейний стан": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "residence.address",
+      "residence.city",
+      "residence.country",
     ],
-    'Запит про надання копії свідоцтва про народження': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання копії свідоцтва про народження": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання копії свідоцтва про розірвання шлюбу': [
-      'email',
-      'couplePIB1',
-      'couplePIB2',
+    "Запит про надання копії свідоцтва про розірвання шлюбу": [
+      "email",
+      "couplePIB1",
+      "couplePIB2",
     ],
-    'Запит про надання копії свідоцтва про смерть': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'deadName',
-      'deadBirthday',
-      'deadDeathDay',
-      'deadRelationship',
+    "Запит про надання копії свідоцтва про смерть": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "deadName",
+      "deadBirthday",
+      "deadDeathDay",
+      "deadRelationship",
     ],
-    'Запит про надання копії свідоцтва про шлюб': [
-      'couplePIB1',
-      'couplePIB2',
-      'coupleBirthday1',
-      'coupleBirthday2',
+    "Запит про надання копії свідоцтва про шлюб": [
+      "couplePIB1",
+      "couplePIB2",
+      "coupleBirthday1",
+      "coupleBirthday2",
     ],
     // АДПСУ / адміністрації ДПСУ
-    'Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України':
+    "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
     "Запит про надання копій документів, пов'язаних з міграційними процедурами":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
     "Запит про надання копій документів, пов'язаних з перетином кордону": [
-      'citizenship',
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'passport',
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
     ],
-    'Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон':
+    "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
-    'Запит про надання інформації щодо наявності або відсутності громадянства України у особи':
-      ['email', 'name', 'surname', 'fatherName', 'birthday'],
+    "Запит про надання інформації щодо наявності або відсутності громадянства України у особи":
+      ["email", "name", "surname", "fatherName", "birthday"],
     "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
-    'Запит про надання інформації щодо наявності обмежень на виїзд за кордон': [
-      'citizenship',
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'passport',
+    "Запит про надання інформації щодо наявності обмежень на виїзд за кордон": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
     ],
-    'Запит про надання інформації щодо перетину державного кордону особою': [
-      'citizenship',
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'passport',
-      'date.start',
-      'date.end',
+    "Запит про надання інформації щодо перетину державного кордону особою": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
+      "date.start",
+      "date.end",
     ],
-    'Запит про надання інформації щодо реєстрації місця проживання або перебування особи':
+    "Запит про надання інформації щодо реєстрації місця проживання або перебування особи":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
-    'Запит про надання інформації щодо рішень про депортацію або примусове видворення':
+    "Запит про надання інформації щодо рішень про депортацію або примусове видворення":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
-    'Запит про надання інформації щодо стану розгляду заяв або клопотань': [
-      'citizenship',
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'passport',
+    "Запит про надання інформації щодо стану розгляду заяв або клопотань": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
     ],
     "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'passport',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "passport",
       ],
-    'Запит про наявність тимчасового обмеження у праві виїзду за кордон': [
-      'citizenship',
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'passport',
+    "Запит про наявність тимчасового обмеження у праві виїзду за кордон": [
+      "citizenship",
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "passport",
     ],
     // МОУ і ТЦК
-    'Запит про надання копій документів особової справи': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'rank',
-      'unit',
+    "Запит про надання копій документів особової справи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
     ],
     "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації":
-      ['email', 'name', 'surname', 'fatherName', 'birthday'],
-    'Запит про надання інформації з питань мобілізації': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації з питань мобілізації": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
     ],
-    'Запит про надання інформації щодо дисциплінарних стягнень': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'rank',
-      'unit',
-      'date.start',
-      'date.end',
+    "Запит про надання інформації щодо дисциплінарних стягнень": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
     ],
-    'Запит про надання інформації щодо надання відстрочки або звільнення від призову':
-      ['email', 'name', 'surname', 'fatherName', 'birthday'],
-    'Запит про надання інформації щодо нарахування та виплати грошового забезпечення':
+    "Запит про надання інформації щодо надання відстрочки або звільнення від призову":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації щодо нарахування та виплати грошового забезпечення":
       [
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'rank',
-        'unit',
-        'date.start',
-        'date.end',
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "rank",
+        "unit",
+        "date.start",
+        "date.end",
       ],
-    'Запит щодо медичної документації': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'rank',
-      'unit',
-      'date.start',
-      'date.end',
+    "Запит щодо медичної документації": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
     ],
-    'Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)':
+    "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)":
       [
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'servicemanPIB',
-        'rank',
-        'unit',
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "servicemanPIB",
+        "rank",
+        "unit",
       ],
-    'Запит щодо наказів про мобілізацію та військову службу': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит щодо наказів про мобілізацію та військову службу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит щодо підтвердження правового статусу особи': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
+    "Запит щодо підтвердження правового статусу особи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
     ],
-    'Запит щодо результатів службового розслідування': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'rank',
-      'unit',
+    "Запит щодо результатів службового розслідування": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
     ],
-    'Запит щодо розміру та видів грошового забезпечення, премій та надбавок': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'rank',
-      'unit',
-      'date.start',
-      'date.end',
+    "Запит щодо розміру та видів грошового забезпечення, премій та надбавок": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
     ],
-    'Запит щодо рішень, які прийняті за рапортами військовослужбовця': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'servicemanPIB',
-      'rank',
-      'unit',
-      'date.start',
-      'date.end',
+    "Запит щодо рішень, які прийняті за рапортами військовослужбовця": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "servicemanPIB",
+      "rank",
+      "unit",
+      "date.start",
+      "date.end",
     ],
     // ПФУ і ДПСУ
-    'Запит про надання копій документів пенсійної справи': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання копій документів пенсійної справи": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання справки про відсутність заборгованості по податках': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'inn',
+    "Запит про надання справки про відсутність заборгованості по податках": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
     ],
-    'Запит про надання інформації щодо заборгованості по виплаті пенсії': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання інформації щодо заборгованості по виплаті пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання інформації щодо застосування пільгового стажу': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання інформації щодо застосування пільгового стажу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання інформації щодо нарахування та виплати пенсії': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання інформації щодо нарахування та виплати пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання інформації щодо перерахунку пенсії': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання інформації щодо перерахунку пенсії": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання інформації щодо призначення пенсії по інвалідності': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання інформації щодо призначення пенсії по інвалідності": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
     "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника":
-      ['email', 'name', 'surname', 'fatherName'],
-    'Запит про надання інформації щодо підтвердження страхового стажу': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+      ["email", "name", "surname", "fatherName"],
+    "Запит про надання інформації щодо підтвердження страхового стажу": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит про надання інформації щодо стану податкової заборгованості': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'inn',
+    "Запит про надання інформації щодо стану податкової заборгованості": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
     ],
-    'Запит про повернення або зарахування переплачених податків': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'inn',
+    "Запит про повернення або зарахування переплачених податків": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "inn",
     ],
     // МВС
-    'Запит про надання довідки про відсутність судимості': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
+    "Запит про надання довідки про відсутність судимості": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
     ],
-    'Запит на надання копій протоколів та документів, підписаних водієм': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'eventDate',
-      'eventTime',
-      'eventPlace',
+    "Запит на надання копій протоколів та документів, підписаних водієм": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "eventDate",
+      "eventTime",
+      "eventPlace",
     ],
-    'Запит про надання показань свідків або інших учасників події': [
-      'email',
-      'name',
-      'surname',
-      'fatherName',
-      'birthday',
-      'eventDate',
-      'eventTime',
-      'eventPlace',
+    "Запит про надання показань свідків або інших учасників події": [
+      "email",
+      "name",
+      "surname",
+      "fatherName",
+      "birthday",
+      "eventDate",
+      "eventTime",
+      "eventPlace",
     ],
-    'Запит про надання інформації щодо правових підстав для зупинки автомобіля':
+    "Запит про надання інформації щодо правових підстав для зупинки автомобіля":
       [
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'eventDate',
-        'eventTime',
-        'eventPlace',
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "eventDate",
+        "eventTime",
+        "eventPlace",
       ],
-    'Запит про надання інформації щодо стану та калібрування вимірювальних приладів':
-      ['email', 'name', 'surname', 'fatherName', 'birthday'],
-    'Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР':
-      ['email', 'name', 'surname', 'fatherName', 'birthday'],
+    "Запит про надання інформації щодо стану та калібрування вимірювальних приладів":
+      ["email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР":
+      ["email", "name", "surname", "fatherName", "birthday"],
     // ВПО
-    'Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій':
+    "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'propertyAddress',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "propertyAddress",
       ],
-    'Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій':
+    "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'propertyAddress',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "propertyAddress",
       ],
-    'Запит про надання інформації щодо отримання соціальної допомоги та компенсацій':
-      ['citizenship', 'email', 'name', 'surname', 'fatherName', 'birthday'],
-    'Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС':
+    "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій":
+      ["citizenship", "email", "name", "surname", "fatherName", "birthday"],
+    "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС":
       [
-        'citizenship',
-        'email',
-        'name',
-        'surname',
-        'fatherName',
-        'birthday',
-        'propertyAddress',
+        "citizenship",
+        "email",
+        "name",
+        "surname",
+        "fatherName",
+        "birthday",
+        "propertyAddress",
       ],
   };
 
   const requestNameToKeyMap = {
     //МОУ і ТЦК
-    'Запит про надання копій документів особової справи':
-      'Запит про надання копій документів особової справи',
+    "Запит про надання копій документів особової справи":
+      "Запит про надання копій документів особової справи",
     "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації":
       "Запит про надання роз'яснень щодо рішень, ухвалених ТЦК стосовно мобілізації",
-    'Запит про надання інформації з питань мобілізації':
-      'Запит про надання інформації з питань мобілізації',
-    'Запит про надання інформації щодо дисциплінарних стягнень':
-      'Запит про надання інформації щодо дисциплінарних стягнень',
-    'Запит про надання інформації щодо надання відстрочки або звільнення від призову':
-      'Запит про надання інформації щодо надання відстрочки або звільнення від призову',
-    'Запит про надання інформації щодо нарахування та виплати грошового забезпечення':
-      'Запит про надання інформації щодо нарахування та виплати грошового забезпечення',
-    'Запит щодо медичної документації': 'Запит щодо медичної документації',
-    'Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)':
-      'Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)',
-    'Запит щодо наказів про мобілізацію та військову службу':
-      'Запит щодо наказів про мобілізацію та військову службу',
-    'Запит щодо підтвердження правового статусу особи':
-      'Запит щодо підтвердження правового статусу особи',
-    'Запит щодо результатів службового розслідування':
-      'Запит щодо результатів службового розслідування',
-    'Запит щодо розміру та видів грошового забезпечення, премій та надбавок':
-      'Запит щодо розміру та видів грошового забезпечення, премій та надбавок',
-    'Запит щодо рішень, які прийняті за рапортами військовослужбовця':
-      'Запит щодо рішень, які прийняті за рапортами військовослужбовця',
+    "Запит про надання інформації з питань мобілізації":
+      "Запит про надання інформації з питань мобілізації",
+    "Запит про надання інформації щодо дисциплінарних стягнень":
+      "Запит про надання інформації щодо дисциплінарних стягнень",
+    "Запит про надання інформації щодо надання відстрочки або звільнення від призову":
+      "Запит про надання інформації щодо надання відстрочки або звільнення від призову",
+    "Запит про надання інформації щодо нарахування та виплати грошового забезпечення":
+      "Запит про надання інформації щодо нарахування та виплати грошового забезпечення",
+    "Запит щодо медичної документації": "Запит щодо медичної документації",
+    "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)":
+      "Запит щодо надання довідки про обставини травми (поранення, контузії, каліцтва)",
+    "Запит щодо наказів про мобілізацію та військову службу":
+      "Запит щодо наказів про мобілізацію та військову службу",
+    "Запит щодо підтвердження правового статусу особи":
+      "Запит щодо підтвердження правового статусу особи",
+    "Запит щодо результатів службового розслідування":
+      "Запит щодо результатів службового розслідування",
+    "Запит щодо розміру та видів грошового забезпечення, премій та надбавок":
+      "Запит щодо розміру та видів грошового забезпечення, премій та надбавок",
+    "Запит щодо рішень, які прийняті за рапортами військовослужбовця":
+      "Запит щодо рішень, які прийняті за рапортами військовослужбовця",
     // ПФУ і ДПСУ
-    'Запит про надання копій документів пенсійної справи':
-      'Запит про надання копій документів пенсійної справи',
-    'Запит про надання справки про відсутність заборгованості по податках':
-      'Запит про надання справки про відсутність заборгованості по податках',
-    'Запит про надання інформації щодо заборгованості по виплаті пенсії':
-      'Запит про надання інформації щодо заборгованості по виплаті пенсії',
-    'Запит про надання інформації щодо застосування пільгового стажу':
-      'Запит про надання інформації щодо застосування пільгового стажу',
-    'Запит про надання інформації щодо нарахування та виплати пенсії':
-      'Запит про надання інформації щодо нарахування та виплати пенсії',
-    'Запит про надання інформації щодо перерахунку пенсії':
-      'Запит про надання інформації щодо перерахунку пенсії',
-    'Запит про надання інформації щодо призначення пенсії по інвалідності':
-      'Запит про надання інформації щодо призначення пенсії по інвалідності',
+    "Запит про надання копій документів пенсійної справи":
+      "Запит про надання копій документів пенсійної справи",
+    "Запит про надання справки про відсутність заборгованості по податках":
+      "Запит про надання справки про відсутність заборгованості по податках",
+    "Запит про надання інформації щодо заборгованості по виплаті пенсії":
+      "Запит про надання інформації щодо заборгованості по виплаті пенсії",
+    "Запит про надання інформації щодо застосування пільгового стажу":
+      "Запит про надання інформації щодо застосування пільгового стажу",
+    "Запит про надання інформації щодо нарахування та виплати пенсії":
+      "Запит про надання інформації щодо нарахування та виплати пенсії",
+    "Запит про надання інформації щодо перерахунку пенсії":
+      "Запит про надання інформації щодо перерахунку пенсії",
+    "Запит про надання інформації щодо призначення пенсії по інвалідності":
+      "Запит про надання інформації щодо призначення пенсії по інвалідності",
     "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника":
       "Запит про надання інформації щодо призначення пенсії у зв'язку з втратою годувальника",
-    'Запит про надання інформації щодо підтвердження страхового стажу':
-      'Запит про надання інформації щодо підтвердження страхового стажу',
-    'Запит про надання інформації щодо стану податкової заборгованості':
-      'Запит про надання інформації щодо стану податкової заборгованості',
-    'Запит про повернення або зарахування переплачених податків':
-      'Запит про повернення або зарахування переплачених податків',
+    "Запит про надання інформації щодо підтвердження страхового стажу":
+      "Запит про надання інформації щодо підтвердження страхового стажу",
+    "Запит про надання інформації щодо стану податкової заборгованості":
+      "Запит про надання інформації щодо стану податкової заборгованості",
+    "Запит про повернення або зарахування переплачених податків":
+      "Запит про повернення або зарахування переплачених податків",
     // ДРАЦС /РАЦС(на рус)
-    'Запит про надання довідки про зміну імені або прізвища':
-      'Запит про надання довідки про зміну імені або прізвища',
-    'Запит про надання довідки про місце реєстрації проживання':
-      'Запит про надання довідки про місце реєстрації проживання',
-    'Запит про надання довідки про сімейний стан':
-      'Запит про надання довідки про сімейний стан',
-    'Запит про надання копії свідоцтва про народження':
-      'Запит про надання копії свідоцтва про народження',
-    'Запит про надання копії свідоцтва про розірвання шлюбу':
-      'Запит про надання копії свідоцтва про розірвання шлюбу',
-    'Запит про надання копії свідоцтва про смерть':
-      'Запит про надання копії свідоцтва про смерть',
-    'Запит про надання копії свідоцтва про шлюб':
-      'Запит про надання копії свідоцтва про шлюб',
+    "Запит про надання довідки про зміну імені або прізвища":
+      "Запит про надання довідки про зміну імені або прізвища",
+    "Запит про надання довідки про місце реєстрації проживання":
+      "Запит про надання довідки про місце реєстрації проживання",
+    "Запит про надання довідки про сімейний стан":
+      "Запит про надання довідки про сімейний стан",
+    "Запит про надання копії свідоцтва про народження":
+      "Запит про надання копії свідоцтва про народження",
+    "Запит про надання копії свідоцтва про розірвання шлюбу":
+      "Запит про надання копії свідоцтва про розірвання шлюбу",
+    "Запит про надання копії свідоцтва про смерть":
+      "Запит про надання копії свідоцтва про смерть",
+    "Запит про надання копії свідоцтва про шлюб":
+      "Запит про надання копії свідоцтва про шлюб",
     // МВС
-    'Запит про надання довідки про відсутність судимості':
-      'Запит про надання довідки про відсутність судимості',
-    'Запит на надання копій протоколів та документів, підписаних водієм':
-      'Запит на надання копій протоколів та документів, підписаних водієм',
-    'Запит про надання показань свідків або інших учасників події':
-      'Запит про надання показань свідків або інших учасників події',
-    'Запит про надання інформації щодо правових підстав для зупинки автомобіля':
-      'Запит про надання інформації щодо правових підстав для зупинки автомобіля',
-    'Запит про надання інформації щодо стану та калібрування вимірювальних приладів':
-      'Запит про надання інформації щодо стану та калібрування вимірювальних приладів',
-    'Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР':
-      'Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР',
+    "Запит про надання довідки про відсутність судимості":
+      "Запит про надання довідки про відсутність судимості",
+    "Запит на надання копій протоколів та документів, підписаних водієм":
+      "Запит на надання копій протоколів та документів, підписаних водієм",
+    "Запит про надання показань свідків або інших учасників події":
+      "Запит про надання показань свідків або інших учасників події",
+    "Запит про надання інформації щодо правових підстав для зупинки автомобіля":
+      "Запит про надання інформації щодо правових підстав для зупинки автомобіля",
+    "Запит про надання інформації щодо стану та калібрування вимірювальних приладів":
+      "Запит про надання інформації щодо стану та калібрування вимірювальних приладів",
+    "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР":
+      "Запит про надання роз’яснень правових підстав накладення штрафу або іншого покарання за порушення ПДР",
     // ВПО
-    'Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій':
-      'Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій',
-    'Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій':
-      'Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій',
-    'Запит про надання інформації щодо отримання соціальної допомоги та компенсацій':
-      'Запит про надання інформації щодо отримання соціальної допомоги та компенсацій',
-    'Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС':
-      'Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС',
+    "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій":
+      "Запит про надання інформації щодо компенсації за втрачене майно до Міністерства з питань реінтеграції тимчасово окупованих територій",
+    "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій":
+      "Запит про надання підтвердження факту знищення або пошкодження майна в результаті бойових дій",
+    "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій":
+      "Запит про надання інформації щодо отримання соціальної допомоги та компенсацій",
+    "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС":
+      "Запит про надання інформації щодо фіксації факту пошкодження майна від ДСНС",
     // АДПСУ / адміністрації ДПСУ
-    'Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України':
-      'Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України',
+    "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України":
+      "Запит про вилучення інформації з бази даних ДПСУ щодо тимчасового обмеження у праві виїзду з України",
     "Запит про надання копій документів, пов'язаних з міграційними процедурами":
       "Запит про надання копій документів, пов'язаних з міграційними процедурами",
     "Запит про надання копій документів, пов'язаних з перетином кордону":
       "Запит про надання копій документів, пов'язаних з перетином кордону",
-    'Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон':
-      'Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон',
-    'Запит про надання інформації щодо наявності або відсутності громадянства України у особи':
-      'Запит про надання інформації щодо наявності або відсутності громадянства України у особи',
+    "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон":
+      "Запит про надання інформації щодо затримання або відмови у пропуску через державний кордон",
+    "Запит про надання інформації щодо наявності або відсутності громадянства України у особи":
+      "Запит про надання інформації щодо наявності або відсутності громадянства України у особи",
     "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну":
       "Запит про надання інформації щодо наявності або відсутності заборони на в'їзд в Україну",
-    'Запит про надання інформації щодо наявності обмежень на виїзд за кордон':
-      'Запит про надання інформації щодо наявності обмежень на виїзд за кордон',
-    'Запит про надання інформації щодо перетину державного кордону особою':
-      'Запит про надання інформації щодо перетину державного кордону особою',
-    'Запит про надання інформації щодо реєстрації місця проживання або перебування особи':
-      'Запит про надання інформації щодо реєстрації місця проживання або перебування особи',
-    'Запит про надання інформації щодо рішень про депортацію або примусове видворення':
-      'Запит про надання інформації щодо рішень про депортацію або примусове видворення',
-    'Запит про надання інформації щодо стану розгляду заяв або клопотань':
-      'Запит про надання інформації щодо стану розгляду заяв або клопотань',
+    "Запит про надання інформації щодо наявності обмежень на виїзд за кордон":
+      "Запит про надання інформації щодо наявності обмежень на виїзд за кордон",
+    "Запит про надання інформації щодо перетину державного кордону особою":
+      "Запит про надання інформації щодо перетину державного кордону особою",
+    "Запит про надання інформації щодо реєстрації місця проживання або перебування особи":
+      "Запит про надання інформації щодо реєстрації місця проживання або перебування особи",
+    "Запит про надання інформації щодо рішень про депортацію або примусове видворення":
+      "Запит про надання інформації щодо рішень про депортацію або примусове видворення",
+    "Запит про надання інформації щодо стану розгляду заяв або клопотань":
+      "Запит про надання інформації щодо стану розгляду заяв або клопотань",
     "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства":
       "Запит про наявність рішення про заборону в'їзду для іноземця або особи без громадянства",
-    'Запит про наявність тимчасового обмеження у праві виїзду за кордон':
-      'Запит про наявність тимчасового обмеження у праві виїзду за кордон',
+    "Запит про наявність тимчасового обмеження у праві виїзду за кордон":
+      "Запит про наявність тимчасового обмеження у праві виїзду за кордон",
   };
 
-  const filterFieldsByRequestType = requestEn => {
-    const typeKey = requestNameToKeyMap[requestEn] || '';
+  const filterFieldsByRequestType = (requestEn) => {
+    const typeKey = requestNameToKeyMap[requestEn] || "";
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEnTitle);
 
   const getNestedValue = (obj, path) => {
     return path
-      .split('.')
+      .split(".")
       .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
   };
 
   const isFormValid = () => {
     // console.log(visibleFields);
-    return visibleFields.every(field => {
+    return visibleFields.every((field) => {
       const value = getNestedValue(formData, field);
 
-      if (field === 'fatherName') {
+      if (field === "fatherName") {
         return true;
       }
 
@@ -720,7 +722,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         return value.size > 0;
       }
 
-      return typeof value === 'string' ? value.trim() !== '' : Boolean(value);
+      return typeof value === "string" ? value.trim() !== "" : Boolean(value);
     });
   };
 
@@ -728,8 +730,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     const getRecipient = async () => {
       try {
         const recipient = await getCollectionWhereKeyValue(
-          'recipient',
-          'name',
+          "recipient",
+          "name",
           requestRecipient
         );
         // console.log(recipient);
@@ -746,36 +748,36 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         const recipientName = recipient[0].application;
         const recipientAddress = recipient[0].address;
 
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           recipient: { name: recipientName, address: recipientAddress },
         }));
 
         return;
       } catch (error) {
-        console.error('Error saving request to Firestore:', error);
+        console.error("Error saving request to Firestore:", error);
         throw error;
       }
     };
     getRecipient();
   }, [requestRecipient]);
 
-  const generatePDFPreview = async type => {
+  const generatePDFPreview = async (type) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post('/api/pdf/preview-pdf', {
+      const response = await axios.post("/api/pdf/preview-pdf", {
         formData,
         type,
       });
       const pdfBase64 = response.data.pdfBase64;
-      const pdfBuffer = Buffer.from(pdfBase64, 'base64'); // Декодуємо Base64
-      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+      const pdfBuffer = Buffer.from(pdfBase64, "base64"); // Декодуємо Base64
+      const blob = new Blob([pdfBuffer], { type: "application/pdf" });
 
       // Створюємо тимчасовий URL для файлу
       const blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl, '_blank');
+      window.open(blobUrl, "_blank");
     } catch (err) {
       console.error(`Error generating ${type} PDF preview:`, err);
       setError(`Failed to generate ${type} PDF preview.`);
@@ -788,7 +790,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post('/api/pdf/save-pdf', {
+      const response = await axios.post("/api/pdf/save-pdf", {
         formData,
         selectedDocuments,
         uid: user?.uid,
@@ -797,42 +799,42 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       // Отримуємо сформовані PDF-файли
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
 
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         agreement: agreementPDF,
         contract: contractPDF,
         pdfDocUrl: lawyersRequestPDF,
       }));
     } catch (err) {
-      console.error('Error saving documents:', err);
-      setError('Failed to save documents.');
+      console.error("Error saving documents:", err);
+      setError("Failed to save documents.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChangeForFile = async e => {
+  const handleChangeForFile = async (e) => {
     e.preventDefault();
     const { name, files } = e.target;
 
-    if (name === 'requesterFile' && files.length > 0) {
-      setFormData(prevData => ({
+    if (name === "requesterFile" && files.length > 0) {
+      setFormData((prevData) => ({
         ...prevData,
         [name]: files[0],
       }));
     }
   };
 
-  const handleCheckboxChange = async e => {
+  const handleCheckboxChange = async (e) => {
     const { name, checked } = e.target;
-    setSelectedDocuments(prev => ({ ...prev, [name]: checked }));
+    setSelectedDocuments((prev) => ({ ...prev, [name]: checked }));
 
     // if (checked) {
     //   generatePDFPreview(name);
     // }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(formData);
     const dataToSend = new FormData();
@@ -843,14 +845,17 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         dataToSend.append(key, value);
       }
     });
-
-    fetch('/submit', {
-      method: 'POST',
+    fetch("/submit", {
+      method: "POST",
       body: dataToSend,
     })
-      .then(response => response.json())
-      .then(data => console.log('success', data))
-      .catch(error => console.error('Error', error));
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        console.log("success");
+      })
+      .catch((error) => console.error("Error", error));
 
     savePDF();
     setStatusRenewUser(true);
@@ -935,22 +940,22 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   //   }
   // };
 
-  const handleDocuSign = async userData => {
-    const res = await fetch('/api/docusign', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  const handleDocuSign = async () => {
+    const res = await fetch("/api/docusign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        signerEmail: userData?.email,
-        signerName: userData?.name,
-        ccEmail: 'vlad_np@ukr.net',
-        ccName: 'vlad',
-        doc2File: userData.requests[0].pdfAgreement,
-        doc3File: userData.requests[0].pdfContract,
+        signerEmail: userRequests[userRequests.length - 1]?.userEmail,
+        signerName: userCredentials.name,
+        ccEmail: "vlad_np@ukr.net",
+        ccName: "vlad",
+        doc2File: userRequests[userRequests.length - 1]?.pdfAgreement,
+        doc3File: userRequests[userRequests.length - 1]?.pdfContract,
       }),
     });
 
     const data = await res.json();
-    console.log('setMessage', data);
+    console.log("setMessage", data);
     if (res.ok) {
       setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
     } else {
@@ -963,14 +968,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setError(null);
 
     try {
-      const response = await fetch('/api/pdf/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/pdf/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           uid: formData.uid,
           // recipient: formData.recipient,
           // // recipient: { address: formData.recipient.address },
-          recipient: { address: 'julia.j.shcherban@gmail.com' },
+          recipient: { address: "julia.j.shcherban@gmail.com" },
         }),
       });
 
@@ -981,18 +986,18 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
       const data = await response.json();
       if (response.ok) {
-        console.log('Email успішно відправлено:', data.message);
+        console.log("Email успішно відправлено:", data.message);
       } else {
-        console.error('Помилка:', data.error);
+        console.error("Помилка:", data.error);
       }
     } catch (err) {
-      console.error('Помилка під час відправки запиту:', err);
+      console.error("Помилка під час відправки запиту:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getCountriesByLanguage = lang => {
+  const getCountriesByLanguage = (lang) => {
     return Object.entries(countries.getNames(lang)).map(([code, name]) => ({
       value: code,
       label: name,
@@ -1016,27 +1021,27 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     <>
       <div className={styles.orderForm}>
         <form onSubmit={handleSubmit} className={styles.orderForm__form}>
-          <h1>{t('Create a lawyer request')}:</h1>
+          <h1>{t("Create a lawyer request")}:</h1>
           <ul>
-            {visibleFields.map(field => {
-              const value = getNestedValue(formData, field) || '';
+            {visibleFields.map((field) => {
+              const value = getNestedValue(formData, field) || "";
               const isDanger =
                 patternInput[field] && !patternInput[field].test(value);
-              const inputType = inputTypes[field] || 'text';
+              const inputType = inputTypes[field] || "text";
 
               return (
                 <li key={field}>
                   <label className={styles.orderForm__form_lable}>
                     <span className={styles.orderForm__form_span}>
-                      {t(fieldInputForForm[field]) || field}:{' '}
-                      {field !== 'fatherName' && (
+                      {t(fieldInputForForm[field]) || field}:{" "}
+                      {field !== "fatherName" && (
                         <span className={styles.orderForm__form_required}>
                           *
                         </span>
                       )}
                     </span>
 
-                    {field === 'citizenship' ? (
+                    {field === "citizenship" ? (
                       <select
                         className={
                           !value
@@ -1045,9 +1050,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         }
                         name={field}
                         value={value}
-                        onChange={e => {
+                        onChange={(e) => {
                           const { name, value } = e.target;
-                          setFormData(prevData => ({
+                          setFormData((prevData) => ({
                             ...prevData,
                             [name]: value,
                           }));
@@ -1055,9 +1060,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         required
                       >
                         <option value="" disabled>
-                          {t('Select a country')}
+                          {t("Select a country")}
                         </option>
-                        {countryList.map(country => (
+                        {countryList.map((country) => (
                           <option key={country.value} value={country.label}>
                             {country.label}
                           </option>
@@ -1072,35 +1077,35 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         }
                         type={inputType}
                         name={field}
-                        value={inputType !== 'file' ? value : undefined}
+                        value={inputType !== "file" ? value : undefined}
                         pattern={patternInput[field]?.source || undefined}
-                        placeholder={placeHolder[field] || ''}
-                        onChange={e => {
+                        placeholder={placeHolder[field] || ""}
+                        onChange={(e) => {
                           const { name, value, files } = e.target;
 
-                          if (name === 'requesterFile' && files?.length > 0) {
+                          if (name === "requesterFile" && files?.length > 0) {
                             handleChangeForFile(e);
-                          } else if (name.startsWith('recipient.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("recipient.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               recipient: {
                                 ...prevData.recipient,
                                 [key]: value,
                               },
                             }));
-                          } else if (name.startsWith('residence.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("residence.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               residence: {
                                 ...prevData.residence,
                                 [key]: value,
                               },
                             }));
-                          } else if (name.startsWith('date.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("date.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               date: {
                                 ...prevData.date,
@@ -1108,7 +1113,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                               },
                             }));
                           } else {
-                            setFormData(prevData => ({
+                            setFormData((prevData) => ({
                               ...prevData,
                               [name]: value,
                             }));
@@ -1126,7 +1131,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                           : styles.form__validate__hide
                       }
                     >
-                      {t('Please use pattern')}: {placeHolder[field]}
+                      {t("Please use pattern")}: {placeHolder[field]}
                     </span>
                   )}
                 </li>
@@ -1138,12 +1143,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             type="button"
             className={styles.orderForm__form_button}
             onClick={() => {
-              generatePDFPreview('lawyersRequest');
+              generatePDFPreview("lawyersRequest");
             }}
           >
-            {isLoading ? t('Generating...') : t('Lawyer`s request generate')}
+            {isLoading ? t("Generating...") : t("Lawyer`s request generate")}
           </button>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <div className={styles.checkbox_wrapper_29}>
             <div>
@@ -1161,9 +1166,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               <label
                 className={styles.label}
                 htmlFor="agreement-checkbox"
-                onClick={() => generatePDFPreview('agreement')}
+                onClick={() => generatePDFPreview("agreement")}
               >
-                {t('I consent to the processing of personal data')}
+                {t("I consent to the processing of personal data")}
               </label>
             </div>
 
@@ -1182,10 +1187,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               <label
                 className={styles.label}
                 htmlFor="contract-checkbox"
-                onClick={() => generatePDFPreview('contract')}
+                onClick={() => generatePDFPreview("contract")}
               >
                 {t(
-                  'I consent to the conclusion of a legal assistance agreement.'
+                  "I consent to the conclusion of a legal assistance agreement."
                 )}
               </label>
             </div>
@@ -1197,14 +1202,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             type="submit"
             className={styles.orderForm__form_button}
           >
-            {isLoading ? t('Saving...') : t('Next')}
+            {isLoading ? t("Saving...") : t("Next")}
           </button>
           <button
             onClick={handleSendEmail}
             type="button"
             className={styles.orderForm__form_button}
           >
-            {isLoading ? t('Sending') : t('Send')}
+            {isLoading ? t("Sending") : t("Send")}
           </button>
         </form>
       </div>
