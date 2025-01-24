@@ -23,6 +23,7 @@ export default function HistoryPage() {
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
   const [checkInfo, setCheckInfo] = useState([]);
+  console.log("userRequests", userRequests);
 
   useEffect(() => {
     let arr = [];
@@ -37,8 +38,11 @@ export default function HistoryPage() {
       getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
         (res) => {
           if (res) {
-            setUserRequests(res);
-            // console.log(res);
+            setUserRequests(
+              res.sort(
+                (a, b) => -new Date(a.dateCreating) + new Date(b.dateCreating)
+              )
+            );
           }
         }
       );
