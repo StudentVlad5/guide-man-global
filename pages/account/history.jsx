@@ -111,7 +111,10 @@ export default function HistoryPage() {
                               {it.title}
                             </span>
                           </li>
-                          <li className={styl.profile__item}>
+                          <li
+                            className={styl.profile__item}
+                            style={{ alignItems: "center" }}
+                          >
                             <div
                               className={
                                 it.status === "pending" ||

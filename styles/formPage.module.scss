@@ -45,7 +45,7 @@
   &__container ul li {
     @include onMobile {
       justify-content: center;
-      align-items: center;
+      align-items: start;
       width: 100%;
       max-width: 100% !important;
     }
@@ -63,6 +63,12 @@
       font-size: 16px;
       font-weight: 700;
       line-height: 19.6px;
+      @include onMobile {
+        border: none;
+        width: 100%;
+        padding: 20px 0;
+        gap: 10px;
+      }
       & li {
         padding: 12px;
         display: flex;
