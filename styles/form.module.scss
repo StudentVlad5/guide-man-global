@@ -10,9 +10,11 @@
   font-weight: 400;
   font-size: 27px;
   line-height: 169%;
+  margin-left: 31px;
 
   @include onMobile {
     font-size: 10px;
+    margin-left: 0px;
   }
 
   &__li {

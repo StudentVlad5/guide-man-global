@@ -24,6 +24,8 @@ import {
   inputTypes,
   patternInput,
   placeHolder,
+  requestNameToKeyMap,
+  requestTypeMap,
 } from "../helpers/constant";
 import { requestNameToKeyMap, requestTypeMap } from "../helpers/requestTypeMap";
 import { useRouter } from "next/router";
@@ -44,6 +46,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [statusRenewUser, setStatusRenewUser] = useState(false);
   const [message, setMessage] = useState("");
   const [userRequests, setUserRequests] = useState([]);
+  const [userRequest, setUserRequest] = useState([]);
+
   useEffect(() => {
     if (user) {
       getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
@@ -261,7 +265,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
       // Отримуємо сформовані PDF-файли
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
-
+      setUserRequest(response.data);
       setFormData((prev) => ({
         ...prev,
         agreement: agreementPDF,
@@ -308,33 +312,34 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         dataToSend.append(key, value);
       }
     });
-    fetch("/submit", {
-      method: "POST",
-      body: dataToSend,
-    })
-      .then((response) => {
-        response.json();
-      })
-      .then((data) => {
-        console.log("success");
-      })
-      .catch((error) => console.error("Error", error));
+    // fetch("/submit", {
+    //   method: "POST",
+    //   body: dataToSend,
+    // })
+    //   .then((response) => {
+    //     response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log("success");
+    //   })
+    //   .catch((error) => console.error("Error", error));
 
     savePDF();
     setStatusRenewUser(true);
   };
 
+  console.log(userRequest);
   const handleDocuSign = async () => {
     const res = await fetch("/api/docusign", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        signerEmail: userRequests[userRequests.length - 1]?.userEmail,
+        signerEmail: userRequest?.request?.userEmail,
         signerName: userCredentials.name,
         ccEmail: "vlad_np@ukr.net",
         ccName: "vlad",
-        doc2File: userRequests[userRequests.length - 1]?.pdfAgreement,
-        doc3File: userRequests[userRequests.length - 1]?.pdfContract,
+        doc2File: userRequest?.request?.pdfAgreement,
+        doc3File: userRequest?.request?.pdfContract,
       }),
     });
 
