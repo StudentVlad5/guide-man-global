@@ -38,7 +38,7 @@ export default function HistoryPage() {
         (res) => {
           if (res) {
             setUserRequests(res);
-            console.log(res);
+            // console.log(res);
           }
         }
       );
@@ -95,9 +95,7 @@ export default function HistoryPage() {
                             className={styl.profile__item}
                             style={{ gap: "8px", maxWidth: "225px" }}
                           >
-                            <i>
-                              <b>{t("Lawyer`s request")}:</b>
-                            </i>{" "}
+                            <b>{t("Lawyer`s request")}:</b>
                             <span
                               className={styl.profile__button}
                               onClick={() => {
