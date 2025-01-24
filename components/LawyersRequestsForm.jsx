@@ -27,7 +27,6 @@ import {
   requestNameToKeyMap,
   requestTypeMap,
 } from "../helpers/constant";
-import { requestNameToKeyMap, requestTypeMap } from "../helpers/requestTypeMap";
 import { useRouter } from "next/router";
 
 countries.registerLocale(ukLocale);
@@ -301,31 +300,64 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     // }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
-    const dataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value instanceof File) {
-        dataToSend.append(key, value, value.name);
-      } else {
-        dataToSend.append(key, value);
-      }
-    });
-    // fetch("/submit", {
-    //   method: "POST",
-    //   body: dataToSend,
-    // })
-    //   .then((response) => {
-    //     response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("success");
-    //   })
-    //   .catch((error) => console.error("Error", error));
+    console.log(formData);
 
-    savePDF();
-    setStatusRenewUser(true);
+    try {
+      const returnUrl = `${window.location.origin}${router.asPath}`;
+
+      const paymentResponse = await fetch("/api/liqpay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: "0.1",
+          currency: "UAH",
+          description: title || "Payment",
+          currentLanguage: currentLanguage,
+          returnUrl,
+          order_id: `order_${Date.now()}_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
+        }),
+      });
+
+      if (!paymentResponse.ok) {
+        throw new Error("Error initializing payment");
+      }
+
+      const paymentData = await paymentResponse.json();
+      console.log("Payment initialized:", paymentData);
+
+      const paymentForm = document.createElement("form");
+      paymentForm.method = "POST";
+      paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+      paymentForm.acceptCharset = "utf-8";
+
+      const inputData = document.createElement("input");
+      inputData.type = "hidden";
+      inputData.name = "data";
+      inputData.value = paymentData.data;
+
+      const inputSignature = document.createElement("input");
+      inputSignature.type = "hidden";
+      inputSignature.name = "signature";
+      inputSignature.value = paymentData.signature;
+
+      paymentForm.appendChild(inputData);
+      paymentForm.appendChild(inputSignature);
+
+      document.body.appendChild(paymentForm);
+      paymentForm.submit();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      savePDF();
+      setStatusRenewUser(true);
+    }
   };
 
   console.log(userRequest);
@@ -441,7 +473,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               const isDanger =
                 patternInput[field] && !patternInput[field].test(value);
               const inputType = inputTypes[field] || "text";
-
+              const isFatherName = field === "fatherName";
+              const inputClass = isFatherName
+                ? styles.orderForm__form_select
+                : isDanger
+                ? styles.orderForm__form_input__danger
+                : styles.orderForm__form_input;
               return (
                 <li key={field}>
                   <label className={styles.orderForm__form_lable}>
@@ -483,11 +520,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                       </select>
                     ) : (
                       <input
-                        className={
-                          isDanger
-                            ? styles.orderForm__form_input__danger
-                            : styles.orderForm__form_input
-                        }
+                        className={inputClass}
                         type={inputType}
                         name={field}
                         value={inputType !== "file" ? value : undefined}
