@@ -46,6 +46,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [message, setMessage] = useState("");
   const [userRequests, setUserRequests] = useState([]);
   const [userRequest, setUserRequest] = useState([]);
+  const [tck, setTck] = useState([]);
 
   useEffect(() => {
     if (user) {
@@ -62,6 +63,28 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       );
     }
   }, [user, isLoading]);
+
+  useEffect(() => {
+    const fetchCollection = async () => {
+      try {
+        const db = getFirestore();
+        const querySnapshot = await getDocs(collection(db, "tck"));
+
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const uniqueData = Array.from(new Set(data.map((item) => item.id))).map(
+          (id) => data.find((item) => item.id === id)
+        );
+        setTck(uniqueData);
+      } catch (error) {
+        console.error("Error fetching collection: ", error);
+      }
+    };
+
+    fetchCollection();
+  }, []);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -329,12 +352,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       }
 
       const paymentData = await paymentResponse.json();
-      console.log("Payment initialized:", paymentData);
 
       const paymentForm = document.createElement("form");
       paymentForm.method = "POST";
       paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
       paymentForm.acceptCharset = "utf-8";
+      paymentForm.target = "_blank";
 
       const inputData = document.createElement("input");
       inputData.type = "hidden";
@@ -518,6 +541,48 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                           </option>
                         ))}
                       </select>
+                    ) : field === "recipient.name" ? (
+                      <select
+                        className={
+                          !value
+                            ? styles.orderForm__form_input__danger
+                            : styles.orderForm__form_select
+                        }
+                        name="recipient.name"
+                        value={formData.recipient?.name || ""}
+                        onChange={(e) => {
+                          const { value } = e.target;
+
+                          const selectedTCK = tck.find((t) => t.name === value);
+
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            recipient: {
+                              ...prevData.recipient,
+                              name: value,
+                              address: selectedTCK?.email || "",
+                            },
+                          }));
+                        }}
+                        required
+                      >
+                        <option value="" disabled>
+                          {t("Select a TCK")}
+                        </option>
+                        {tck.map((tck) => (
+                          <option key={tck.id} value={tck.name}>
+                            {tck.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : field === "recipient.address" ? (
+                      <input
+                        className={inputClass}
+                        type="text"
+                        name="recipient.address"
+                        value={formData.recipient?.address || ""}
+                        readOnly
+                      />
                     ) : (
                       <input
                         className={inputClass}
@@ -641,7 +706,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </label>
             </div>
           </div>
-
           <button
             // onClick={(e) => handleSubmit(e)}
             disabled={isLoading || isSubmitDisabled}
