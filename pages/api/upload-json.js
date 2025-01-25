@@ -1,12 +1,5 @@
 import { db } from '../../firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  setDoc,
-  runTransaction,
-} from 'firebase/firestore';
+import { collection, doc, runTransaction } from 'firebase/firestore';
 import fs from 'fs';
 import path from 'path';
 
@@ -25,10 +18,8 @@ export default async function handler(req, res) {
     }
 
     // Завантаження JSON-файлу
-    const filePath = path.join(process.cwd(), 'api', fileName);
-    console.log('File Name:', fileName);
-    console.log('Collection Name:', collectionName);
-    
+    const filePath = path.join(process.cwd(), 'data', fileName);
+
     // Перевірка існування файлу
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: `Файл ${fileName} не знайдено` });
@@ -45,18 +36,21 @@ export default async function handler(req, res) {
       const data = jsonData[key];
 
       await runTransaction(db, async transaction => {
-        // Перевірка існування документа з таким самим `id`
-        if (data.id) {
-          const q = doc(collectionRef, data.id); // Використання `id` як ключа документа
-          const docSnap = await transaction.get(q);
+        // Використання `data.id` або автоматичне створення
+        const documentId =
+          data.id && typeof data.id === 'string' ? data.id : undefined;
+        const docRef = documentId
+          ? doc(collectionRef, documentId)
+          : doc(collectionRef);
 
-          if (!docSnap.exists()) {
-            // Якщо документ не існує, додаємо його
-            const newDocRef = doc(collectionRef); // Генерація унікального `idPost`
-            transaction.set(q, { ...data, idPost: newDocRef.id }); // Додаємо дані з унікальним `idPost`
-          } else {
-            console.log(`Документ із id "${data.id}" вже існує. Пропускаємо.`);
-          }
+        const docSnap = await transaction.get(docRef);
+
+        if (!docSnap.exists()) {
+          // Додавання нового документа
+          transaction.set(docRef, {
+            ...data,
+            idPost: documentId || docRef.id, // Використовуємо існуючий або автоматично згенерований `id`
+          });
         } else {
           // Якщо `id` відсутнє, додаємо з автоматичним ключем
           const newDocRef = doc(collectionRef);

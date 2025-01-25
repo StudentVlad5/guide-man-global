@@ -47,54 +47,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userRequests, setUserRequests] = useState([]);
   const [userRequest, setUserRequest] = useState([]);
 
-  useEffect(() => {
-    if (user) {
-      getCollectionWhereKeyValue('userRequests', 'userId', user.uid).then(
-        res => {
-          if (res) {
-            setUserRequests(
-              res.sort(
-                (a, b) => new Date(a.dateCreating) - new Date(b.dateCreating)
-              )
-            );
-          }
-        }
-      );
-    }
-  }, [user, isLoading]);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      if (user) {
-        const db = getFirestore(); // Initialize Firestore
-        const userCollection = collection(db, 'users');
-        const userQuery = query(userCollection, where('uid', '==', user.uid));
-
-        try {
-          const snapshot = await getDocs(userQuery);
-          if (!snapshot.empty) {
-            const userData = snapshot.docs[0].data();
-            setUserData(userData);
-            handleDocuSign(userData);
-          } else {
-            console.log('User data not found');
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-
-    if (statusRenewUser) {
-      getUserData(), setStatusRenewUser(false);
-    }
-  }, [statusRenewUser, user]);
-
   const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
 
-  // const requestEn = request.requestType.ua;
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
   const title = request?.[currentLanguage]?.title || 'Default Payment Title';
@@ -191,6 +147,47 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       return typeof value === 'string' ? value.trim() !== '' : Boolean(value);
     });
   };
+
+  useEffect(() => {
+    if (user) {
+      getCollectionWhereKeyValue('userRequests', 'uid', user.uid).then(res => {
+        if (res) {
+          setUserRequests(
+            res.sort(
+              (a, b) => new Date(a.dateCreating) - new Date(b.dateCreating)
+            )
+          );
+        }
+      });
+    }
+  }, [user, isLoading]);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      if (user) {
+        const db = getFirestore(); // Initialize Firestore
+        const userCollection = collection(db, 'users');
+        const userQuery = query(userCollection, where('uid', '==', user.uid));
+
+        try {
+          const snapshot = await getDocs(userQuery);
+          if (!snapshot.empty) {
+            const userData = snapshot.docs[0].data();
+            setUserData(userData);
+            handleDocuSign(userData);
+          } else {
+            console.log('User data not found');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    if (statusRenewUser) {
+      getUserData(), setStatusRenewUser(false);
+    }
+  }, [statusRenewUser, user]);
 
   useEffect(() => {
     const getRecipient = async () => {

@@ -1,4 +1,7 @@
-import { getCollectionWhereKeyValue, updateDocument } from './firebaseControl';
+import {
+  getCollectionWhereKeyValue,
+  updateDocumentInCollection,
+} from './firebaseControl';
 import { sendEmail } from './prepareAttachments';
 
 export const processIncomingEmail = async email => {
@@ -31,7 +34,7 @@ export const processIncomingEmail = async email => {
     }
 
     // Оновлюємо статус запиту на 'done'
-    await updateDocument(
+    await updateDocumentInCollection(
       'userRequests',
       {
         status: 'done',

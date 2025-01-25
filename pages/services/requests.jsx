@@ -6,7 +6,7 @@ import { ServisesDropdown } from '../../components/ServisesDropdown';
 import { ServisesButton } from '../../components/ServisesButton';
 import { getRightData, getRightURL } from '../../helpers/rightData';
 
-import requestsDescription from '../../api/requestsDescription.json';
+import requestsDescription from '../../data/requestsDescription.json';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Layout } from '../../components/Layout';
@@ -85,12 +85,14 @@ export default function LawyersRequests({ requests }) {
       body: JSON.stringify({
         fileName: 'tck.json',
         collectionName: 'tck',
+        // fileName: 'dataRequests.json',
+        // collectionName: 'requests',
       }),
     });
 
     const data = await response.json();
     console.log(response);
-    
+
     if (response.ok) {
       console.log(data.message);
     } else {
@@ -98,9 +100,9 @@ export default function LawyersRequests({ requests }) {
     }
   };
 
-  useEffect(() => {
-    uploadData();
-  }, []);
+  // useEffect(() => {
+  //   uploadData();
+  // }, []);
 
   return (
     <Layout

@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     // Завантаження файлів із Firestore
     const userRequests = await getCollectionWhereKeyValue(
       'userRequests',
-      'userId',
+      'uid',
       uid
     );
 
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         .json({ error: 'Запити не знайдено для вказаного UID' });
     }
 
-    const { id, title, pdfLawyersRequest, pdfAgreement, order, file } =
+    const { id, title, pdfLawyersRequest, pdfAgreement, order, requesterFile } =
       userRequests[0];
     // Формуємо масив файлів для відправлення
     const pdfFiles = [
@@ -37,14 +37,14 @@ export default async function handler(req, res) {
     ];
 
     // Додаємо файли з поля "file" (масив або одиничний файл)
-    if (Array.isArray(file)) {
-      file.forEach((f, index) => {
+    if (Array.isArray(requesterFile)) {
+      requesterFile.forEach((f, index) => {
         if (f.url) {
           pdfFiles.push({ name: `file-${index + 1}.pdf`, url: f.url });
         }
       });
-    } else if (file?.url) {
-      pdfFiles.push({ name: 'file.pdf', url: file.url });
+    } else if (requesterFile?.url) {
+      pdfFiles.push({ name: 'file.pdf', url: requesterFile.url });
     }
 
     const certificatePath = path.join(

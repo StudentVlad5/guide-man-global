@@ -71,23 +71,22 @@ export async function getTitleOfServices(locale) {
   });
 }
 
-export function updateDocumentInCollection(collection, document, idDocumnent) {
-  return new Promise(function (resolve, reject) {
-    try {
-      db.collection(collection)
-        .doc(idDocumnent)
-        .update(document)
-        .then(r => {
-          resolve({ result: r });
-        })
-        .catch(e => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
+export const updateDocumentInCollection = async (
+  collection,
+  document,
+  documentId
+) => {
+  try {
+    const documentRef = doc(db, collection, documentId); // Отримуємо посилання на документ
+    await updateDoc(documentRef, document); // Оновлюємо документ
+    console.log(
+      `Документ ${documentId} успішно оновлено у колекції ${collection}.`
+    );
+  } catch (error) {
+    console.error('Помилка під час оновлення документа:', error);
+    throw error;
+  }
+};
 
 export function setDocumentToCollection(collection, document) {
   return new Promise(function (resolve, reject) {
@@ -326,7 +325,7 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       pdfContract: pdfUrls.contract || '',
       order: data.numberOrder || pdfUrls.contract,
       // file: data.requesterFile || [],
-      userId: uid,
+      // userId: uid,
       userEmail: user.email,
       status: 'pending',
       ...restData,
@@ -358,19 +357,6 @@ export const uploadPDFToStorage = async (pdfBuffer, fileName, storage) => {
     return fileUrl;
   } catch (error) {
     console.error('Error uploading PDF to Storage:', error);
-    throw error;
-  }
-};
-
-export const updateDocument = async (collection, document, documentId) => {
-  try {
-    const documentRef = doc(db, collection, documentId); // Отримуємо посилання на документ
-    await updateDoc(documentRef, document); // Оновлюємо документ
-    console.log(
-      `Документ ${documentId} успішно оновлено у колекції ${collection}.`
-    );
-  } catch (error) {
-    console.error('Помилка під час оновлення документа:', error);
     throw error;
   }
 };
