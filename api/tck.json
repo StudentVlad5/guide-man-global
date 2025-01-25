@@ -1,0 +1,2207 @@
+[
+    {
+        "id": 1,
+        "name": "ЖИТОМИРСЬКИЙ ОТЦК та СП",
+        "email": "ztovk@post.mil.gov.ua"
+    },
+    {
+        "id": 2,
+        "name": "Житомирський ОМТЦК та СП",
+        "email": "ztomvk_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 3,
+        "name": "Житомирський РТЦК та СП",
+        "email": "ztrtck_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 4,
+        "name": "1 відділ Житомирський РТЦК та СП",
+        "email": "korostishev_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 5,
+        "name": "2 відділ Житомирський РТЦК та СП",
+        "email": "volodar_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 6,
+        "name": "3 відділ Житомирський РТЦК та СП",
+        "email": "chudnov_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 7,
+        "name": "4 відділ Житомирський РТЦК та СП",
+        "email": "lubar_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 8,
+        "name": "5 відділ Житомирський РТЦК та СП",
+        "email": "popelnya_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 9,
+        "name": "6 відділ Житомирський РТЦК та СП",
+        "email": "cherarm_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 10,
+        "name": "7 відділ Житомирський РТЦК та СП",
+        "email": "radomishel_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 11,
+        "name": "8 відділ Житомирський РТЦК та СП",
+        "email": "romaniv_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 12,
+        "name": "9 відділ Житомирський РТЦК та СП",
+        "email": "chernyahiv_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 13,
+        "name": "Коростенський РТЦК та СП",
+        "email": "korosten_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 14,
+        "name": "1 відділ Коростенський РТЦК та СП",
+        "email": "ovruch_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 15,
+        "name": "2 відділ Коростенський РТЦК та СП",
+        "email": "olevsk_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 16,
+        "name": "3 відділ Коростенський РТЦК та СП",
+        "email": "malin_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 17,
+        "name": "4 відділ Коростенський РТЦК та СП",
+        "email": "lugini_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 18,
+        "name": "Бердичівський РТЦК та СП",
+        "email": "berdichev_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 19,
+        "name": "1 відділ Бердичівський РТЦК та СП",
+        "email": "andrushovka_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 20,
+        "name": "2 відділ Бердичівський РТЦК та СП",
+        "email": "rugin_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 21,
+        "name": "Звягельський РТЦК та СП",
+        "email": "novograd_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 22,
+        "name": "1 відділ Звягельського РТЦК та СП",
+        "email": "emilcheno_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 23,
+        "name": "2 відділ Звягельського РТЦК та СП",
+        "email": "baranivka_vk@post.mil.gov.ua"
+    },
+    {
+        "id": 24,
+        "name": "КИЇВСЬКИЙ ОТЦК та СП",
+        "email": "kyivskuyovk@post.mil.gov.ua"
+    },
+    {
+        "id": 25,
+        "name": "Білоцерківський РТЦК та СП",
+        "email": "bilacerkvaomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 26,
+        "name": "1 відділ Білоцерківського РТЦК та СП",
+        "email": "skvirarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 27,
+        "name": "2 відділ Білоцерківського РТЦК та СП",
+        "email": "tetievrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 28,
+        "name": "3 відділ Білоцерківського РТЦК та СП",
+        "email": "tarasharvk@post.mil.gov.ua"
+    },
+    {
+        "id": 29,
+        "name": "4 відділ Білоцерківського РТЦК та СП",
+        "email": "volodarkarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 30,
+        "name": "5 відділ Білоцерківського РТЦК та СП",
+        "email": "rokitnervk@post.mil.gov.ua"
+    },
+    {
+        "id": 31,
+        "name": "6 відділ Білоцерківського РТЦК та СП",
+        "email": "stavishervk@post.mil.gov.ua"
+    },
+    {
+        "id": 32,
+        "name": "Бориспільський РТЦК та СП",
+        "email": "borispilomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 33,
+        "name": "1 відділ Бориспільського РТЦК та СП",
+        "email": "pereyaslovrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 34,
+        "name": "2 відділ Бориспільського РТЦК та СП",
+        "email": "yagotinrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 35,
+        "name": "Броварський РТЦК та СП",
+        "email": "brovaryomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 36,
+        "name": "1 відділ Броварського РТЦК та СП",
+        "email": "berezanmvk@post.mil.gov.ua"
+    },
+    {
+        "id": 37,
+        "name": "2 відділ Броварського РТЦК та СП",
+        "email": "barishivkarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 38,
+        "name": "3 відділ Броварського РТЦК та СП",
+        "email": "zgurivkarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 39,
+        "name": "Бучанський РТЦК СП",
+        "email": "irpinbuchaorvk@post.mil.gov.ua"
+    },
+    {
+        "id": 40,
+        "name": "1 відділ Бучанського РТЦК та СП",
+        "email": "kievsvyat@post.mil.gov.ua"
+    },
+    {
+        "id": 41,
+        "name": "2 відділ Бучанського РТЦК та СП",
+        "email": "borodyankarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 42,
+        "name": "3 відділ Бучанського РТЦК та СП",
+        "email": "makarivrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 43,
+        "name": "Вишгородський РТЦК СП",
+        "email": "vushgorodrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 44,
+        "name": "1 відділ Вишгородського РТЦК та СП",
+        "email": "ivankivorvk@post.mil.gov.ua"
+    },
+    {
+        "id": 45,
+        "name": "2 відділ Вишгородського РТЦК та СП",
+        "email": "slavutichmvk@post.mil.gov.ua"
+    },
+    {
+        "id": 46,
+        "name": "Обухівський РТЦК СП",
+        "email": "obyhivrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 47,
+        "name": "1 відділ Обухівського РТЦК та СП",
+        "email": "vasilkivomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 48,
+        "name": "2 відділ Обухівського РТЦК та СП",
+        "email": "kagarlik@post.mil.gov.ua"
+    },
+    {
+        "id": 49,
+        "name": "3 відділ Обухівського РТЦК та СП",
+        "email": "mironivkarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 50,
+        "name": "4 відділ Обухівського РТЦК та СП",
+        "email": "boguslav@post.mil.gov.ua"
+    },
+    {
+        "id": 51,
+        "name": "Фастівський РТЦК СП",
+        "email": "fastivomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 52,
+        "name": "1 відділ Фастівського РТЦК та СП",
+        "email": "boyarka_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 53,
+        "name": "ЧЕРНІГІВСЬКИЙ ОТЦК та СП",
+        "email": "chernigiv.otcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 54,
+        "name": "Чернігівський об’єднаний міський ТЦК та СП",
+        "email": "chemigiv.omtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 55,
+        "name": "Чернігівський районний ТЦК та СП",
+        "email": "chemigiv_rtcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 56,
+        "name": "1 відділ Чернігівського районного ТЦК та СП",
+        "email": "gorodnya.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 57,
+        "name": "2 відділ Чернігівського районного ТЦК та СП",
+        "email": "kozelec.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 58,
+        "name": "3 відділ Чернігівського районного ТЦК та СП",
+        "email": "kylukivka.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 59,
+        "name": "4 відділ Чернігівського районного ТЦК та СП",
+        "email": "ripku.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 60,
+        "name": "Ніжинський районний ТЦК та СП",
+        "email": "nizhyn.omtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 61,
+        "name": "1 відділ Ніжинського районного ТЦК та СП",
+        "email": "bobrovitsa.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 62,
+        "name": "2 відділ Ніжинського районного ТЦК та СП",
+        "email": "bahmach.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 63,
+        "name": "3 відділ Ніжинського районного ТЦК та СП",
+        "email": "borzna.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 64,
+        "name": "4 відділ Ніжинського районного ТЦК та СП",
+        "email": "nosivka.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 65,
+        "name": "Прилуцький районний ТЦК та СП",
+        "email": "priluki.omtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 66,
+        "name": "1 відділ Прилуцького районного ТЦК та СП",
+        "email": "ichnya.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 67,
+        "name": "2 відділ Прилуцького районного ТЦК та СП",
+        "email": "sribne.ortck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 68,
+        "name": "3 відділ Прилуцького районного ТЦК та СП",
+        "email": "varva.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 69,
+        "name": "Корюківський районний ТЦК та СП",
+        "email": "korukivka.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 70,
+        "name": "1 відділ Корюківського районного ТЦК та СП",
+        "email": "mena.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 71,
+        "name": "2 відділ Корюківського районного ТЦК та СП",
+        "email": "snovsk.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 72,
+        "name": "3 відділ Корюківського районного ТЦК та СП",
+        "email": "sosnuca.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 73,
+        "name": "Новгород-Сіверський районний ТЦК та СП",
+        "email": "novgorodsiverskiy.omtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 74,
+        "name": "1 відділ Новгород-Сіверського РТЦК та СП",
+        "email": "korop.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 75,
+        "name": "2 відділ Новгород-Сіверського РТЦК та СП",
+        "email": "semenivka.rtck_sp@post.mil.gov.ua"
+    },
+    {
+        "id": 76,
+        "name": "КИЇВСЬКИЙ МТЦК та СП",
+        "email": "kyiv_mvk@post.mil.gov.ua"
+    },
+    {
+        "id": 77,
+        "name": "Голосіївський РТЦК та СП",
+        "email": "holos_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 78,
+        "name": "Дарницький РТЦК та СП",
+        "email": "darnica_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 79,
+        "name": "Деснянський РТЦК та СП",
+        "email": "desna_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 80,
+        "name": "Дніпровський РТЦК та СП",
+        "email": "dnepr_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 81,
+        "name": "Оболонський РТЦК та СП",
+        "email": "obolon_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 82,
+        "name": "Печерський РТЦК та СП",
+        "email": "pechersk_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 83,
+        "name": "Подільський РТЦК та СП",
+        "email": "podol_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 84,
+        "name": "Святошинський РТЦК та СП",
+        "email": "svyatosh_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 85,
+        "name": "Солом'янський РТЦК та СП",
+        "email": "solomyansk_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 86,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "shevchenkovsk_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 87,
+        "name": "ЧЕРКАСЬКИЙ ОТЦК та СП",
+        "email": "cherkasy_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 88,
+        "name": "Звенигородський РТЦК та СП",
+        "email": "zvenygorodka_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 89,
+        "name": "1 відділ Звенигородського РТЦК та СП",
+        "email": "v1_zvenygor_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 90,
+        "name": "2 відділ Звенигородського РТЦК та СП",
+        "email": "v2_zvenygor_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 91,
+        "name": "3 відділ Звенигородського РТЦК та СП",
+        "email": "v3_zvenygor_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 92,
+        "name": "4 відділ Звенигородського РТЦК та СП",
+        "email": "v4_zvenygor_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 93,
+        "name": "Золотоніський РТЦК та СП",
+        "email": "zolotonosha_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 94,
+        "name": "1 відділ Золотоніського РТЦК та СП",
+        "email": "v1_zolot_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 95,
+        "name": "2 відділ Золотоніського РТЦК та СП",
+        "email": "v2_zolot_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 96,
+        "name": "Уманський РТЦК та СП",
+        "email": "uman_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 97,
+        "name": "1 відділ Уманського РТЦК та СП",
+        "email": "v1_uman_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 98,
+        "name": "2 відділ Уманського РТЦК та СП",
+        "email": "v2_uman_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 99,
+        "name": "3 відділ Уманського РТЦК та СП",
+        "email": "v3_uman_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 100,
+        "name": "4 відділ Уманського РТЦК та СП",
+        "email": "v4_uman_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 101,
+        "name": "Черкаський РТЦК та СП",
+        "email": "cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 102,
+        "name": "1 відділ Черкаського РТЦК та СП",
+        "email": "v1_cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 103,
+        "name": "2 відділ Черкаського РТЦК та СП",
+        "email": "v2_cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 104,
+        "name": "3 відділ Черкаського РТЦК та СП",
+        "email": "v3_cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 105,
+        "name": "4 відділ Черкаського РТЦК та СП",
+        "email": "v4_cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 106,
+        "name": "5 відділ Черкаського РТЦК та СП",
+        "email": "v5_cherkasy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 107,
+        "name": "Черкаський ОМТЦК та СП",
+        "email": "cherkasy_mtck@post.mil.gov.ua"
+    },
+    {
+        "id": 108,
+        "name": "СУМСЬКИЙ ОТЦК та СП",
+        "email": "sovk@post.mil.gov.ua"
+    },
+    {
+        "id": 109,
+        "name": "Районний ТЦК та СП",
+        "email": "sumy-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 110,
+        "name": "1-й відділ Сумського РТЦК та СП",
+        "email": "bilop-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 111,
+        "name": "2-й відділ Сумського РТЦК та СП",
+        "email": "lebedyn-omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 112,
+        "name": "3-й відділ Сумського РТЦК та СП",
+        "email": "krasnop-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 113,
+        "name": "Сумський міський ТЦК та СП",
+        "email": "sumy-mvk@post.mil.gov.ua"
+    },
+    {
+        "id": 114,
+        "name": "Конотопський РТЦК та СП",
+        "email": "konotop-omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 115,
+        "name": "1 відділ Конотопського РТЦК та СП",
+        "email": "buryn-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 116,
+        "name": "2 відділ Конотопського РТЦК та СП",
+        "email": "krolevec-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 117,
+        "name": "3 відділ Конотопського РТЦК та СП",
+        "email": "putivl-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 118,
+        "name": "Охтирський РТЦК та СП",
+        "email": "ohtyrka-omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 119,
+        "name": "1 відділ Охтирського РТЦК та СП",
+        "email": "trost-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 120,
+        "name": "2 відділ Охтирського РТЦК та СП",
+        "email": "v-pysarivka-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 121,
+        "name": "Роменський РТЦК та СП",
+        "email": "romny-omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 122,
+        "name": "1 відділ Роменського РТЦК та СП",
+        "email": "L-dolyna-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 123,
+        "name": "2 відділ Роменського РТЦК та СП",
+        "email": "nedrig-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 124,
+        "name": "Шостинський РТЦК та СП",
+        "email": "shostka-omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 125,
+        "name": "1 відділ Шостинського РТЦК та СП",
+        "email": "gluhiv_omvk@post.mil.gov.ua"
+    },
+    {
+        "id": 126,
+        "name": "2 відділ Шостинського РТЦК та СП",
+        "email": "yampil-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 127,
+        "name": "3 відділ Шостинського РТЦК та СП",
+        "email": "s-buda-rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 128,
+        "name": "ПОЛТАВСЬКИЙ ОТЦК та СП",
+        "email": "pоlt_ovk@post.mil.gov.ua"
+    },
+    {
+        "id": 129,
+        "name": "Полтавський О(М)ТЦК та СП",
+        "email": "poltavskiyomvk@post.mil.gov.ua"
+    },
+    {
+        "id": 130,
+        "name": "Полтавський РТЦК та СП",
+        "email": "polt_prvk@post.mil.gov.ua"
+    },
+    {
+        "id": 131,
+        "name": "1-й відділ Полтавського РТЦК та СП",
+        "email": "1v_prtck@post.mil.gov.ua"
+    },
+    {
+        "id": 132,
+        "name": "2-й відділ Полтавського РТЦК та СП",
+        "email": "n.san_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 133,
+        "name": "3-й відділ Полтавського РТЦК та СП",
+        "email": "kobrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 134,
+        "name": "4-й відділ Полтавського РТЦК та СП",
+        "email": "karlivka_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 135,
+        "name": "5-й відділ Полтавського РТЦК та СП",
+        "email": "dyk_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 136,
+        "name": "6-й відділ Полтавського РТЦК та СП",
+        "email": "reshetylivka_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 137,
+        "name": "7-й відділ Полтавського РТЦК та СП",
+        "email": "kotelva_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 138,
+        "name": "8-й відділ Полтавського РТЦК та СП",
+        "email": "mashivkarvk@post.mil.gov.ua"
+    },
+    {
+        "id": 139,
+        "name": "9-й відділ Полтавського РТЦК та СП",
+        "email": "kotelva_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 140,
+        "name": "Лубенський РТЦК та СП",
+        "email": "lubny_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 141,
+        "name": "1-й відділ Лубенського РТЦК та СП",
+        "email": "horol_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 142,
+        "name": "2-й відділ Лубенського РТЦК та СП",
+        "email": "pir_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 143,
+        "name": "3-й відділ Лубенського РТЦК та СП",
+        "email": "chornuhyn@post.mil.gov.ua"
+    },
+    {
+        "id": 144,
+        "name": "4-й відділ Лубенського РТЦК та СП",
+        "email": "or_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 145,
+        "name": "5-й відділ Лубенського РТЦК та СП",
+        "email": "grebinka_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 146,
+        "name": "Кременчуцький РТЦК та СП",
+        "email": "krem_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 147,
+        "name": "1-й відділ Кременчуцького РТЦК та СП",
+        "email": "horishplavn_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 148,
+        "name": "2-й відділ Кременчуцького РТЦК та СП",
+        "email": "glob_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 149,
+        "name": "3-й відділ Кременчуцького РТЦК та СП",
+        "email": "semenivskiy_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 150,
+        "name": "4-й відділ Кременчуцького РТЦК та СП",
+        "email": "kozrvk@post.mil.gov.ua"
+    },
+    {
+        "id": 151,
+        "name": "Миргородський РТЦК та СП",
+        "email": "myrgorod_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 152,
+        "name": "1-й відділ Миргородського РТЦК та СП",
+        "email": "gad_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 153,
+        "name": "2-й відділ Миргородського РТЦК та СП",
+        "email": "lohvytsia_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 154,
+        "name": "3-й відділ Миргородського РТЦК та СП",
+        "email": "v_bag@post.mil.gov.ua"
+    },
+    {
+        "id": 155,
+        "name": "4-й відділ Миргородського РТЦК та СП",
+        "email": "shishaki_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 156,
+        "name": "ОДЕСЬКИЙ ОТЦК та СП",
+        "email": "Odeskiy_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 157,
+        "name": "Одеський РТЦК та СП",
+        "email": "a.kifiak@post.mil.gov.ua"
+    },
+    {
+        "id": 158,
+        "name": "Березівський РТЦК та СП",
+        "email": "berezivskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 159,
+        "name": "Білгород-Дністровський РТЦК та СП",
+        "email": "b_dnistrovskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 160,
+        "name": "Болградський РТЦК та СП",
+        "email": "bolgrad_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 161,
+        "name": "Ізмаїльський РТЦК та СП",
+        "email": "izmail_rtckp@post.mil.gov.ua"
+    },
+    {
+        "id": 162,
+        "name": "Подільський РТЦК та СП",
+        "email": "Podilsk_GZ@post.mil.gov.ua"
+    },
+    {
+        "id": 163,
+        "name": "Роздільнянський РТЦК та СП",
+        "email": "rozd_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 164,
+        "name": "Київський РТЦК та СП",
+        "email": "kyivskiy_od_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 165,
+        "name": "Малиновський РТЦК та СП",
+        "email": "malinovskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 166,
+        "name": "Приморський РТЦК та СП",
+        "email": "b_dnistrovskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 167,
+        "name": "Пересипський РТЦК та СП",
+        "email": "Peresyp_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 168,
+        "name": "ВІННИЦЬКИЙ ОТЦК та СП",
+        "email": "vin_ovk@post.mil.gov.ua"
+    },
+    {
+        "id": 169,
+        "name": "Вінницький ОМТЦК та СП",
+        "email": "vinnitsya_omtck@post.mil.gov.ua"
+    },
+    {
+        "id": 170,
+        "name": "Вінницький РТЦК та СП",
+        "email": "vinnytsya_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 171,
+        "name": "Гайсинський РТЦК та СП",
+        "email": "haysin_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 172,
+        "name": "Жмеринський РТЦК та СП",
+        "email": "gmerinka_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 173,
+        "name": "Могилів-Подільський РТЦК та СП",
+        "email": "mog_pod_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 174,
+        "name": "Тульчинський РТЦК та СП",
+        "email": "tulchin_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 175,
+        "name": "Хмільницький РТЦК та СП",
+        "email": "hmilnyk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 176,
+        "name": "Кіровоградський ОТЦК та СП",
+        "email": "kirovogradskiy_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 177,
+        "name": "Кропивницький МТЦК та СП",
+        "email": "kropuvnuckiy_mtck@post.mil.gov.ua"
+    },
+    {
+        "id": 178,
+        "name": "Кропивницький РТЦК та СП",
+        "email": "kropyvnytskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 179,
+        "name": "Голованівський РТЦК та СП",
+        "email": "golovanivskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 180,
+        "name": "Новоукраїнський РТЦК та СП",
+        "email": "novoukrainskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 181,
+        "name": "Олександрійський РТЦК та СП",
+        "email": "oleksandriyskiy_omtck@post.mil.gov.ua"
+    },
+    {
+        "id": 182,
+        "name": "Кропивницький МТЦК та СП",
+        "email": "kropuvnuckiy_mtck@post.mil.gov.ua"
+    },
+    {
+        "id": 183,
+        "name": "МИКОЛАЇВСЬКИЙ ОТЦК та СП",
+        "email": "mykolaivskiy_ovk@post.mil.gov.ua"
+    },
+    {
+        "id": 184,
+        "name": "Центральний РТЦК та СП",
+        "email": "centralnuy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 185,
+        "name": "Вознесенський РТЦК та СП",
+        "email": "voznesensk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 186,
+        "name": "Миколаївський РТЦК та СП",
+        "email": "mukolaiv_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 187,
+        "name": "Первомайський РТЦК та СП",
+        "email": "pervomaysk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 188,
+        "name": "Заводський РТЦК та СП",
+        "email": "zavodskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 189,
+        "name": "Інгульський РТЦК та СП",
+        "email": "ingylskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 190,
+        "name": "Корабельний РТЦК та СП",
+        "email": "korabelnuy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 191,
+        "name": "Баштанський РТЦК та СП",
+        "email": "bashtanka_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 192,
+        "name": "ХЕРСОНСЬКИЙ ОТЦК та СП",
+        "email": "khersonskiy_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 193,
+        "name": "Херсонський РТЦК та СП",
+        "email": "khersonskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 194,
+        "name": "Бериславський РТЦК та СП",
+        "email": "berislavskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 195,
+        "name": "Генічеський РТЦК та СП",
+        "email": "genicheskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 196,
+        "name": "Каховський РТЦК та СП",
+        "email": "kakhovskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 197,
+        "name": "Скадовський РТЦК та СП",
+        "email": "kakhovskiy_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 198,
+        "name": "ВОЛИНСЬКИЙ ОТЦК та СП",
+        "email": "volyn_ovk@post.mil.gov.ua"
+    },
+    {
+        "id": 199,
+        "name": "Володимир-Волинський РТЦК та СП",
+        "email": "vol-vol.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 200,
+        "name": "1 відділ Володимир-Волинського РТЦК та СП",
+        "email": "vol-vol.rtck.v1@post.mil.gov.ua"
+    },
+    {
+        "id": 201,
+        "name": "2 відділ Володимир-Волинського РТЦК та СП",
+        "email": "vol-vol.rtck.v2@post.mil.gov.ua"
+    },
+    {
+        "id": 202,
+        "name": "3 відділ Володимир-Волинського РТЦК та СП",
+        "email": "vol-vol.rtck.v3@post.mil.gov.ua"
+    },
+    {
+        "id": 203,
+        "name": "Камінь-Каширський РТЦК та СП",
+        "email": "k.ka@post.mil.gov.ua"
+    },
+    {
+        "id": 204,
+        "name": "1 відділ Камінь-Каширського РТЦК та СП",
+        "email": "1v_k.ka@post.mil.gov.ua"
+    },
+    {
+        "id": 205,
+        "name": "2 відділ Камінь-Каширського РТЦК та СП",
+        "email": "2v_k.ka@post.mil.gov.ua"
+    },
+    {
+        "id": 206,
+        "name": "Ковельський РТЦК та СП",
+        "email": "kovel.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 207,
+        "name": "1 відділ Ковельського РТЦК та СП",
+        "email": "luboml.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 208,
+        "name": "2 відділ Ковельського РТЦК та СП",
+        "email": "ratne.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 209,
+        "name": "3 відділ Ковельського РТЦК та СП",
+        "email": "turisk_kovel.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 210,
+        "name": "4 відділ Ковельського РТЦК та СП",
+        "email": "shatsk.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 211,
+        "name": "5 відділ Ковельського РТЦК та СП",
+        "email": "stvgvka.tck@post.mil.gov.ua"
+    },
+    {
+        "id": 212,
+        "name": "Луцький РТЦК та СП",
+        "email": "lutsk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 213,
+        "name": "1 відділ Луцького РТЦК та СП",
+        "email": "v1gor_lutsk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 214,
+        "name": "2 відділ Луцького РТЦК та СП",
+        "email": "v2roz_lutsk_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 215,
+        "name": "Луцький ОМТЦК та СП",
+        "email": "lutck_mtck@post.mil.gov.ua"
+    },
+    {
+        "id": 216,
+        "name": "ЗАКАРПАТСЬКИЙ ОТЦК та СП",
+        "email": "zakotck@post.mil.gov.ua"
+    },
+    {
+        "id": 217,
+        "name": "Ужгородський РТЦК та СП",
+        "email": "uzhrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 218,
+        "name": "1 відділ Ужгородського РТЦК та СП",
+        "email": "uzh1rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 219,
+        "name": "2 відділ Ужгородського РТЦК та СП",
+        "email": "uzh2rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 220,
+        "name": "Мукачівський РТЦК та СП",
+        "email": "mukrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 221,
+        "name": "1 відділ Мукачівського РТЦК та СП",
+        "email": "muk1rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 222,
+        "name": "2 відділ Мукачівського РТЦК та СП",
+        "email": "muk2rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 223,
+        "name": "Хустський РТЦК та СП",
+        "email": "husrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 224,
+        "name": "1 відділ Хустського РТЦК та СП",
+        "email": "hus1rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 225,
+        "name": "2 відділ Хустського РТЦК та СП",
+        "email": "hus2rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 226,
+        "name": "Берегівський РТЦК та СП",
+        "email": "berrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 227,
+        "name": "1 відділ Берегівського РТЦК та СП",
+        "email": "ber1rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 228,
+        "name": "Тячівський РТЦК та СП",
+        "email": "tacrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 229,
+        "name": "Рахівський РТЦК та СП",
+        "email": "rahrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 230,
+        "name": "ІВАНО-ФРАНКІВСЬКИЙ ОТЦК та СП",
+        "email": "ifovk@post.mil.gov.ua"
+    },
+    {
+        "id": 231,
+        "name": "Івано-Франківський РТЦК та СП",
+        "email": "if_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 232,
+        "name": "Калуський РТЦК та СП",
+        "email": "kal_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 233,
+        "name": "Коломийський РТЦК та СП",
+        "email": "kol_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 234,
+        "name": "Косівський РТЦК та СП",
+        "email": "kos_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 235,
+        "name": "Верховинський РТЦК та СП",
+        "email": "ver_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 236,
+        "name": "Надвірнянський РТЦК та СП",
+        "email": "nad_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 237,
+        "name": "Івано-Франківський МТЦК та СП",
+        "email": "ivf_mtck@post.mil.gov.ua"
+    },
+    {
+        "id": 238,
+        "name": "ЛЬВІВСЬКИЙ ОТЦК та СП",
+        "email": "lvivovk@post.mil.gov.ua"
+    },
+    {
+        "id": 239,
+        "name": "Галицько-Франківський РТЦК та СП",
+        "email": "gfr@post.mil.gov.ua"
+    },
+    {
+        "id": 240,
+        "name": "Дрогобицький РТЦК та СП",
+        "email": "dbo@post.mil.gov.ua"
+    },
+    {
+        "id": 241,
+        "name": "Золочівський РТЦК та СП",
+        "email": "zol@post.mil.gov.ua"
+    },
+    {
+        "id": 242,
+        "name": "1 відділ Золочівського РТЦК та СП",
+        "email": "bro@post.mil.gov.ua"
+    },
+    {
+        "id": 243,
+        "name": "2 відділ Золочівського РТЦК та СП",
+        "email": "but@post.mil.gov.ua"
+    },
+    {
+        "id": 244,
+        "name": "Личаківсько-Залізничний РТЦК та СП",
+        "email": "lza@post.mil.gov.ua"
+    },
+    {
+        "id": 245,
+        "name": "Львівський РТЦК та СП",
+        "email": "zho@post.mil.gov.ua"
+    },
+    {
+        "id": 246,
+        "name": "1 відділ Львівського РТЦК та СП",
+        "email": "gor@post.mil.gov.ua"
+    },
+    {
+        "id": 247,
+        "name": "2 відділ Львівського РТЦК та СП",
+        "email": "kbu@post.mil.gov.ua"
+    },
+    {
+        "id": 248,
+        "name": "3 відділ Львівського РТЦК та СП",
+        "email": "pus@post.mil.gov.ua"
+    },
+    {
+        "id": 249,
+        "name": "4 відділ Львівського РТЦК та СП",
+        "email": "per@post.mil.gov.ua"
+    },
+    {
+        "id": 250,
+        "name": "Самбірський РТЦК та СП",
+        "email": "sam@post.mil.gov.ua"
+    },
+    {
+        "id": 251,
+        "name": "1 відділ Самбірського РТЦК та СП",
+        "email": "sta@post.mil.gov.ua"
+    },
+    {
+        "id": 252,
+        "name": "2 відділ Самбірського РТЦК та СП",
+        "email": "tur@post.mil.gov.ua"
+    },
+    {
+        "id": 253,
+        "name": "Сихівський РТЦК та СП",
+        "email": "sih@post.mil.gov.ua"
+    },
+    {
+        "id": 254,
+        "name": "Стрийський РТЦК та СП",
+        "email": "str@post.mil.gov.ua"
+    },
+    {
+        "id": 255,
+        "name": "1 відділ Стрийського РТЦК та СП",
+        "email": "zhi@post.mil.gov.ua"
+    },
+    {
+        "id": 256,
+        "name": "2 відділ Стрийського РТЦК та СП",
+        "email": "mik@post.mil.gov.ua"
+    },
+    {
+        "id": 257,
+        "name": "3 відділ Стрийського РТЦК та СП",
+        "email": "sko@post.mil.gov.ua"
+    },
+    {
+        "id": 258,
+        "name": "Червоноградський РТЦК та СП",
+        "email": "che@post.mil.gov.ua"
+    },
+    {
+        "id": 259,
+        "name": "1 відділ Червоноградського РТЦК та СП",
+        "email": "sok@post.mil.gov.ua"
+    },
+    {
+        "id": 260,
+        "name": "2 відділ Червоноградського РТЦК та СП",
+        "email": "rad@post.mil.gov.ua"
+    },
+    {
+        "id": 261,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "she@post.mil.gov.ua"
+    },
+    {
+        "id": 262,
+        "name": "Яворівський РТЦК та СП",
+        "email": "yar@post.mil.gov.ua"
+    },
+    {
+        "id": 263,
+        "name": "1 відділ Яворівського РТЦК та СП",
+        "email": "mos@post.mil.gov.ua"
+    },
+    {
+        "id": 264,
+        "name": "РІВНЕНСЬКИЙ ОТЦК та СП",
+        "email": "rivne_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 265,
+        "name": "Варашський РТЦК та СП",
+        "email": "varash_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 266,
+        "name": "1 відділ Варашського ТЦК та СП",
+        "email": "volodym_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 267,
+        "name": "2 відділ Варашського ТЦК та СП",
+        "email": "zarichne_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 268,
+        "name": "Дубенський РТЦК та СП",
+        "email": "dubno_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 269,
+        "name": "1 відділ Дубенського ТЦК та СП",
+        "email": "mlyniv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 270,
+        "name": "2 відділ Дубенського ТЦК та СП",
+        "email": "radyvyliv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 271,
+        "name": "Рівненський ОМТЦК та СП",
+        "email": "rivnemisto_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 272,
+        "name": "Рівненський РТЦК та СП",
+        "email": "rivne_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 273,
+        "name": "1 відділ Рівненського ТЦК та СП",
+        "email": "berezne_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 274,
+        "name": "2 відділ Рівненського ТЦК та СП",
+        "email": "kostopil_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 275,
+        "name": "3 відділ Рівненського ТЦК та СП",
+        "email": "goshcha_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 276,
+        "name": "4 відділ Рівненського ТЦК та СП",
+        "email": "zdolbuniv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 277,
+        "name": "5 відділ Рівненського ТЦК та СП",
+        "email": "korets_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 278,
+        "name": "6 відділ Рівненського ТЦК та СП",
+        "email": "ostroh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 279,
+        "name": "Сарненський РТЦК та СП",
+        "email": "sarny_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 280,
+        "name": "1 відділ Сарненського ТЦК та СП",
+        "email": "dubr_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 281,
+        "name": "2 відділ Сарненського ТЦК та СП",
+        "email": "rokytne_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 282,
+        "name": "ТЕРНОПІЛЬСЬКИЙ ОТЦК та СП",
+        "email": "terovk_admin@post.mil.gov.ua"
+    },
+    {
+        "id": 283,
+        "name": "Тернопільський МТЦК та СП",
+        "email": "tern_оmtck@post.mil.gov.ua"
+    },
+    {
+        "id": 284,
+        "name": "Тернопільський РЦК та СП",
+        "email": "terrayon_vozik@post.mil.gov.ua"
+    },
+    {
+        "id": 285,
+        "name": "1 відділ Тернопільського РЦК та СП",
+        "email": "terrayon_vozik@post.mil.gov.ua"
+    },
+    {
+        "id": 286,
+        "name": "2 відділ Тернопільського РЦК та СП",
+        "email": "terrayon_vozik@post.mil.gov.ua"
+    },
+    {
+        "id": 287,
+        "name": "3 відділ Тернопільського РЦК та СП",
+        "email": "terrayon_vozik@post.mil.gov.ua"
+    },
+    {
+        "id": 288,
+        "name": "4 відділ Тернопільського РЦК та СП",
+        "email": "terrayon_vozik@post.mil.gov.ua"
+    },
+    {
+        "id": 289,
+        "name": "5 відділ Тернопільського РЦК та СП",
+        "email": "pidv_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 290,
+        "name": "6 відділ Тернопільського РЦК та СП",
+        "email": "pidv_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 291,
+        "name": "7 відділ Тернопільського РЦК та СП",
+        "email": "pidv_rvk@post.mil.gov.ua"
+    },
+    {
+        "id": 292,
+        "name": "Кременецький РТЦК та СП",
+        "email": "krem_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 293,
+        "name": "1 відділ Кременецького РТЦК та СП",
+        "email": "krem_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 294,
+        "name": "2 відділ Кременецького РТЦК та СП",
+        "email": "krem_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 295,
+        "name": "Чортківський РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 296,
+        "name": "1 відділ Чортківського РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 297,
+        "name": "2 відділ Чортківського РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 298,
+        "name": "3 відділ Чортківського РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 299,
+        "name": "4 відділ Чортківського РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 300,
+        "name": "5 відділ Чортківського РТЦК та СП",
+        "email": "ch_tern_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 301,
+        "name": "ХМЕЛЬНИЦЬКИЙ ОТЦК та СП",
+        "email": "khmelnytskyi_otcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 302,
+        "name": "Кам’янець-Подільський РТЦК та СП",
+        "email": "kam_podilskyi_rtcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 303,
+        "name": "1 відділ Кам’янець-Подільського РТЦК та СП",
+        "email": "dunaievetsi_1vl@post.mil.gov.ua"
+    },
+    {
+        "id": 304,
+        "name": "2 відділ Кам’янець-Подільського РТЦК та СП",
+        "email": "chemerivtsi_2vl@post.mil.gov.ua"
+    },
+    {
+        "id": 305,
+        "name": "3 відділ Кам’янець-Подільського РТЦК та СП",
+        "email": "novaaushytsia_3vl@post.mil.gov.ua"
+    },
+    {
+        "id": 306,
+        "name": "Хмельницький РТЦК та СП",
+        "email": "khmelnskyi_rtcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 307,
+        "name": "1 відділ Хмельницького РТЦК та СП",
+        "email": "stkostiantyniv_1vl@post.mil.gov.ua"
+    },
+    {
+        "id": 308,
+        "name": "2 відділ Хмельницького РТЦК та СП",
+        "email": "horodok_2vl@post.mil.gov.ua"
+    },
+    {
+        "id": 309,
+        "name": "3 відділ Хмельницького РТЦК та СП",
+        "email": "derazhnia_3vl@post.mil.gov.ua"
+    },
+    {
+        "id": 310,
+        "name": "4 відділ Хмельницького РТЦК та СП",
+        "email": "krasyliv_4vl@post.mil.gov.ua"
+    },
+    {
+        "id": 311,
+        "name": "5 відділ Хмельницького РТЦК та СП",
+        "email": "letychiv_5vl@post.mil.gov.ua"
+    },
+    {
+        "id": 312,
+        "name": "6 відділ Хмельницького РТЦК та СП",
+        "email": "yarmolyntsi_6vl@post.mil.gov.ua"
+    },
+    {
+        "id": 313,
+        "name": "7 відділ Хмельницького РТЦК та СП",
+        "email": "volochysk_7vl@post.mil.gov.ua"
+    },
+    {
+        "id": 314,
+        "name": "8 відділ Хмельницького РТЦК та СП",
+        "email": "teofipol_8vl@post.mil.gov.ua"
+    },
+    {
+        "id": 315,
+        "name": "9 відділ Хмельницького РТЦК та СП",
+        "email": "vinkivtsi_9vl@post.mil.gov.ua"
+    },
+    {
+        "id": 316,
+        "name": "10 відділ Хмельницького РТЦК та СП",
+        "email": "starasyniava_10vl@post.mil.gov.ua"
+    },
+    {
+        "id": 317,
+        "name": "Шепетівський РТЦК та СП",
+        "email": "shepetivskyi_rtcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 318,
+        "name": "1 відділ Шепетівського РТЦК та СП",
+        "email": "slavuta_1vl@post.mil.gov.ua"
+    },
+    {
+        "id": 319,
+        "name": "2 відділ Шепетівського РТЦК та СП",
+        "email": "polone_2vl@post.mil.gov.ua"
+    },
+    {
+        "id": 320,
+        "name": "3 відділ Шепетівського РТЦК та СП",
+        "email": "iziaslav_3vl@post.mil.gov.ua"
+    },
+    {
+        "id": 321,
+        "name": "4 відділ Шепетівського РТЦК та СП",
+        "email": "bilohiria_4vl@post.mil.gov.ua"
+    },
+    {
+        "id": 322,
+        "name": "Хмельницький ОМТЦК та СП",
+        "email": "khmelnskyi_omtcksp@post.mil.gov.ua"
+    },
+    {
+        "id": 323,
+        "name": "ЧЕРНІВЕЦЬКИЙ ОТЦК та СП",
+        "email": "ovk_cv@post.mil.gov.ua"
+    },
+    {
+        "id": 324,
+        "name": "Чернівецький МТЦК та СП",
+        "email": "tck_mist@post.mil.gov.ua"
+    },
+    {
+        "id": 325,
+        "name": "Чернівецький РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 326,
+        "name": "1 відділ Чернівецького РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 327,
+        "name": "2 відділ Чернівецького РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 328,
+        "name": "3 відділ Чернівецького РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 329,
+        "name": "4 відділ Чернівецького РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 330,
+        "name": "6 відділ Чернівецького РТЦК та СП",
+        "email": "chrtck@post.mil.gov.ua"
+    },
+    {
+        "id": 331,
+        "name": "Дністровський РТЦК та СП",
+        "email": "yur_drtck@post.mil.gov.ua"
+    },
+    {
+        "id": 332,
+        "name": "1 відділ Дністровського РТЦК та СП",
+        "email": "yur_drtck@post.mil.gov.ua"
+    },
+    {
+        "id": 333,
+        "name": "2 відділ Дністровського РТЦК та СП",
+        "email": "yur_drtck@post.mil.gov.ua"
+    },
+    {
+        "id": 334,
+        "name": "Вижницький РТЦК та СП",
+        "email": "yur_drtck@post.mil.gov.ua"
+    },
+    {
+        "id": 335,
+        "name": "1 відділ Вижницького РТЦК та СП",
+        "email": "yur_drtck@post.mil.gov.ua"
+    },
+    {
+        "id": 336,
+        "name": "ДОНЕЦЬКИЙ ОТЦК та СП",
+        "email": "donetsk.otck@post.mil.gov.ua"
+    },
+    {
+        "id": 337,
+        "name": "Бахмутський РТЦК та СП",
+        "email": "bakhmut.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 338,
+        "name": "Волноваський РТЦК та СП",
+        "email": "volnovakha.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 339,
+        "name": "Краматорський РТЦК та СП",
+        "email": "kramatorsk.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 340,
+        "name": "Маріупольський РТЦК та СП",
+        "email": "mariupol.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 341,
+        "name": "Покровський РТЦК та СП",
+        "email": "pokrovsk.rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 341,
+        "name": "ДНІПРОПЕТРОВСЬКИЙ ОТЦК та СП",
+        "email": "tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 342,
+        "name": "Новомосковський РТЦК та СП",
+        "email": "novomoskov_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 343,
+        "name": "1 відділ Новомосковського РТЦК та СП",
+        "email": "magdalin_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 344,
+        "name": "Амур-Нижньодніпровський РТЦК та СП",
+        "email": "and_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 345,
+        "name": "Дніпровський РТЦК та СП",
+        "email": "dniprovskiy_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 346,
+        "name": "1 відділ Дніпровського РТЦК та СП",
+        "email": "petrikivka_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 347,
+        "name": "2 відділ Дніпровського РТЦК та СП",
+        "email": "solone_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 348,
+        "name": "3 відділ Дніпровського РТЦК та СП",
+        "email": "carichanka_tckspdpd@post.mil.gov.ua"
+    },
+    {
+        "id": 349,
+        "name": "Індустріальний РТЦК та СП",
+        "email": "indystrial_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 350,
+        "name": "Центрально-Чечелівський ОРТЦК та СП",
+        "email": "centralnochechel_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 351,
+        "name": "Соборний РТЦК та СП",
+        "email": "sobor_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 352,
+        "name": "Самарський РТЦК та СП",
+        "email": "samara_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 353,
+        "name": "Новокодацький РТЦК та СП",
+        "email": "novokodak_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 354,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "shevchenkivskiy_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 355,
+        "name": "Кам'янський РТЦК та СП",
+        "email": "kamyanske_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 356,
+        "name": "1 відділ Кам'янського РТЦК та СП",
+        "email": "verhdnipr_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 357,
+        "name": "2 відділ Кам'янського РТЦК та СП",
+        "email": "krinichki_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 358,
+        "name": "3 відділ Кам'янського РТЦК та СП",
+        "email": "pyatihatki_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 359,
+        "name": "4 відділ Кам'янського РТЦК та СП",
+        "email": "djovtivodi_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 360,
+        "name": "Нікопольський РТЦК та СП",
+        "email": "nikopol_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 361,
+        "name": "1 відділ Нікопольського РТЦК та СП",
+        "email": "tomakivka_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 362,
+        "name": "2 відділ Нікопольського РТЦК та СП",
+        "email": "zelene_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 363,
+        "name": "3 відділ Нікопольського РТЦК та СП",
+        "email": "pokrov_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 364,
+        "name": "Центрально-Міський РТЦК та СП",
+        "email": "centalmiskuy_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 365,
+        "name": "Металургійно-Довгинцівський ОРТЦК та СП",
+        "email": "metaldovg_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 366,
+        "name": "Покровсько-Тернівський РТЦК та СП",
+        "email": "pokrovotern_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 367,
+        "name": "Інгулецький ОРТЦК та СП",
+        "email": "ingulec_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 368,
+        "name": "Криворізький РТЦК та СП",
+        "email": "krivoyrog_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 369,
+        "name": "1 відділ Криворізького РТЦК та СП",
+        "email": "apostal_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 370,
+        "name": "2 відділ Криворізького РТЦК та СП",
+        "email": "shiroke_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 371,
+        "name": "3 відділ Криворізького РТЦК та СП",
+        "email": "sofievka_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 372,
+        "name": "Саксаганський РТЦК та СП",
+        "email": "saksagan_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 373,
+        "name": "Павлоградський РТЦК та СП",
+        "email": "pavlograd_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 374,
+        "name": "Синельниківський РТЦК та СП",
+        "email": "sinelnikovo_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 375,
+        "name": "1 відділ Синельниківського РТЦК та СП",
+        "email": "vasilkivka_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 376,
+        "name": "2 відділ Синельниківського РТЦК та СП",
+        "email": "petropavlivka_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 377,
+        "name": "3 відділ Синельниківського РТЦК та СП",
+        "email": "pokrovske_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 378,
+        "name": "4 відділ Синельниківського РТЦК та СП",
+        "email": "mejeva_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 379,
+        "name": "5 відділ Синельниківського РТЦК та СП",
+        "email": "pershotravensk_tckspdp@post.mil.gov.ua"
+    },
+    {
+        "id": 380,
+        "name": "ЗАПОРІЗЬКИЙ ОТКЦ та СП",
+        "email": "zotck@post.mil.gov.ua"
+    },
+    {
+        "id": 381,
+        "name": "Бердянський РТЦК та СП",
+        "email": "berd_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 382,
+        "name": "Василівський РТЦК та СП",
+        "email": "vasilivka_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 383,
+        "name": "Заводський РТЦК та СП",
+        "email": "zavodskiy_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 384,
+        "name": "Запорізький РТЦК та СП",
+        "email": "zapor_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 385,
+        "name": "Комунарський РТЦК та СП",
+        "email": "komunar_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 386,
+        "name": "Мелітопільський РТЦК та СП",
+        "email": "melitopol_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 387,
+        "name": "Пологівський ОТЦК та СП",
+        "email": "pologi_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 388,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "shevhenk_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 389,
+        "name": "Хортицький РТЦК та СП",
+        "email": "khortscay_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 390,
+        "name": "Центральний ОРТЦК та СП",
+        "email": "central_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 380,
+        "name": "ЗАПОРІЗЬКИЙ ОТКЦ та СП",
+        "email": "zotck@post.mil.gov.ua"
+    },
+    {
+        "id": 381,
+        "name": "Бердянський РТЦК та СП",
+        "email": "berd_rtck@post.mil.gov.ua"
+    },
+    {
+        "id": 382,
+        "name": "Василівський РТЦК та СП",
+        "email": "vasilivka_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 383,
+        "name": "Заводський РТЦК та СП",
+        "email": "zavodskiy_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 384,
+        "name": "Запорізький РТЦК та СП",
+        "email": "zapor_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 385,
+        "name": "Комунарський РТЦК та СП",
+        "email": "komunar_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 386,
+        "name": "Мелітопільський РТЦК та СП",
+        "email": "melitopol_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 387,
+        "name": "Пологівський ОТЦК та СП",
+        "email": "pologi_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 388,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "shevhenk_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 389,
+        "name": "Хортицький РТЦК та СП",
+        "email": "khortscay_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 390,
+        "name": "Центральний ОРТЦК та СП",
+        "email": "central_zp@post.mil.gov.ua"
+    },
+    {
+        "id": 391,
+        "name": "ХАРКІВСЬКИЙ ОТКЦ та СП",
+        "email": "kharkiv_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 392,
+        "name": "Богодухівський РТЦК та СП",
+        "email": "bogodukhiv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 393,
+        "name": "1 відділ Валківський",
+        "email": "valki_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 394,
+        "name": "2 відділ Золочівський",
+        "email": "zolochiv_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 395,
+        "name": "3 відділ Коломацький",
+        "email": "kolomak_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 396,
+        "name": "4 відділ Краснокутський",
+        "email": "bogodukhiv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 397,
+        "name": "Ізюмський РТЦК та СП",
+        "email": "izum_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 398,
+        "name": "1 відділ Балаклійський",
+        "email": "balakliya_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 399,
+        "name": "2 відділ Барвінківський",
+        "email": "barvin_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 400,
+        "name": "3 відділ Борівський",
+        "email": "borova_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 401,
+        "name": "Індустріальний РТЦК та СП",
+        "email": "ind_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 402,
+        "name": "Красноградський РТЦК та СП",
+        "email": "krasnograd_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 403,
+        "name": "1 відділ Зачепилівський",
+        "email": "zachepylivka_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 404,
+        "name": "2 відділ Кегичівський",
+        "email": "kegychivka_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 405,
+        "name": "3 відділ Сахновщинський",
+        "email": "sachnovsina_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 406,
+        "name": "Куп`янський РТЦК та СП",
+        "email": "kupyansk_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 407,
+        "name": "1 відділ Великобурлуцький",
+        "email": "v_burluk_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 408,
+        "name": "2 відділ Дворічанський",
+        "email": "dvorichna_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 409,
+        "name": "3 відділ Шевченківський",
+        "email": "shevch_khobl_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 410,
+        "name": "Лозівський РТЦК та СП",
+        "email": "lozova_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 411,
+        "name": "1 відділ Первомайський ОМТЦКтаСП",
+        "email": "pervomay_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 412,
+        "name": "2 відділ Близнюківський",
+        "email": "blizniuki_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 413,
+        "name": "Салтівський РТЦК та СП",
+        "email": "mosk_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 414,
+        "name": "Немишлянський РТЦК та СП",
+        "email": "nemysh_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 415,
+        "name": "Новобаварський ОРТЦК та СП",
+        "email": "n_bovar_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 416,
+        "name": "Слобідський ОРТЦК та СП",
+        "email": "slobid_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 417,
+        "name": "Харківський РТЦК та СП",
+        "email": "khar_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 418,
+        "name": "1 відділ Дергачівський",
+        "email": "dergachi_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 419,
+        "name": "2 відділ",
+        "email": "n_vodolaga_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 420,
+        "name": "Чугуївський РТЦК та СП",
+        "email": "chuguyv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 421,
+        "name": "1 відділ",
+        "email": "vovchansky_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 422,
+        "name": "2 відділ",
+        "email": "zmiyv_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 423,
+        "name": "3 відділ",
+        "email": "pechenigi_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 424,
+        "name": "Шевченківський РТЦК та СП",
+        "email": "shevch_kh_tck@post.mil.gov.ua"
+    },
+    {
+        "id": 425,
+        "name": "ЛУГАНСЬКИЙ ОТЦК та СП",
+        "email": "Lug_otck@post.mil.gov.ua"
+    },
+    {
+        "id": 426,
+        "name": "Сватівський РТЦК та СП",
+        "email": "svat_TCK@post.mil.gov.ua"
+    },
+    {
+        "id": 427,
+        "name": "Сєвєродонецький РТЦК та СП",
+        "email": "sev_TCK@post.mil.gov.ua"
+    },
+    {
+        "id": 428,
+        "name": "Старобільський РТЦК та СП",
+        "email": "star_TCK@post.mil.gov.ua"
+    },
+    {
+        "id": 429,
+        "name": "Щастинський РТЦК та СП",
+        "email": "nov_TCK@post.mil.gov.ua"
+    }
+]

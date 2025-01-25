@@ -27,7 +27,7 @@ import {
   requestNameToKeyMap,
   requestTypeMap,
 } from "../helpers/constant";
-import { Payment } from "./Payment";
+import { useRouter } from "next/router";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -98,19 +98,20 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
   const title = request?.[currentLanguage]?.title || "Default Payment Title";
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     uid: user?.uid || "",
-    citizenship: userCredentials?.citizenship || "", //ВСІ ФОРМИ
-    name: userCredentials?.name || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: userCredentials?.surname || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: userCredentials?.fatherName || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: userCredentials?.email || "", //ВСІ ФОРМИ
-    birthday: userCredentials?.birthday || "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    citizenship: "", //ВСІ ФОРМИ
+    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: "", //ВСІ ФОРМИ
+    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
-      address: userCredentials?.address_1 || "",
-      city: userCredentials?.city || "",
-      country: userCredentials?.country || "",
+      address: "",
+      city: "",
+      country: "",
     }, //РАЦС
     requesterBirthday: "", //РАЦС
     requesterName: "", //РАЦС
@@ -136,7 +137,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     date: { start: "", end: "" }, //АДПСУ, МОУ і ТЦК
     // ПАСПОРТИ
     abroadPassnum: "", //АДПСУ
-    passport: userCredentials?.passport || "", //АДПСУ, ЗАМІСТЬ passportNum
+    passport: "", //АДПСУ, ЗАМІСТЬ passportNum
     pmjNum: "", //АДПСУ,
     // Подружжя (дані супругів)
     couplePIB1: "", //РАЦС
@@ -149,7 +150,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     eventDate: "", //МВС
     eventTime: "", //МВС
     eventPlace: "", //МВС
-    inn: userCredentials?.inn || "", //ПФУ і ДПСУ
+    inn: "", //ПФУ і ДПСУ
     propertyAddress: "", //ВПО
     request: request,
   });
@@ -299,111 +300,66 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     // }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
-    const dataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value instanceof File) {
-        dataToSend.append(key, value, value.name);
-      } else {
-        dataToSend.append(key, value);
-      }
-    });
-    // fetch("/submit", {
-    //   method: "POST",
-    //   body: dataToSend,
-    // })
-    //   .then((response) => {
-    //     response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("success");
-    //   })
-    //   .catch((error) => console.error("Error", error));
+    console.log(formData);
 
-    savePDF();
-    setStatusRenewUser(true);
+    try {
+      const returnUrl = `${window.location.origin}${router.asPath}`;
+
+      const paymentResponse = await fetch("/api/liqpay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: "0.1",
+          currency: "UAH",
+          description: title || "Payment",
+          currentLanguage: currentLanguage,
+          returnUrl,
+          order_id: `order_${Date.now()}_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
+        }),
+      });
+
+      if (!paymentResponse.ok) {
+        throw new Error("Error initializing payment");
+      }
+
+      const paymentData = await paymentResponse.json();
+      console.log("Payment initialized:", paymentData);
+
+      const paymentForm = document.createElement("form");
+      paymentForm.method = "POST";
+      paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+      paymentForm.acceptCharset = "utf-8";
+
+      const inputData = document.createElement("input");
+      inputData.type = "hidden";
+      inputData.name = "data";
+      inputData.value = paymentData.data;
+
+      const inputSignature = document.createElement("input");
+      inputSignature.type = "hidden";
+      inputSignature.name = "signature";
+      inputSignature.value = paymentData.signature;
+
+      paymentForm.appendChild(inputData);
+      paymentForm.appendChild(inputSignature);
+
+      document.body.appendChild(paymentForm);
+      paymentForm.submit();
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      savePDF();
+      setStatusRenewUser(true);
+    }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   console.log(formData);
-
-  //   try {
-  //     const dataToSend = new FormData();
-  //     Object.entries(formData).forEach(([key, value]) => {
-  //       if (value instanceof File) {
-  //         dataToSend.append(key, value, value.name);
-  //       } else {
-  //         dataToSend.append(key, value);
-  //       }
-  //     });
-
-  //     const submitResponse = await fetch("/submit", {
-  //       method: "POST",
-  //       body: dataToSend,
-  //     });
-
-  //     if (!submitResponse.ok) {
-  //       throw new Error("Error submitting the form");
-  //     }
-
-  //     const submitResult = await submitResponse.json();
-  //     console.log("Form submission success:", submitResult);
-
-  //     const paymentResponse = await fetch("/api/liqpay", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           amount: "0.1",
-  //           currency: "UAH",
-  //           description: title || "Payment",
-  //           currentLanguage: currentLanguage,
-  //           returnUrl,
-  //           order_id: `order_${Date.now()}_${Math.random()
-  //             .toString(36)
-  //             .substr(2, 9)}`,
-  //         }),
-  //     });
-
-  //     if (!paymentResponse.ok) {
-  //       throw new Error("Error initializing payment");
-  //     }
-
-  //     const paymentData = await paymentResponse.json();
-  //     console.log("Payment initialized:", paymentData);
-
-  //     const paymentForm = document.createElement("form");
-  //     paymentForm.method = "POST";
-  //     paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
-  //     paymentForm.acceptCharset = "utf-8";
-
-  //     const inputData = document.createElement("input");
-  //     inputData.type = "hidden";
-  //     inputData.name = "data";
-  //     inputData.value = paymentData.data;
-
-  //     const inputSignature = document.createElement("input");
-  //     inputSignature.type = "hidden";
-  //     inputSignature.name = "signature";
-  //     inputSignature.value = paymentData.signature;
-
-  //     paymentForm.appendChild(inputData);
-  //     paymentForm.appendChild(inputSignature);
-
-  //     document.body.appendChild(paymentForm);
-  //     paymentForm.submit();
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     alert("An error occurred. Please try again.");
-  //   } finally {
-  //     savePDF();
-  //     setStatusRenewUser(true);
-  //   }
-  // };
   console.log(userRequest);
   const handleDocuSign = async () => {
     const res = await fetch("/api/docusign", {
@@ -488,12 +444,41 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         <form onSubmit={handleSubmit} className={styles.orderForm__form}>
           <h1>{t("Create a lawyer request")}:</h1>
           <ul>
+            <button
+              type="button"
+              className={styles.orderForm__form_button_fill}
+              onClick={() => {
+                setFormData((prevData) => ({
+                  ...prevData,
+                  name: userCredentials?.name || "",
+                  surname: userCredentials?.surname || "",
+                  fatherName: userCredentials?.fatherName || "",
+                  email: userCredentials?.email || "",
+                  birthday: userCredentials?.birthday || "",
+                  citizenship: userCredentials?.citizenship || "",
+                  passport: userCredentials?.passport || "",
+                  residence: {
+                    address: userCredentials?.address_1 || "",
+                    city: userCredentials?.city || "",
+                    country: userCredentials?.country || "",
+                  },
+                  inn: userCredentials?.inn || "",
+                }));
+              }}
+            >
+              {t("Fill fields")}
+            </button>
             {visibleFields.map((field) => {
               const value = getNestedValue(formData, field) || "";
               const isDanger =
                 patternInput[field] && !patternInput[field].test(value);
               const inputType = inputTypes[field] || "text";
-
+              const isFatherName = field === "fatherName";
+              const inputClass = isFatherName
+                ? styles.orderForm__form_select
+                : isDanger
+                ? styles.orderForm__form_input__danger
+                : styles.orderForm__form_input;
               return (
                 <li key={field}>
                   <label className={styles.orderForm__form_lable}>
@@ -535,11 +520,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                       </select>
                     ) : (
                       <input
-                        className={
-                          isDanger
-                            ? styles.orderForm__form_input__danger
-                            : styles.orderForm__form_input
-                        }
+                        className={inputClass}
                         type={inputType}
                         name={field}
                         value={inputType !== "file" ? value : undefined}
@@ -660,7 +641,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </label>
             </div>
           </div>
-          {/* <Payment request={request} currentLanguage={currentLanguage} /> */}
+
           <button
             // onClick={(e) => handleSubmit(e)}
             disabled={isLoading || isSubmitDisabled}
@@ -669,6 +650,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           >
             {isLoading ? t("Saving...") : t("Next")}
           </button>
+
           <button
             onClick={handleSendEmail}
             type="button"

@@ -83,12 +83,14 @@ export default function LawyersRequests({ requests }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fileName: 'dataRequests.json',
-        collectionName: 'requests',
+        fileName: 'tck.json',
+        collectionName: 'tck',
       }),
     });
 
     const data = await response.json();
+    console.log(response);
+    
     if (response.ok) {
       console.log(data.message);
     } else {

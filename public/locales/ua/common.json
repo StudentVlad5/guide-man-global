@@ -128,7 +128,7 @@
     "button": "Повернутися на попередню сторінку"
   },
   "Name": "Ім'я",
-  "Surname": "Призвіще",
+  "Surname": "Прізвище",
   "Fathername": "По-батькові",
   "Birdthday": "Дата народження",
   "Citizenship": "Громадянство",
@@ -192,5 +192,6 @@
   "Lawyer`s request": "Адвокатський запит",
   "Start date": "Дата початку",
   "End date": "Дата завершення",
-  "Full name of serviceman": "ПІБ військовослужбовця"
+  "Full name of serviceman": "ПІБ військовослужбовця",
+  "Fill fields": "Заповнити поля"
 }
