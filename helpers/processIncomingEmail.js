@@ -1,4 +1,4 @@
-import { getCollectionWhereKeyValue } from './firebaseControl';
+import { getCollectionWhereKeyValue, updateDocument } from './firebaseControl';
 import { sendEmail } from './prepareAttachments';
 
 export const processIncomingEmail = async email => {
@@ -30,24 +30,36 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    // Надсилання листа користувачу
-    const userEmail = userRequest.userEmail;
-    const emailContent = `
-      <p>Шановний клієнте,</p>
-      <p>Ми отримали відповідь на ваш запит (${subject}):</p>
-      <blockquote>${body}</blockquote>
-      <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
-    `;
+    // Оновлюємо статус запиту на 'done'
+    await updateDocument(
+      'userRequests',
+      {
+        status: 'done',
+        responseDate: new Date().toISOString(), // зберігаємо дату отримання відповіді
+      },
+      userRequest.id
+    );
 
-    await sendEmail({
-      to: userEmail,
-      subject: `Відповідь на запит ${requestId}`,
-      text: `Вітаємо! Ми отримали відповідь на ваш запит ${subject}.`,
-      html: emailContent,
-      attachments,
-    });
+    console.log(`Статус запиту ${requestId} оновлено на 'done'.`);
 
-    console.log(`Лист із запитом ${requestId} успішно відправлено.`);
+    // // Надсилання листа користувачу
+    // const userEmail = userRequest.userEmail;
+    // const emailContent = `
+    //   <p>Шановний клієнте,</p>
+    //   <p>Ми отримали відповідь на ваш запит (${subject}):</p>
+    //   <blockquote>${body}</blockquote>
+    //   <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
+    // `;
+
+    // await sendEmail({
+    //   to: userEmail,
+    //   subject: `Відповідь на запит ${requestId}`,
+    //   text: `Вітаємо! Ми отримали відповідь на ваш запит ${subject}.`,
+    //   html: emailContent,
+    //   attachments,
+    // });
+
+    // console.log(`Лист із запитом ${requestId} успішно відправлено.`);
   } catch (error) {
     console.error('Помилка під час обробки листа:', error);
   }

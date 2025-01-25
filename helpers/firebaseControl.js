@@ -313,6 +313,9 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
 
     const user = users[0];
 
+    // Виключаємо `request` з об'єкта `data`
+    const { request, emblemBase64, ...restData } = data;
+
     // Формуємо новий запит
     const newRequest = {
       id: Math.floor(Date.now() * Math.random()).toString(),
@@ -322,10 +325,11 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       pdfAgreement: pdfUrls.agreement || '',
       pdfContract: pdfUrls.contract || '',
       order: data.numberOrder || pdfUrls.contract,
-      file: data.requesterFile || [],
+      // file: data.requesterFile || [],
       userId: uid,
-      userEmail: data.email,
+      userEmail: user.email,
       status: 'pending',
+      ...restData,
     };
 
     // Зберігаємо новий запит в колекцію "userRequests"
@@ -354,6 +358,19 @@ export const uploadPDFToStorage = async (pdfBuffer, fileName, storage) => {
     return fileUrl;
   } catch (error) {
     console.error('Error uploading PDF to Storage:', error);
+    throw error;
+  }
+};
+
+export const updateDocument = async (collection, document, documentId) => {
+  try {
+    const documentRef = doc(db, collection, documentId); // Отримуємо посилання на документ
+    await updateDoc(documentRef, document); // Оновлюємо документ
+    console.log(
+      `Документ ${documentId} успішно оновлено у колекції ${collection}.`
+    );
+  } catch (error) {
+    console.error('Помилка під час оновлення документа:', error);
     throw error;
   }
 };
