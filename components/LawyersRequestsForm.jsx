@@ -46,6 +46,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [message, setMessage] = useState('');
   const [userRequests, setUserRequests] = useState([]);
   const [userRequest, setUserRequest] = useState([]);
+  const [tck, setTck] = useState([]);
 
   const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
@@ -326,12 +327,11 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       }
 
       const paymentData = await paymentResponse.json();
-      console.log('Payment initialized:', paymentData);
-
       const paymentForm = document.createElement('form');
       paymentForm.method = 'POST';
       paymentForm.action = 'https://www.liqpay.ua/api/3/checkout';
       paymentForm.acceptCharset = 'utf-8';
+      paymentForm.target = '_blank';
 
       const inputData = document.createElement('input');
       inputData.type = 'hidden';
@@ -357,7 +357,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     }
   };
 
-  console.log(userRequest);
+  // console.log(userRequest);
   const handleDocuSign = async () => {
     const res = await fetch('/api/docusign', {
       method: 'POST',
@@ -393,7 +393,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           uid: formData.uid,
           // recipient: formData.recipient,
           // // recipient: { address: formData.recipient.address },
-          recipient: { address: 'julia.j.shcherban@gmail.com' },
+          recipient: { address: 'julia_js@bigmir.net' },
         }),
       });
 
@@ -517,6 +517,48 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                           </option>
                         ))}
                       </select>
+                    ) : field === 'recipient.name' ? (
+                      <select
+                        className={
+                          !value
+                            ? styles.orderForm__form_input__danger
+                            : styles.orderForm__form_select
+                        }
+                        name="recipient.name"
+                        value={formData.recipient?.name || ''}
+                        onChange={e => {
+                          const { value } = e.target;
+
+                          const selectedTCK = tck.find(t => t.name === value);
+
+                          setFormData(prevData => ({
+                            ...prevData,
+                            recipient: {
+                              ...prevData.recipient,
+                              name: value,
+                              address: selectedTCK?.email || '',
+                            },
+                          }));
+                        }}
+                        required
+                      >
+                        <option value="" disabled>
+                          {t('Select a TCK')}
+                        </option>
+                        {tck.map(tck => (
+                          <option key={tck.id} value={tck.name}>
+                            {tck.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : field === 'recipient.address' ? (
+                      <input
+                        className={inputClass}
+                        type="text"
+                        name="recipient.address"
+                        value={formData.recipient?.address || ''}
+                        readOnly
+                      />
                     ) : (
                       <input
                         className={inputClass}
@@ -640,7 +682,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               </label>
             </div>
           </div>
-
           <button
             // onClick={(e) => handleSubmit(e)}
             disabled={isLoading || isSubmitDisabled}
