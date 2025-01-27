@@ -200,22 +200,15 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         );
         // console.log(recipient);
 
-        if (!recipient || recipient.length === 0) {
-          console.error(
-            `Recipient with application ${requestRecipient} not found in the database.`
-          );
-          throw new Error(
-            `Recipient with application ${requestRecipient} does not exist.`
-          );
+        if (recipient.length > 0) {
+          const recipientName = recipient[0].application;
+          const recipientAddress = recipient[0].address;
+
+          setFormData(prev => ({
+            ...prev,
+            recipient: { name: recipientName, address: recipientAddress },
+          }));
         }
-
-        const recipientName = recipient[0].application;
-        const recipientAddress = recipient[0].address;
-
-        setFormData(prev => ({
-          ...prev,
-          recipient: { name: recipientName, address: recipientAddress },
-        }));
 
         return;
       } catch (error) {

@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     // Відправка листа
     await sendEmail({
       to: recipient.address,
-      subject: `${title} (REQ${id})`,
+      subject: `${title} REQ${id}`,
       text: `Вітаю, направляю ${title} у вкладенні.`,
       attachments,
     });

@@ -313,7 +313,7 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
     const user = users[0];
 
     // Виключаємо `request` з об'єкта `data`
-    const { request, emblemBase64, ...restData } = data;
+    const { request, ...restData } = data;
 
     // Формуємо новий запит
     const newRequest = {
