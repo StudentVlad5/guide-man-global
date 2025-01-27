@@ -1,5 +1,9 @@
-import { getCollectionWhereKeyValue } from './firebaseControl';
+import {
+  getCollectionWhereKeyValue,
+  updateDocumentInCollection,
+} from './firebaseControl';
 import { sendEmail } from './prepareAttachments';
+import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
   try {
@@ -7,8 +11,11 @@ export const processIncomingEmail = async email => {
     const body = email.text || '';
     const attachments = email.attachments || [];
 
+    console.log('Отримано новий лист:', { subject, body, attachments });
+
     // Вилучення ідентифікатора запиту
-    const regex = /REQ\d+/;
+    const regex = /REQ\s*\d+/i;
+    console.log('regex:', regex);
     const match = subject.match(regex) || body.match(regex);
 
     if (!match) {
@@ -16,7 +23,8 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    const requestId = match[0];
+    const requestId = match[0].trim();
+    console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
 
     // Знаходимо відповідний запит у Firestore
     const [userRequest] = await getCollectionWhereKeyValue(
@@ -29,6 +37,22 @@ export const processIncomingEmail = async email => {
       console.log(`Запит із ID ${requestId} не знайдено.`);
       return;
     }
+
+    console.log(`Знайдено запит у Firestore: ${JSON.stringify(userRequest)}`);
+
+    // Оновлюємо статус запиту на 'done'
+    await updateDocumentInCollection(
+      'userRequests',
+      {
+        status: 'done',
+        responseDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+      },
+      requestId
+    );
+
+    console.log(
+      `Статус запиту ${requestId} оновлено на 'done'. Дата відповіді збережена.`
+    );
 
     // Надсилання листа користувачу
     const userEmail = userRequest.userEmail;
@@ -47,7 +71,7 @@ export const processIncomingEmail = async email => {
       attachments,
     });
 
-    console.log(`Лист із запитом ${requestId} успішно відправлено.`);
+    // console.log(`Лист із запитом ${requestId} успішно відправлено.`);
   } catch (error) {
     console.error('Помилка під час обробки листа:', error);
   }

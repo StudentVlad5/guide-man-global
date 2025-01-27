@@ -8,10 +8,25 @@ import NextNProgress from 'nextjs-progressbar';
 require('dotenv').config();
 import '../styles/global.scss';
 import { AppProvider } from '../components/AppProvider';
+import { useEffect } from 'react';
 
 i18n.use(initReactI18next).init(nextI18NextConfig);
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    const startScheduler = async () => {
+      try {
+        const response = await fetch('/api/pdf/cron');
+        const data = await response.json();
+        console.log(data.message);
+      } catch (error) {
+        console.error('Помилка запуску планувальника:', error);
+      }
+    };
+
+    startScheduler(); // Запуск планувальника при завантаженні програми
+  }, []);
+
   return (
     <AppProvider>
       <Head>
