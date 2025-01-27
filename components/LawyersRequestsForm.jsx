@@ -219,6 +219,28 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     getRecipient();
   }, [requestRecipient]);
 
+  useEffect(() => {
+    const fetchCollection = async () => {
+      try {
+        const db = getFirestore();
+        const querySnapshot = await getDocs(collection(db, 'tck'));
+
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const uniqueData = Array.from(new Set(data.map(item => item.id))).map(
+          id => data.find(item => item.id === id)
+        );
+        setTck(uniqueData);
+      } catch (error) {
+        console.error('Error fetching collection: ', error);
+      }
+    };
+
+    fetchCollection();
+  }, []);
+
   const generatePDFPreview = async type => {
     setIsLoading(true);
     setError(null);

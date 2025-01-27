@@ -15,6 +15,7 @@ export const processIncomingEmail = async email => {
 
     // Вилучення ідентифікатора запиту
     const regex = /REQ\s*\d+/i;
+    console.log('regex:', regex);
     const match = subject.match(regex) || body.match(regex);
 
     if (!match) {
