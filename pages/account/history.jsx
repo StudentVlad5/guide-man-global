@@ -35,7 +35,7 @@ export default function HistoryPage() {
 
   useEffect(() => {
     if (user) {
-      getCollectionWhereKeyValue("userRequests", "userId", user.uid).then(
+      getCollectionWhereKeyValue("userRequests", "uid", user.uid).then(
         (res) => {
           if (res) {
             setUserRequests(
