@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import Link from "next/link";
 import { placeHolder, patternInput } from "../../helpers/constant";
+import { updateDocumentInCollection } from "../../helpers/firebaseControl";
 
 const PAGE_SIZE = 10;
 
@@ -92,15 +93,16 @@ export default function AdminOrders() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const check = saveCredentials({
-    //   ...setEditOrder,
-    // });
+    const check = updateDocumentInCollection(
+      "userRequests",
+      { ...editOrder },
+      editOrder.id
+    );
     if (check) {
       setIsModal(false);
       setEditOrder("");
     }
   };
-
   return (
     <div className={styles.main}>
       <h1>
@@ -216,7 +218,7 @@ export default function AdminOrders() {
                                   type="text"
                                   id={ind}
                                   name={i}
-                                  value={editOrder[it[i]]}
+                                  value={editOrder[it][i]}
                                   pattern={patternInput[it[i]]?.source}
                                   placeholder={placeHolder[it[i]]}
                                   onChange={(e) => {
@@ -228,14 +230,13 @@ export default function AdminOrders() {
                                     } else {
                                       setValidateStatus(false);
                                     }
-                                    if (it === "birthday") {
-                                      handleInputChangeBirthday(e);
-                                    } else {
-                                      setEditOrder({
-                                        ...editOrder,
-                                        [it[i]]: e.currentTarget.value,
-                                      });
-                                    }
+                                    setEditOrder({
+                                      ...editOrder,
+                                      [it]: {
+                                        ...editOrder[it],
+                                        [i]: e.currentTarget.value,
+                                      },
+                                    });
                                   }}
                                 />
                                 <span
@@ -288,14 +289,10 @@ export default function AdminOrders() {
                                   } else {
                                     setValidateStatus(false);
                                   }
-                                  if (it === "birthday") {
-                                    handleInputChangeBirthday(e);
-                                  } else {
-                                    setEditOrder({
-                                      ...editOrder,
-                                      [it]: e.currentTarget.value,
-                                    });
-                                  }
+                                  setEditOrder({
+                                    ...editOrder,
+                                    [it]: e.currentTarget.value,
+                                  });
                                 }}
                               />
                               <span

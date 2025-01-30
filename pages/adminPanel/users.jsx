@@ -238,14 +238,11 @@ export default function AdminUsers() {
                                 } else {
                                   setValidateStatus(false);
                                 }
-                                if (it === "birthday") {
-                                  handleInputChangeBirthday(e);
-                                } else {
-                                  setEditUser({
-                                    ...editUser,
-                                    [it]: e.currentTarget.value,
-                                  });
-                                }
+
+                                setEditUser({
+                                  ...editUser,
+                                  [it]: e.currentTarget.value,
+                                });
                               }}
                             />
                             <span
