@@ -35,7 +35,6 @@ export const AppProvider = ({ children }) => {
   const [servicesArray, setServicesArray] = useState([]);
   const [requestsArray, setRequestsArray] = useState([]);
   const [userCredentials, setUserCredentials] = useState({});
-  // console.log(user);
 
   const router = useRouter();
 
@@ -73,12 +72,12 @@ export const AppProvider = ({ children }) => {
         (res) => {
           if (res[0].role === "admin") {
             setUserRole(res[0].role);
-            router.push("adminPanel");
+            // router.push("adminPanel");
           }
         }
       );
     }
-  }, [user, router]);
+  }, [router, user]);
 
   useEffect(() => {
     // getData();
