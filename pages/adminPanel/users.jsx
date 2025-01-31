@@ -28,19 +28,22 @@ export default function AdminUsers() {
   const [isModal, setIsModal] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
+  const [checkFetch, setcheckFetch] = useState(false);
 
   useEffect(() => {
     fetchUsers();
   }, [page, search]);
 
   useEffect(() => {
-    const renewFetch = setTimeout(() => {
-      fetchUsers();
-    }, 2000);
-    return () => {
-      clearTimeout(renewFetch);
-    };
-  }, [isModal]);
+    if (checkFetch) {
+      const renewFetch = setTimeout(() => {
+        fetchUsers();
+      }, 2000);
+      return () => {
+        clearTimeout(renewFetch);
+      };
+    }
+  }, [checkFetch, isModal]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -88,6 +91,7 @@ export default function AdminUsers() {
   };
 
   const handleModal = () => {
+    setcheckFetch(true);
     setIsModal(!isModal);
   };
 
@@ -120,7 +124,7 @@ export default function AdminUsers() {
 
           {/* Table displaying user data */}
           {users && (
-            <table>
+            <table className={styles.tablewidth}>
               <thead>
                 <tr className={styles.tablewidth}>
                   <th className={styles.tableHead}>Name</th>
