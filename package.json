@@ -3,7 +3,6 @@
   "homepage": "https://Julia2063.github.io/global_guide",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@react-pdf/renderer": "^4.1.6",
     "@svgr/webpack": "^8.0.1",
