@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { scheduleEmailFetch } from '../../../helpers/scheduleEmailFetch';
+import { fetchEmails } from './fetchEmails.js';
 
 let taskStarted = false;
 
@@ -13,7 +13,12 @@ export default async function handler(req, res) {
     console.log('Запуск планувальника перевірки пошти...');
     cron.schedule('*/5 * * * *', async () => {
       console.log('Виконується перевірка пошти...');
-      await scheduleEmailFetch();
+      try {
+        await fetchEmails(); // Викликаємо функцію перевірки пошти
+        console.log('Перевірка пошти завершена успішно.');
+      } catch (error) {
+        console.error('Помилка під час перевірки пошти:', error.message);
+      }
     });
     taskStarted = true;
   }

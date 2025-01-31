@@ -1,8 +1,8 @@
 import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
-} from './firebaseControl';
-import { sendEmail } from './prepareAttachments';
+} from './firebaseControl.js';
+import { sendEmail } from './prepareAttachments.js';
 import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
@@ -14,16 +14,30 @@ export const processIncomingEmail = async email => {
     console.log('Отримано новий лист:', { subject, body, attachments });
 
     // Вилучення ідентифікатора запиту
-    const regex = /REQ\s*\d+/i;
+    const regex = /ID\s*(\d+)/i;
     console.log('regex:', regex);
     const match = subject.match(regex) || body.match(regex);
+    const hasId = regex.test(email.subject) || regex.test(email.text);
+    const hasAttachments = email.attachments && email.attachments.length > 0;
 
     if (!match) {
       console.log('Ідентифікатор запиту не знайдено.');
       return;
     }
 
-    const requestId = match[0].trim();
+    if (!hasId) {
+      console.log(`Пропущено лист без ID: ${email.subject || 'Без теми'}`);
+      return; // Пропускаємо листи без ID
+    }
+
+    if (!hasAttachments) {
+      console.log(
+        `Пропущено лист без вкладень: ${email.subject || 'Без теми'}`
+      );
+      return; // Пропускаємо листи без вкладень
+    }
+
+    const requestId = match[1].trim();
     console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
 
     // Знаходимо відповідний запит у Firestore

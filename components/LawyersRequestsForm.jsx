@@ -58,6 +58,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
+    id: Math.floor(Date.now() * Math.random()).toString(),
     uid: user?.uid || '',
     citizenship: '', //ВСІ ФОРМИ
     name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
@@ -405,7 +406,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          uid: formData.uid,
+          id: formData.id,
           // recipient: formData.recipient,
           // // recipient: { address: formData.recipient.address },
           recipient: { address: 'julia_js@bigmir.net' },

@@ -11,14 +11,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Метод не дозволено' });
   }
 
-  const { uid, recipient } = req.body;
+  const { id, recipient } = req.body;
 
   try {
     // Завантаження файлів із Firestore
     const userRequests = await getCollectionWhereKeyValue(
       'userRequests',
-      'uid',
-      uid
+      'id',
+      id
     );
 
     if (!userRequests || userRequests.length === 0) {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         .json({ error: 'Запити не знайдено для вказаного UID' });
     }
 
-    const { id, title, pdfLawyersRequest, pdfAgreement, order, requesterFile } =
+    const { title, pdfLawyersRequest, pdfAgreement, order, requesterFile } =
       userRequests[0];
     // Формуємо масив файлів для відправлення
     const pdfFiles = [
@@ -68,8 +68,8 @@ export default async function handler(req, res) {
     // Відправка листа
     await sendEmail({
       to: recipient.address,
-      subject: `${title} REQ${id}`,
-      text: `Вітаю, направляю ${title} у вкладенні.`,
+      subject: `${title} ID ${id}`,
+      text: `Вітаю, направляю ${title} ID ${id} у вкладенні.`,
       attachments,
     });
 
