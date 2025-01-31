@@ -181,15 +181,15 @@
   }
 }
 .tablewidth {
+  width: calc(100vw * 0.9);
   @include onMobile {
-    max-width: 80px !important;
     overflow: hidden;
   }
 }
 .tableHead {
   padding: 6px;
   color: $dark;
-  width: 100%;
+  width: calc(100vw / 5);
   @include onMobile {
     max-width: 60px !important;
     overflow: hidden;

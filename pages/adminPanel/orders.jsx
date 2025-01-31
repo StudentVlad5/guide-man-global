@@ -28,19 +28,22 @@ export default function AdminOrders() {
   const [isModal, setIsModal] = useState(false);
   const [editOrder, setEditOrder] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
+  const [checkFetch, setcheckFetch] = useState(false);
 
   useEffect(() => {
     fetchOrders();
   }, [page, search]);
 
   useEffect(() => {
-    const renewFetch = setTimeout(() => {
-      fetchOrders();
-    }, 2000);
-    return () => {
-      clearTimeout(renewFetch);
-    };
-  }, [isModal]);
+    if (checkFetch) {
+      const renewFetch = setTimeout(() => {
+        fetchUsers();
+      }, 2000);
+      return () => {
+        clearTimeout(renewFetch);
+      };
+    }
+  }, [checkFetch, isModal]);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -72,7 +75,7 @@ export default function AdminOrders() {
 
     setLoading(false);
   };
-
+  console.log(editOrder);
   const handleEdit = (id) => {
     setIsModal(true);
     setEditOrder(orders.find((it) => it.id === id));
@@ -88,6 +91,7 @@ export default function AdminOrders() {
   };
 
   const handleModal = () => {
+    setcheckFetch(true);
     setIsModal(!isModal);
   };
 
@@ -121,9 +125,9 @@ export default function AdminOrders() {
 
           {/* Table displaying user data */}
           {orders && (
-            <table>
+            <table className={styles.tablewidth}>
               <thead>
-                <tr className={styles.tablewidth}>
+                <tr>
                   <th className={styles.tableHead}>Name</th>
                   <th className={`${styles.tableHead} ${styles.tableHide}`}>
                     Surname
@@ -133,9 +137,7 @@ export default function AdminOrders() {
                     Email
                   </th>
                   <th className={`${styles.tableHead}`}>Title</th>
-                  <th className={`${styles.tableHead} ${styles.tableHide}`}>
-                    Status
-                  </th>
+                  <th className={`${styles.tableHead}`}>Status</th>
                   <th className={styles.tableHead}>Actions</th>
                 </tr>
               </thead>
@@ -199,58 +201,59 @@ export default function AdminOrders() {
                       return Array.isArray(editOrder[it]) ||
                         typeof editOrder[it] === "object"
                         ? Object.keys(editOrder[it]).map((i, ind) => {
-                            return (
-                              <li key={ind} className={st.form__li}>
-                                <span
-                                  className={styl.orderForm__form_span}
-                                  style={{ color: "#fff" }}
-                                >
-                                  {i}:
-                                </span>
-                                <input
-                                  style={{
-                                    width: "100%",
-                                    padding: "0 16px",
-                                    height: "48px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                  type="text"
-                                  id={ind}
-                                  name={i}
-                                  value={editOrder[it][i]}
-                                  pattern={patternInput[it[i]]?.source}
-                                  placeholder={placeHolder[it[i]]}
-                                  onChange={(e) => {
-                                    if (
-                                      patternInput[it[i]] &&
-                                      !patternInput[it[i]].test(e.target.value)
-                                    ) {
-                                      setValidateStatus(true);
-                                    } else {
-                                      setValidateStatus(false);
-                                    }
-                                    setEditOrder({
-                                      ...editOrder,
-                                      [it]: {
-                                        ...editOrder[it],
-                                        [i]: e.currentTarget.value,
-                                      },
-                                    });
-                                  }}
-                                />
-                                <span
-                                  className={
-                                    patternInput[i] &&
-                                    !patternInput[i].test(editOrder[it[i]])
-                                      ? st.form__validate
-                                      : st.form__validate__hide
-                                  }
-                                >
-                                  {"Please use pattern"}: {placeHolder[it[i]]}
-                                </span>
-                              </li>
-                            );
+                            if (
+                              !Array.isArray(editOrder[it[i]]) &&
+                              typeof editOrder[it[i]] === "object"
+                            )
+                              return (
+                                <li key={ind} className={st.form__li}>
+                                  <span
+                                    className={styl.orderForm__form_span}
+                                    style={{ color: "#fff" }}
+                                  >
+                                    {i}:
+                                  </span>
+                                  <input
+                                    style={{
+                                      width: "100%",
+                                      padding: "0 16px",
+                                      height: "48px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                    type="text"
+                                    id={ind}
+                                    name={i}
+                                    value={editOrder[it[i]]}
+                                    pattern={patternInput[it[i]]?.source}
+                                    placeholder={placeHolder[it[i]]}
+                                    onChange={(e) => {
+                                      if (
+                                        patternInput[it[i]] &&
+                                        !patternInput[it[i]].test(
+                                          e.target.value
+                                        )
+                                      ) {
+                                        setValidateStatus(true);
+                                      } else {
+                                        setValidateStatus(false);
+                                      }
+                                      setEditOrder({
+                                        ...editOrder,
+                                        [it]: {
+                                          ...editOrder[it],
+                                          [i]: e.currentTarget.value,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  <span style={{ color: "#fff" }}>
+                                    {placeHolder[it[i]] &&
+                                      "Please use pattern:" +
+                                        placeHolder[it[i]]}
+                                  </span>
+                                </li>
+                              );
                           })
                         : it !== "id" && (
                             <li key={it} className={st.form__li}>
@@ -295,15 +298,9 @@ export default function AdminOrders() {
                                   });
                                 }}
                               />
-                              <span
-                                className={
-                                  patternInput[it] &&
-                                  !patternInput[it].test(editOrder[it])
-                                    ? st.form__validate
-                                    : st.form__validate__hide
-                                }
-                              >
-                                {"Please use pattern"}: {placeHolder[it]}
+                              <span style={{ color: "#fff" }}>
+                                {placeHolder[it] &&
+                                  "Please use pattern:" + placeHolder[it]}
                               </span>
                             </li>
                           );
