@@ -1,21 +1,21 @@
-import { useTranslation } from "next-i18next";
-import { PageNavigation } from "../../components/PageNavigation";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getRightURL } from "../../helpers/rightData";
-import { useRouter } from "next/router";
-import { Layout } from "../../components/Layout";
+import { useTranslation } from 'next-i18next';
+import { PageNavigation } from '../../components/PageNavigation';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { getRightURL } from '../../helpers/rightData';
+import { useRouter } from 'next/router';
+import { Layout } from '../../components/Layout';
 
-import { BASE_URL } from "../sitemap.xml";
-import ErrorPage from "../404";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../components/AppProvider";
-import styles from "../../styles/form.module.scss";
-import styl from "../../styles/profile.module.scss";
-import s from "../../styles/formPage.module.scss";
-import SideBar from "../../components/SideBar";
-import "firebase/firestore";
-import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
-import Link from "next/link";
+import { BASE_URL } from '../sitemap.xml';
+import ErrorPage from '../404';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../../components/AppProvider';
+import styles from '../../styles/form.module.scss';
+import styl from '../../styles/profile.module.scss';
+import s from '../../styles/formPage.module.scss';
+import SideBar from '../../components/SideBar';
+import 'firebase/firestore';
+import { getCollectionWhereKeyValue } from '../../helpers/firebaseControl';
+import Link from 'next/link';
 
 export default function HistoryPage() {
   const [userRequests, setUserRequests] = useState([]);
@@ -23,7 +23,7 @@ export default function HistoryPage() {
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
   const [checkInfo, setCheckInfo] = useState([]);
-  console.log("userRequests", userRequests);
+  console.log('userRequests', userRequests);
 
   useEffect(() => {
     let arr = [];
@@ -35,25 +35,23 @@ export default function HistoryPage() {
 
   useEffect(() => {
     if (user) {
-      getCollectionWhereKeyValue("userRequests", "uid", user.uid).then(
-        (res) => {
-          if (res) {
-            setUserRequests(
-              res.sort(
-                (a, b) => -new Date(a.dateCreating) + new Date(b.dateCreating)
-              )
-            );
-          }
+      getCollectionWhereKeyValue('userRequests', 'uid', user.uid).then(res => {
+        if (res) {
+          setUserRequests(
+            res.sort(
+              (a, b) => -new Date(a.dateCreating) + new Date(b.dateCreating)
+            )
+          );
         }
-      );
+      });
     }
   }, [user]);
 
   return user ? (
     <Layout
       type="service page"
-      desctiption={`⭐${t("navbar.account")}⭐ ${t("head.home.description")}`}
-      h1={t("navbar.account")}
+      desctiption={`⭐${t('navbar.account')}⭐ ${t('head.home.description')}`}
+      h1={t('navbar.account')}
       script={`
         {
             "@context": "http://schema.org",
@@ -66,7 +64,7 @@ export default function HistoryPage() {
                   "item":
                   {
                     "@id": "${BASE_URL}",
-                    "name": "${t("pageNavigation.main")}"
+                    "name": "${t('pageNavigation.main')}"
                   }
                 },
                 {
@@ -75,14 +73,14 @@ export default function HistoryPage() {
                   "item":
                   {
                     "@id": "${getRightURL(locale, pathname)}",
-                    "name": "${t("navbar.account")}"
+                    "name": "${t('navbar.account')}"
                   }
                 },
               ]
           }`}
     >
       <div className="container">
-        <PageNavigation title={t("navbar.account")} />
+        <PageNavigation title={t('navbar.account')} />
       </div>
       <div className="page page-bigBottom">
         <div className="container">
@@ -97,9 +95,9 @@ export default function HistoryPage() {
                         <ul className={styl.profile__container}>
                           <li
                             className={styl.profile__item}
-                            style={{ gap: "8px", maxWidth: "225px" }}
+                            style={{ gap: '8px', maxWidth: '225px' }}
                           >
-                            <b>{t("Lawyer`s request")}:</b>
+                            <b>{t('Lawyer`s request')}:</b>
                             <span
                               className={styl.profile__button}
                               onClick={() => {
@@ -113,60 +111,60 @@ export default function HistoryPage() {
                           </li>
                           <li
                             className={styl.profile__item}
-                            style={{ alignItems: "center" }}
+                            style={{ alignItems: 'center' }}
                           >
                             <div
                               className={
-                                it.status === "pending" ||
-                                it.status === "paid" ||
-                                it.status === "sign" ||
-                                it.status === "done"
+                                it.status === 'pending' ||
+                                it.status === 'paid' ||
+                                it.status === 'sign' ||
+                                it.status === 'done'
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "paid" ||
-                                it.status === "sign" ||
-                                it.status === "done"
+                                it.status === 'paid' ||
+                                it.status === 'sign' ||
+                                it.status === 'done'
                                   ? `${styl.green} ${styl.block}`
                                   : styl.block
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "paid" ||
-                                it.status === "sign" ||
-                                it.status === "done"
+                                it.status === 'paid' ||
+                                it.status === 'sign' ||
+                                it.status === 'done'
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "sign" || it.status === "done"
+                                it.status === 'sign' || it.status === 'done'
                                   ? `${styl.green} ${styl.block}`
                                   : styl.block
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "sign" || it.status === "done"
+                                it.status === 'sign' || it.status === 'done'
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "done"
+                                it.status === 'done'
                                   ? `${styl.green} ${styl.block}`
                                   : styl.block
                               }
                             ></div>
                             <div
                               className={
-                                it.status === "done"
+                                it.status === 'done'
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
@@ -174,32 +172,32 @@ export default function HistoryPage() {
                           </li>
                           <li
                             className={styl.profile__item}
-                            style={{ gap: "8px" }}
+                            style={{ gap: '8px' }}
                           >
                             {it.dateCreating
-                              .split(" ")[0]
-                              .split("-")
+                              .split(' ')[0]
+                              .split('-')
                               .reverse()
-                              .join(".")}
+                              .join('.')}
                           </li>
                         </ul>
                         {checkInfo[ind] && (
                           <ul>
                             <li className={styl.profile__item_link}>
                               <Link href={it.pdfLawyersRequest}>
-                                {t("Download Lawyers Request")}
+                                {t('Download Lawyers Request')}
                               </Link>
                             </li>
 
                             <li className={styl.profile__item_link}>
                               <Link href={it.pdfAgreement}>
-                                {t("Download Agreement")}
+                                {t('Download Agreement')}
                               </Link>
                             </li>
 
                             <li className={styl.profile__item_link}>
                               <Link href={it.pdfContract}>
-                                {t("Download Contract")}
+                                {t('Download Contract')}
                               </Link>
                             </li>
                           </ul>
@@ -221,7 +219,7 @@ export default function HistoryPage() {
 export async function getServerSideProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ['common'])),
     },
   };
 }

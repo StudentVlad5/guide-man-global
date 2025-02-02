@@ -317,15 +317,12 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
 
     // Формуємо новий запит
     const newRequest = {
-      id: Math.floor(Date.now() * Math.random()).toString(),
       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
       title: data.request.ua.title || 'Запит',
       pdfLawyersRequest: pdfUrls.lawyersRequest || '',
       pdfAgreement: pdfUrls.agreement || '',
       pdfContract: pdfUrls.contract || '',
       order: data.numberOrder || pdfUrls.contract,
-      // file: data.requesterFile || [],
-      // userId: uid,
       userEmail: user.email,
       status: 'pending',
       ...restData,

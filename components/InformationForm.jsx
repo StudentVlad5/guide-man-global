@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { clsx } from 'clsx';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
@@ -510,7 +511,7 @@ export const InformationForm = ({
   return (
     <form className={styles.form} onSubmit={e => handleSubmitModal(e)}>
       <div className={styles.image}>
-        <img
+        <Image
           src={
             dataModal.image.length > 0
               ? dataModal.image || '../../addPhoto.svg'
@@ -523,7 +524,7 @@ export const InformationForm = ({
         />
         <label>
           <div className={styles.addPhoto}>
-            <img src="../../photo.svg" alt="add photo" />
+            <Image src="../../photo.svg" alt="add photo" />
           </div>
 
           <input
