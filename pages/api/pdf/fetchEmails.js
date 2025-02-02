@@ -10,8 +10,7 @@ const imapConfig = {
     port: 993,
     tls: true,
     authTimeout: 10000,
-    tlsOptions: { rejectUnauthorized: false },
-    tlsOptions: { servername: 'imap.gmail.com' }, // Додаємо серверне ім'я
+    tlsOptions: { rejectUnauthorized: false, servername: 'imap.gmail.com' }, // Додаємо серверне ім'я
   },
 };
 
@@ -31,29 +30,22 @@ export const fetchEmails = async () => {
 
   activeConnections++;
 
+  let connection;
   try {
     console.log('Підключення до IMAP-сервера...');
-    const connection = await imaps.connect(imapConfig); // Підключення до IMAP
-    await connection.openBox('INBOX'); // Відкриття INBOX
+    connection = await imaps.connect(imapConfig); // Підключення до IMAP
+
+    const mailboxes = await connection.getBoxes();
+    console.log('Доступні папки:', Object.keys(mailboxes));
+
+    await connection.openBox('INBOX', { readOnly: false }); // Відкриття INBOX
     console.log('Підключення до INBOX успішне.');
 
-    // Виводимо список UID-листів перед отриманням їх вмісту
-    const messageUids = await connection.search(['ALL'], { bodies: ['UID'] });
-
-    if (messageUids.length === 0) {
-      console.log('Немає листів у INBOX.');
-      return;
-    }
-
-    console.log(
-      'UID знайдених листів:',
-      messageUids.map(m => m.attributes.uid)
-    );
-
-    const searchCriteria = ['UNSEEN']; // Пошук непрочитаних листів
+    // Пошук лише непрочитаних листів
+    const searchCriteria = ['UNSEEN'];
     const fetchOptions = {
-      // bodies: ['HEADER', 'TEXT', '1', '1.1'],
-      bodies: ['HEADER.FIELDS (FROM SUBJECT DATE)'], // Отримуємо тільки заголовки
+      // bodies: ['HEADER', 'TEXT', 'BODY[]'],
+      bodies: ['HEADER.FIELDS (FROM SUBJECT DATE)', 'TEXT'],
       struct: true, // Отримуємо структуру листа
       markSeen: true, // Позначати як прочитані
     };
@@ -66,11 +58,15 @@ export const fetchEmails = async () => {
         console.log(`Обробка листа UID: ${message.attributes.uid}`);
 
         const bodyPart = message.parts.find(
-          part => part.which === 'TEXT'
-          // || part.which === '1' || part.which === '1.1'
+          part =>
+            part.which === 'HEADER.FIELDS (FROM SUBJECT DATE)' ||
+            part.which === 'TEXT'
+          // ||
+          // part.which === 'BODY[]'
         );
         if (!bodyPart || !bodyPart.body) {
           console.warn('Частини листа для парсингу не знайдено.');
+          console.log('Структура листа:', JSON.stringify(message, null, 2));
           continue;
         }
 
@@ -93,6 +89,10 @@ export const fetchEmails = async () => {
     console.error('Error fetching emails:', error);
     throw new Error(`Помилка при отриманні листів: ${error.message}`); // Проброс помилки
   } finally {
+    if (connection && connection.state !== 'disconnected') {
+      connection.end();
+      console.log("З'єднання IMAP закрито.");
+    }
     activeConnections--;
   }
 };
