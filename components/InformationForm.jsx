@@ -511,7 +511,7 @@ export const InformationForm = ({
   return (
     <form className={styles.form} onSubmit={e => handleSubmitModal(e)}>
       <div className={styles.image}>
-        <Image
+        <img
           src={
             dataModal.image.length > 0
               ? dataModal.image || '../../addPhoto.svg'
@@ -524,7 +524,7 @@ export const InformationForm = ({
         />
         <label>
           <div className={styles.addPhoto}>
-            <Image src="../../photo.svg" alt="add photo" />
+            <img src="../../photo.svg" alt="add photo" />
           </div>
 
           <input

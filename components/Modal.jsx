@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import Image from 'next/image';
 import styles from '../styles/modal.module.scss';
 
 export const Modal = ({ title, message, handleModal, form }) => {
@@ -11,7 +10,7 @@ export const Modal = ({ title, message, handleModal, form }) => {
             <div className={styles.modal__between} />
             <p>{title}</p>
             <button className={styles.modal__close} onClick={handleModal}>
-              <Image
+              <img
                 src={'../../cross__white.svg'}
                 alt="cross"
                 className={styles.modal__icon}
