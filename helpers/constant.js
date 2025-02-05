@@ -62,7 +62,7 @@ export const patternInput = {
   phoneNumber: /^\d{6,14}$/,
   country: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,30}$/,
   city: /^[a-zA-Zа-яА-ЯіІїЇ\s]{2,30}$/,
-  address_1: /^[\w\s,.'\-\u00C0-\u024F\u0400-\u04FF]{5,100}$/,
+  // address_1: /^[\w\s,.'\-\u00C0-\u024F\u0400-\u04FF]{5,100}$/,
   inn: /^\d{6,14}$/,
   passport: /^[A-Z0-9]{6,9}$/,
   requesterFile: /.+/,
