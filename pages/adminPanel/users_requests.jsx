@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { placeHolder, patternInput } from "../../helpers/constant";
 import { updateDocumentInCollection } from "../../helpers/firebaseControl";
+import Image from "next/image";
 
 const PAGE_SIZE = 10;
 
@@ -26,7 +27,7 @@ export default function AdminOrders() {
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [editOrder, setEditOrder] = useState(false);
+  const [editOrder, setEditOrder] = useState(null);
   const [validateStatus, setValidateStatus] = useState(false);
   const [checkFetch, setcheckFetch] = useState(false);
 
@@ -75,7 +76,7 @@ export default function AdminOrders() {
 
     setLoading(false);
   };
-  console.log(editOrder);
+
   const handleEdit = (id) => {
     setIsModal(true);
     setEditOrder(orders.find((it) => it.id === id));
@@ -114,13 +115,13 @@ export default function AdminOrders() {
       </h1>
       <div className={styles.category}>
         <div>
-          <h1>Oreders Search</h1>
+          <h1>Поиск запросов клиентов</h1>
           <input
             type="text"
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Search by name"
+            placeholder="Поиск по имени"
           />
 
           {/* Table displaying user data */}
@@ -163,7 +164,12 @@ export default function AdminOrders() {
                       <td className={`${styles.tableHead}`}>{order?.status}</td>
                       <td className={styles.tableHead}>
                         <button onClick={() => handleEdit(order.id)}>
-                          Edit
+                          <Image
+                            src="/edit_icon.svg"
+                            alt="Edit"
+                            width={20}
+                            height={20}
+                          />
                         </button>
                       </td>
                     </tr>

@@ -1,5 +1,4 @@
 import { useTranslation } from "next-i18next";
-import { ItemPage } from "../../components/ItemPage";
 import { PageNavigation } from "../../components/PageNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getRightData, getRightURL } from "../../helpers/rightData";
@@ -225,7 +224,7 @@ export default function ProfileItemPage() {
                                 id={it}
                                 name={it}
                                 value={userCredentials[it]}
-                                pattern={patternInput[it].source}
+                                pattern={patternInput[it]?.source}
                                 placeholder={placeHolder[it]}
                                 onChange={(e) => {
                                   if (
