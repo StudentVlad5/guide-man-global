@@ -134,7 +134,7 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("orders")}
+                onClick={() => handleClickCategory("users_requests")}
               >
                 Заказы
               </div>
