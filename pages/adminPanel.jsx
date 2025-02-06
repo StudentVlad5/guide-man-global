@@ -3,14 +3,13 @@ import { auth } from '../helpers/firebaseControl';
 import { useRouter } from 'next/router';
 
 import styles from '../styles/adminPanel.module.scss';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Modal } from '../components/Modal';
 import { InformationForm } from '../components/InformationForm';
 import { AppContext } from '../components/AppProvider';
 
-
-export default function AdminPanel () {
+export default function AdminPanel() {
   const [isModal, setIsModal] = useState(false);
   const [titleMessage, setTitleMessage] = useState('');
   const [type, setType] = useState('');
@@ -18,20 +17,25 @@ export default function AdminPanel () {
   const [func, setFunc] = useState('updateInfo');
 
   const { userRole } = useContext(AppContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (userRole && userRole !== 'admin') router.push('account/profile/');
+  }, [router, userRole]);
 
   const handleModal = () => {
     setIsModal(!isModal);
   };
 
-  const router = useRouter();
-
   const handleSignOut = () => {
-    signOut(auth).then(() => {
-    router.push('/')
-    }).catch((error) => {
-      alert(error);
-    });
-    };
+    signOut(auth)
+      .then(() => {
+        router.push('/');
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
 
   const handleClick = (e, collection) => {
     setCurrentInfoItem(null);
@@ -41,99 +45,148 @@ export default function AdminPanel () {
     setFunc('addItem');
   };
 
- 
-
-  const handleClickCategory = (category) => {
+  const handleClickCategory = category => {
     router.push(`/adminPanel/${category}`);
   };
 
   return (
     <div className={styles.main}>
-      {userRole && (<><h1>Панель администратора</h1><div className={styles.body}>
-        <div className={styles.body__item}>
-          <div
-            className={styles.body__item__content}
-            onClick={() => handleClickCategory('news')}
-          >
-            Новости
+      {userRole && (
+        <>
+          <h1>Панель администратора</h1>
+          <div className={styles.body}>
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('news')}
+              >
+                Новости
+              </div>
+
+              <button
+                name="news"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'новость')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('questions')}
+              >
+                Вопросы
+              </div>
+
+              <button
+                name="questions"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'вопрос')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('explanations')}
+              >
+                Ссылки
+              </div>
+
+              <button
+                name="explanations"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'ссылку')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('services')}
+              >
+                Услуги
+              </div>
+
+              <button
+                name="services"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'услугу')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('requests')}
+              >
+                Адвокатские запросы
+              </div>
+
+              <button
+                name="requests"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'запрос')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('recipient')}
+              >
+                Адреса госорганов
+              </div>
+
+              {/* <button
+                name="recipient"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'адресат')}
+              >
+                +
+              </button> */}
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('users')}
+              >
+                Пользователи
+              </div>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('users_requests')}
+              >
+                Запросы пользователей
+              </div>
+            </div>
           </div>
-
-          <button
-            name="news"
-            className={styles.body__item__button}
-            onClick={(e) => handleClick(e, 'новость')}
-          >
-            +
+          <button className={styles.logout} onClick={handleSignOut}>
+            Выход
           </button>
-        </div>
-
-        <div className={styles.body__item}>
-          <div
-            className={styles.body__item__content}
-            onClick={() => handleClickCategory('questions')}
-          >
-            Вопросы
-          </div>
-
-          <button
-            name="questions"
-            className={styles.body__item__button}
-            onClick={(e) => handleClick(e, 'вопрос')}
-          >
-            +
-          </button>
-        </div>
-
-        <div className={styles.body__item}>
-          <div
-            className={styles.body__item__content}
-            onClick={() => handleClickCategory('explanations')}
-          >
-            Ссылки
-          </div>
-
-          <button
-            name="explanations"
-            className={styles.body__item__button}
-            onClick={(e) => handleClick(e, 'ссылку')}
-          >
-            +
-          </button>
-        </div>
-
-        <div className={styles.body__item}>
-          <div
-            className={styles.body__item__content}
-            onClick={() => handleClickCategory('services')}
-          >
-            Услуги
-          </div>
-
-          <button
-            name="services"
-            className={styles.body__item__button}
-            onClick={(e) => handleClick(e, 'услугу')}
-          >
-            +
-          </button>
-        </div>
-
-
-
-      </div><button
-        className={styles.logout}
-        onClick={handleSignOut}
-      >
-          Выход
-        </button></>)}
-      
+        </>
+      )}
 
       {isModal && (
         <Modal
           title={titleMessage}
           handleModal={handleModal}
           form={
-            <InformationForm 
+            <InformationForm
               type={type}
               setIsModal={handleModal}
               currentInfoItem={currentInfoItem}
@@ -143,5 +196,5 @@ export default function AdminPanel () {
         />
       )}
     </div>
-  )
+  );
 }

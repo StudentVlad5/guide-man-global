@@ -49,7 +49,14 @@ export const prepareAttachments = async pdfFiles => {
   }
 };
 
-export const sendEmail = async ({ to, subject, text, html, attachments }) => {
+export const sendEmail = async ({
+  to,
+  subject,
+  text,
+  html,
+  attachments,
+  requestId,
+}) => {
   try {
     // Налаштування Nodemailer
     const transporter = nodemailer.createTransport({
@@ -74,6 +81,17 @@ export const sendEmail = async ({ to, subject, text, html, attachments }) => {
 
     const info = await transporter.sendMail(mailOptions);
     console.log(`Лист успішно відправлено: ${info.messageId}`);
+
+    // // Після успішної відправки оновлюємо статус у Firestore
+    // if (requestId) {
+    //   await updateDocumentInCollection(
+    //     'userRequests',
+    //     { status: 'sent' },
+    //     requestId
+    //   );
+    //   console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
+    // }
+
     return info;
   } catch (error) {
     console.error('Помилка при відправленні листа:', error);

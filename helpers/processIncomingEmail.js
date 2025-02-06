@@ -1,8 +1,8 @@
 import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
-} from './firebaseControl';
-import { sendEmail } from './prepareAttachments';
+} from './firebaseControl.js';
+import { sendEmail } from './prepareAttachments.js';
 import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
@@ -14,16 +14,37 @@ export const processIncomingEmail = async email => {
     console.log('Отримано новий лист:', { subject, body, attachments });
 
     // Вилучення ідентифікатора запиту
-    const regex = /REQ\s*\d+/i;
+    const regex = /ID[:\s]*([\d]+)/i;
     console.log('regex:', regex);
+
     const match = subject.match(regex) || body.match(regex);
+    const hasId = !!match; // true, якщо ID знайдено
+    const hasAttachments = email.attachments && email.attachments.length > 0;
+
+    console.log('Тема листа:', subject);
+    console.log('Тіло листа:', body);
+    console.log('Знайдений ID:', match ? match[1] : 'Немає ID');
 
     if (!match) {
-      console.log('Ідентифікатор запиту не знайдено.');
+      console.log(
+        `Ідентифікатор запиту не знайдено у листі (UID: ${email.messageId}).`
+      );
       return;
     }
 
-    const requestId = match[0].trim();
+    // if (!hasId) {
+    //   console.log(`Пропущено лист без ID: ${email.subject || 'Без теми'}`);
+    //   return; // Пропускаємо листи без ID
+    // }
+
+    // if (!hasAttachments) {
+    //   console.log(
+    //     `Пропущено лист без вкладень: ${email.subject || 'Без теми'}`
+    //   );
+    //   return; // Пропускаємо листи без вкладень
+    // }
+
+    const requestId = match[1].trim();
     console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
 
     // Знаходимо відповідний запит у Firestore
@@ -32,6 +53,7 @@ export const processIncomingEmail = async email => {
       'id',
       requestId
     );
+    console.log(`Пошук у Firestore за ID ${requestId}:`, userRequest);
 
     if (!userRequest) {
       console.log(`Запит із ID ${requestId} не знайдено.`);

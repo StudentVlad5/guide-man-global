@@ -89,7 +89,10 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
         )}
 
         <li className={styles.navbar__item__account}>
-          <Link href="/account/profile" className={styles.navbar__link}>
+          <Link
+            href={user ? '/account/profile' : '/account'}
+            className={styles.navbar__link}
+          >
             <p>{user ? t('navbar.account') : t('navbar.cabinet')}</p>
           </Link>
         </li>
@@ -99,7 +102,7 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
         className={`${styles.navbar__container} ${styles.navbar__container__small}`}
       >
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <Link href="/account/profile" className={styles.navbar__link}>
+          <Link href="/account" className={styles.navbar__link}>
             <p>{user ? t('navbar.account') : t('navbar.login')}</p>
           </Link>
         </li>

@@ -59,15 +59,16 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    uid: user?.uid || "",
+    id: Math.floor(Date.now() * Math.random()).toString(),
+    uid: user?.uid || '',
     paymentStatus: paymentStatus,
     orderId: orderId,
-    citizenship: "", //ВСІ ФОРМИ
-    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: "", //ВСІ ФОРМИ
-    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    citizenship: '', //ВСІ ФОРМИ
+    name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: '', //ВСІ ФОРМИ
+    birthday: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
       address: "",
       city: "",
@@ -498,7 +499,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          uid: formData.uid,
+          id: formData.id,
           // recipient: formData.recipient,
           // // recipient: { address: formData.recipient.address },
           recipient: { address: "julia_js@bigmir.net" },

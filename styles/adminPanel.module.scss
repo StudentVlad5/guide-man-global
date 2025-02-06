@@ -1,4 +1,4 @@
-@import './mixins';
+@import "./mixins";
 @import "./variables";
 
 .main {
@@ -20,24 +20,24 @@
 }
 
 .logout {
-    width: 400px;
-    height: 85px;
-    box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
-    border-radius: 13.376px;
-    border: none;
-    font-family: 'Montserrat';
-    font-size: 33.44px;
-    line-height: 43px;
-    background: $white1;
+  width: 400px;
+  height: 85px;
+  box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
+  border-radius: 13.376px;
+  border: none;
+  font-family: "Montserrat";
+  font-size: 33.44px;
+  line-height: 43px;
+  background: $white1;
 
-    @include onMobile {
-      font-size: 12.44px;
-      line-height: 130%;
-      border-radius: 4.976px;
+  @include onMobile {
+    font-size: 12.44px;
+    line-height: 130%;
+    border-radius: 4.976px;
 
-      width: 200px;
-      height: 40px;
-    }
+    width: 200px;
+    height: 40px;
+  }
 }
 
 .body {
@@ -67,7 +67,7 @@
       padding: 10px;
       background: $white1;
       min-width: 100%;
-      font-family: 'Montserrat';
+      font-family: "Montserrat";
       font-size: 20px;
       font-weight: 700;
 
@@ -76,32 +76,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
     }
-    
+
     &__button {
-        box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
-        border-radius: 13.376px;
-        border: none;
-        font-family: 'Montserrat';
-        font-size: 20px;
-        background: $white1;
-        padding: 10px;
-        height: 60px;
-        
-    
-        @include onMobile {
-          font-size: 12.44px;
-          border-radius: 4.976px;
-    
-          height: 40px;
-        }
+      box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
+      border-radius: 13.376px;
+      border: none;
+      font-family: "Montserrat";
+      font-size: 20px;
+      background: $white1;
+      padding: 10px;
+      height: 60px;
 
-        &_item {
-          width: 50%;
-        }
+      @include onMobile {
+        font-size: 12.44px;
+        border-radius: 4.976px;
+
+        height: 40px;
+      }
+
+      &_item {
+        width: 50%;
+      }
     }
-    
   }
 }
 
@@ -110,62 +107,96 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, 270px);
   gap: 40px;
-
   justify-content: center;
+  @include onMobile {
+    justify-content: start;
+  }
 
   &__item {
     position: relative;
-      width: 270px;
+    width: 270px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 0 auto;
+    background: $white2;
+    box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    border-radius: 8px;
+    height: 200px;
+    overflow: hidden;
+
+    &__title {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    &__text {
+      font-size: 10px;
+      width: 100%;
+    }
+
+    & img {
+      width: 260px;
+      height: 68.68px;
+      border-radius: 8px;
+    }
+
+    &__button {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      left: 230px;
+      top: 20px;
+      z-index: 10;
+    }
+
+    &__click {
+      cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 5px;
-      margin: 0 auto;
-      background: $white2;
-      box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
-      padding: 5px;
-      border-radius: 8px;
-      height: 200px;
-      overflow: hidden;
-  
-      &__title {
-        font-size: 12px;
-        font-weight: bold;
-      }
-  
-      &__text {
-        font-size: 10px;
-        width: 100%;
-      }
-  
-      & img {
-        width: 260px;
-        height: 68.68px;
-        border-radius: 8px;
-      }
-  
-      &__button {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background: #fff;
-        border-radius: 50%;
-        position: absolute;
-        left: 230px;
-        top: 20px;
-        z-index: 10;
-      }
-  
-      &__click {
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-        height: 100%;
-        width: 100%;
-      }
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 
-
+.searchPanel {
+  background-color: #ffffff;
+  padding: 16px;
+  width: 517px;
+  border-radius: 8px;
+  font-family: "Trebuchet MS", sans-serif;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 20px;
+  @include onMobile {
+    width: 100%;
+  }
+}
+.tablewidth {
+  width: calc(100vw * 0.9);
+  @include onMobile {
+    overflow: hidden;
+  }
+}
+.tableHead {
+  padding: 6px;
+  color: $dark;
+  width: calc(100vw / 5);
+  @include onMobile {
+    max-width: 60px !important;
+    overflow: hidden;
+  }
+}
+.tableHide {
+  @include onSmallDesktop {
+    display: none;
+  }
+}

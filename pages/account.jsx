@@ -13,9 +13,8 @@ import { Layout } from "../components/Layout";
 import styles from "../styles/formPage.module.scss";
 import { useTranslation } from "next-i18next";
 import { auth } from "../helpers/firebaseControl";
-import Link from "next/link";
 import { PageNavigation } from "../components/PageNavigation";
-import { getRightData, getRightURL } from "../helpers/rightData";
+import { getRightURL } from "../helpers/rightData";
 import { BASE_URL } from "./sitemap.xml";
 import SideBar from "../components/SideBar";
 
@@ -26,7 +25,7 @@ export default function AccountPage() {
   const { t } = useTranslation();
   const { locale, pathname } = useRouter();
   const router = useRouter();
-  const { user, setUser } = useContext(AppContext);
+  const { user, setUser, userRole } = useContext(AppContext);
 
   const handleLogin = (e, regInfo) => {
     e.preventDefault();
@@ -40,9 +39,10 @@ export default function AccountPage() {
     signInWithEmailAndPassword(auth, regInfo.email, regInfo.password)
       .then((userCredential) => {
         const user = userCredential.user;
-
         setUser(user);
-        router.push("account/profile/");
+        userRole === "admin"
+          ? router.push("adminPanel")
+          : router.push("account/profile/");
       })
       .catch((error) => {
         setIsModal(true);

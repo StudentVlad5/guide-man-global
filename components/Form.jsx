@@ -98,7 +98,7 @@ export const Form = ({
     <form className={styles.form}>
       <div className={styles.form__buttons}>
         <Link
-          href="/account/profile"
+          href="/account"
           className={clsx([styles.form__toggle__button], {
             [styles.form__toggle__button__active]: formFunction === 'account',
           })}
