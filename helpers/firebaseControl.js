@@ -259,6 +259,42 @@ export function createNewPost(postInfo, file, type, serviceType) {
             serviceType,
             dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
           }
+        : type === 'requests'
+        ? {
+            id,
+
+            ua: {
+              title: postInfo.ua.title || '',
+              text: postInfo.ua.text || '',
+            },
+
+            ru: {
+              title: postInfo.ru.title || '',
+              text: postInfo.ru.text || '',
+            },
+            en: {
+              title: postInfo.en.title || '',
+              text: postInfo.en.text || '',
+            },
+
+            path: postInfo.path.length > 0 ? postInfo.path : id,
+            type: postInfo.type,
+            requestType: {
+              ua: postInfo.serviceType.ua || '',
+              ru: postInfo.serviceType.ru || '',
+              en: postInfo.serviceType.en || '',
+            },
+            recipient: postInfo.recipient || '',
+            dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
+          }
+        : type === 'recipient'
+        ? {
+            id,
+            name: postInfo.name || '',
+            title: postInfo.title || '',
+            application: postInfo.application || '',
+            address: postInfo.address || '',
+          }
         : {
             id,
             image: '',

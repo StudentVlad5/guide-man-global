@@ -67,7 +67,7 @@ export default function AdminNews() {
           })
           .map(el => (
             <div className={styles.category__item} key={el.id}>
-              <Image
+              <img
                 src={el.image.length !== 0 ? el.image : '../../noPhoto.svg'}
                 alt="image"
               />

@@ -1,26 +1,26 @@
-import { signOut } from "firebase/auth";
-import { auth } from "../helpers/firebaseControl";
-import { useRouter } from "next/router";
+import { signOut } from 'firebase/auth';
+import { auth } from '../helpers/firebaseControl';
+import { useRouter } from 'next/router';
 
-import styles from "../styles/adminPanel.module.scss";
-import { useContext, useEffect, useState } from "react";
+import styles from '../styles/adminPanel.module.scss';
+import { useContext, useEffect, useState } from 'react';
 
-import { Modal } from "../components/Modal";
-import { InformationForm } from "../components/InformationForm";
-import { AppContext } from "../components/AppProvider";
+import { Modal } from '../components/Modal';
+import { InformationForm } from '../components/InformationForm';
+import { AppContext } from '../components/AppProvider';
 
 export default function AdminPanel() {
   const [isModal, setIsModal] = useState(false);
-  const [titleMessage, setTitleMessage] = useState("");
-  const [type, setType] = useState("");
+  const [titleMessage, setTitleMessage] = useState('');
+  const [type, setType] = useState('');
   const [currentInfoItem, setCurrentInfoItem] = useState(null);
-  const [func, setFunc] = useState("updateInfo");
+  const [func, setFunc] = useState('updateInfo');
 
   const { userRole } = useContext(AppContext);
   const router = useRouter();
 
   useEffect(() => {
-    if (userRole && userRole !== "admin") router.push("account/profile/");
+    if (userRole && userRole !== 'admin') router.push('account/profile/');
   }, [router, userRole]);
 
   const handleModal = () => {
@@ -30,9 +30,9 @@ export default function AdminPanel() {
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        router.push("/");
+        router.push('/');
       })
-      .catch((error) => {
+      .catch(error => {
         alert(error);
       });
   };
@@ -42,10 +42,10 @@ export default function AdminPanel() {
     setIsModal(true);
     setTitleMessage(`Добавить ${collection}`);
     setType(e.currentTarget.name);
-    setFunc("addItem");
+    setFunc('addItem');
   };
 
-  const handleClickCategory = (category) => {
+  const handleClickCategory = category => {
     router.push(`/adminPanel/${category}`);
   };
 
@@ -58,7 +58,7 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("news")}
+                onClick={() => handleClickCategory('news')}
               >
                 Новости
               </div>
@@ -66,7 +66,7 @@ export default function AdminPanel() {
               <button
                 name="news"
                 className={styles.body__item__button}
-                onClick={(e) => handleClick(e, "новость")}
+                onClick={e => handleClick(e, 'новость')}
               >
                 +
               </button>
@@ -75,7 +75,7 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("questions")}
+                onClick={() => handleClickCategory('questions')}
               >
                 Вопросы
               </div>
@@ -83,7 +83,7 @@ export default function AdminPanel() {
               <button
                 name="questions"
                 className={styles.body__item__button}
-                onClick={(e) => handleClick(e, "вопрос")}
+                onClick={e => handleClick(e, 'вопрос')}
               >
                 +
               </button>
@@ -92,7 +92,7 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("explanations")}
+                onClick={() => handleClickCategory('explanations')}
               >
                 Ссылки
               </div>
@@ -100,7 +100,7 @@ export default function AdminPanel() {
               <button
                 name="explanations"
                 className={styles.body__item__button}
-                onClick={(e) => handleClick(e, "ссылку")}
+                onClick={e => handleClick(e, 'ссылку')}
               >
                 +
               </button>
@@ -109,7 +109,7 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("services")}
+                onClick={() => handleClickCategory('services')}
               >
                 Услуги
               </div>
@@ -117,15 +117,50 @@ export default function AdminPanel() {
               <button
                 name="services"
                 className={styles.body__item__button}
-                onClick={(e) => handleClick(e, "услугу")}
+                onClick={e => handleClick(e, 'услугу')}
               >
                 +
               </button>
             </div>
+
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("users")}
+                onClick={() => handleClickCategory('requests')}
+              >
+                Адвокатские запросы
+              </div>
+
+              <button
+                name="requests"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'запрос')}
+              >
+                +
+              </button>
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('recipient')}
+              >
+                Адреса госорганов
+              </div>
+
+              {/* <button
+                name="recipient"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'адресат')}
+              >
+                +
+              </button> */}
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('users')}
               >
                 Пользователи
               </div>
@@ -134,9 +169,9 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
-                onClick={() => handleClickCategory("users_requests")}
+                onClick={() => handleClickCategory('users_requests')}
               >
-                Заказы
+                Запросы пользователей
               </div>
             </div>
           </div>

@@ -21,6 +21,9 @@ export const InformationForm = ({
   setIsModal,
   currentInfoItem,
 }) => {
+  console.log('currentInfoItem:', currentInfoItem);
+  console.log('func:', func);
+  console.log('type:', type);
   const selectValues = [
     'Прохождение пограничного контроля',
     'Прохождение таможенного контроля',
@@ -70,6 +73,7 @@ export const InformationForm = ({
     },
     path: '',
     type,
+    recipient: '',
   });
 
   const [tabsState, setTabsState] = useState({
@@ -264,6 +268,7 @@ export const InformationForm = ({
             textUa: dataModal.ua.text,
 
             path: dataModal.path,
+            recipient: dataModal.recipient,
           });
 
           if (newData.some(el => el.length !== 0)) {
@@ -312,63 +317,7 @@ export const InformationForm = ({
                     },
                     currentInfoItem.idPost
                   )
-                : await updateDocumentInCollection(
-                    `${currentInfoItem.type}`,
-                    {
-                      ...currentInfoItem,
-                      ru: {
-                        title:
-                          dataModal.ru.title.length > 0
-                            ? dataModal.ru.title
-                            : currentInfoItem.ru.title,
-                        preview:
-                          dataModal.ru.preview.length > 0
-                            ? dataModal.ru.preview
-                            : currentInfoItem.ru.preview,
-                        text:
-                          dataModal.ru.text.length > 0
-                            ? dataModal.ru.text
-                            : currentInfoItem.ru.text,
-                      },
-                      en: {
-                        title:
-                          dataModal.en.title.length > 0
-                            ? dataModal.en.title
-                            : currentInfoItem.en.title,
-                        preview:
-                          dataModal.en.preview.length > 0
-                            ? dataModal.en.preview
-                            : currentInfoItem.en.preview,
-                        text:
-                          dataModal.en.text.length > 0
-                            ? dataModal.en.text
-                            : currentInfoItem.en.text,
-                      },
-                      ua: {
-                        title:
-                          dataModal.ua.title.length > 0
-                            ? dataModal.ua.title
-                            : currentInfoItem.ua.title,
-                        preview:
-                          dataModal.ua.preview.length > 0
-                            ? dataModal.ua.preview
-                            : currentInfoItem.ua.preview,
-                        text:
-                          dataModal.ua.text.length > 0
-                            ? dataModal.ua.text
-                            : currentInfoItem.ua.text,
-                      },
-
-                      path:
-                        dataModal.path.length > 0
-                          ? dataModal.path
-                          : currentInfoItem.path,
-                      dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
-                    },
-                    currentInfoItem.idPost
-                  );
-
-              type === 'requests'
+                : type === 'requests'
                 ? await updateDocumentInCollection(
                     `${currentInfoItem.type}`,
                     {
@@ -408,6 +357,12 @@ export const InformationForm = ({
                         dataModal.path.length > 0
                           ? dataModal.path
                           : currentInfoItem.path,
+
+                      recipient:
+                        dataModal.recipient.length > 0
+                          ? dataModal.recipient
+                          : currentInfoItem.recipient,
+
                       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
                     },
                     currentInfoItem.idPost
@@ -493,8 +448,9 @@ export const InformationForm = ({
           const fullRequestType = getRightRequestType(requestType);
 
           try {
-            createNewPost(dataModal, file, type, fullServiseType);
-            createNewRequestPost(dataModal, file, type, fullRequestType);
+            type === 'requests'
+              ? createNewPost(dataModal, file, type, fullRequestType)
+              : createNewPost(dataModal, file, type, fullServiseType);
 
             setIsModal(false);
           } catch (error) {
@@ -511,7 +467,7 @@ export const InformationForm = ({
   return (
     <form className={styles.form} onSubmit={e => handleSubmitModal(e)}>
       <div className={styles.image}>
-        <Image
+        <img
           src={
             dataModal.image.length > 0
               ? dataModal.image || '../../addPhoto.svg'
@@ -524,7 +480,7 @@ export const InformationForm = ({
         />
         <label>
           <div className={styles.addPhoto}>
-            <Image src="../../photo.svg" alt="add photo" />
+            <img src="../../photo.svg" alt="add photo" />
           </div>
 
           <input
@@ -631,25 +587,7 @@ export const InformationForm = ({
               ref={inputRef}
             />
 
-            {type !== 'services' && (
-              <textarea
-                type="text"
-                placeholder="прев'ю"
-                value={
-                  dataModal.ua.preview.length > 0
-                    ? dataModal.ua.preview
-                    : currentInfoItem
-                    ? currentInfoItem.ua.preview
-                    : dataModal.ua.preview
-                }
-                className={styles.input}
-                onChange={e =>
-                  handleChangeModalWithLang('preview', e.target.value, 'ua')
-                }
-              />
-            )}
-
-            {type !== 'requests' && (
+            {type !== 'services' && type !== 'requests' && (
               <textarea
                 type="text"
                 placeholder="прев'ю"
@@ -724,24 +662,7 @@ export const InformationForm = ({
               autoFocus
               ref={inputRef}
             />
-            {type !== 'services' && (
-              <textarea
-                type="text"
-                placeholder="preview"
-                value={
-                  dataModal.en.preview.length > 0
-                    ? dataModal.en.preview
-                    : currentInfoItem
-                    ? currentInfoItem.en.preview
-                    : dataModal.en.preview
-                }
-                className={styles.input}
-                onChange={e =>
-                  handleChangeModalWithLang('preview', e.target.value, 'en')
-                }
-              />
-            )}
-            {type !== 'requests' && (
+            {type !== 'services' && type !== 'requests' && (
               <textarea
                 type="text"
                 placeholder="preview"
@@ -815,24 +736,7 @@ export const InformationForm = ({
               autoFocus
               ref={inputRef}
             />
-            {type !== 'services' && (
-              <textarea
-                type="text"
-                placeholder="превью"
-                value={
-                  dataModal.ru.preview.length > 0
-                    ? dataModal.ru.preview
-                    : currentInfoItem
-                    ? currentInfoItem.ru.preview
-                    : dataModal.ru.preview
-                }
-                className={styles.input}
-                onChange={e =>
-                  handleChangeModalWithLang('preview', e.target.value, 'ru')
-                }
-              />
-            )}
-            {type !== 'requests' && (
+            {type !== 'services' && type !== 'requests' && (
               <textarea
                 type="text"
                 placeholder="превью"
@@ -882,6 +786,24 @@ export const InformationForm = ({
         }
         onChange={e => handleChangeModal('path', e.target.value)}
       />
+
+      {(type === 'requests' || type === 'request') &&
+        (func === 'addItem' || func === 'updateInfo') && (
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="адресат в формате 'mvs'"
+            value={
+              dataModal.recipient.length > 0
+                ? dataModal.recipient
+                : currentInfoItem
+                ? currentInfoItem.recipient
+                : dataModal.recipient
+            }
+            onChange={e => handleChangeModal('recipient', e.target.value)}
+          />
+        )}
+
       <button type="submit" className={styles.submitButton}>
         {func === 'updateInfo' ? 'Обновить' : 'Добавить'}
       </button>

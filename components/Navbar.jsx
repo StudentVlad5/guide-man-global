@@ -1,20 +1,20 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from 'react';
 
-import Link from "next/link";
-import { useTranslation } from "next-i18next";
+import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
-import { PageNavLink } from "./PageNavLink";
+import { PageNavLink } from './PageNavLink';
 
-import styles from "../styles/navbar.module.scss";
-import { useOnClickOutside } from "../hooks/useOnClickOutside";
-import { useWindowSize } from "../hooks/useWindowSize";
-import { AppContext } from "./AppProvider";
+import styles from '../styles/navbar.module.scss';
+import { useOnClickOutside } from '../hooks/useOnClickOutside';
+import { useWindowSize } from '../hooks/useWindowSize';
+import { AppContext } from './AppProvider';
 
-import LogoDark from "../public/logo_dark.svg";
-import Cross from "../public/cross.svg";
+import LogoDark from '../public/logo_dark.svg';
+import Cross from '../public/cross.svg';
 
-import { auth } from "../helpers/firebaseControl";
-import { signOut } from "firebase/auth";
+import { auth } from '../helpers/firebaseControl';
+import { signOut } from 'firebase/auth';
 
 export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
     if (width < 769) {
       setIsOpenMenu(false);
       setHideOrSwow(() => {
-        return { transform: "translateX(100%)" };
+        return { transform: 'translateX(100%)' };
       });
     }
   });
@@ -37,7 +37,7 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
       .then(() => {
         setUser(null);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -57,19 +57,19 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
 
       <div className={styles.navbar__container}>
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <PageNavLink href="/services" text={t("navbar.services")} />
+          <PageNavLink href="/services" text={t('navbar.services')} />
         </li>
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <PageNavLink href="/chat" text={t("navbar.chat")} />
+          <PageNavLink href="/chat" text={t('navbar.chat')} />
         </li>
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <PageNavLink href="/explanations" text={t("navbar.explanations")} />
+          <PageNavLink href="/explanations" text={t('navbar.explanations')} />
         </li>
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <PageNavLink href="/news" text={t("navbar.news")} />
+          <PageNavLink href="/news" text={t('navbar.news')} />
         </li>
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <PageNavLink href="/about" text={t("navbar.about")} />
+          <PageNavLink href="/about" text={t('navbar.about')} />
         </li>
       </div>
 
@@ -78,22 +78,22 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
       >
         {!user ? (
           <li className={styles.navbar__item}>
-            <PageNavLink href="/registration" text={t("navbar.register")} />
+            <PageNavLink href="/registration" text={t('navbar.register')} />
           </li>
         ) : (
           <li className={styles.navbar__item}>
             <button className={styles.navbar__logout} onClick={handleSignOut}>
-              {t("logOut")}
+              {t('logOut')}
             </button>
           </li>
         )}
 
         <li className={styles.navbar__item__account}>
           <Link
-            href={user ? "/account/profile" : "/account"}
+            href={user ? '/account/profile' : '/account'}
             className={styles.navbar__link}
           >
-            <p>{user ? t("navbar.account") : t("navbar.cabinet")}</p>
+            <p>{user ? t('navbar.account') : t('navbar.cabinet')}</p>
           </Link>
         </li>
       </div>
@@ -102,20 +102,20 @@ export const Navbar = ({ style, handleMenu, setHideOrSwow, setIsOpenMenu }) => {
         className={`${styles.navbar__container} ${styles.navbar__container__small}`}
       >
         <li className={styles.navbar__item} onClick={handleMenu}>
-          <Link href="/account/profile" className={styles.navbar__link}>
-            <p>{user ? t("navbar.account") : t("navbar.login")}</p>
+          <Link href="/account" className={styles.navbar__link}>
+            <p>{user ? t('navbar.account') : t('navbar.login')}</p>
           </Link>
         </li>
         {!user ? (
           <li className={styles.navbar__item} onClick={handleMenu}>
             <Link href="/registration" className={styles.navbar__link}>
-              <p>{t("navbar.register_mobile")}</p>
+              <p>{t('navbar.register_mobile')}</p>
             </Link>
           </li>
         ) : (
           <li className={styles.navbar__item} onClick={handleMenu}>
             <button className={styles.navbar__logout} onClick={handleSignOut}>
-              {t("logOut")}
+              {t('logOut')}
             </button>
           </li>
         )}

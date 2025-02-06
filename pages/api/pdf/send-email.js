@@ -69,8 +69,9 @@ export default async function handler(req, res) {
     await sendEmail({
       to: recipient.address,
       subject: `${title} ID ${id}`,
-      text: `Вітаю, направляю ${title} ID ${id} у вкладенні.`,
+      text: `Вітаю, направляю ${title} ID ${id}.`,
       attachments,
+      requestId: id, // Передаємо ID для оновлення статусу
     });
 
     return res.status(200).json({
