@@ -1,24 +1,24 @@
-'use client';
-import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { AppContext } from './AppProvider';
-import styles from '../styles/lawyersRequestForm.module.scss';
-import countries from 'i18n-iso-countries';
-import ukLocale from 'i18n-iso-countries/langs/uk.json';
-import ruLocale from 'i18n-iso-countries/langs/ru.json';
-import enLocale from 'i18n-iso-countries/langs/en.json';
-import { useTranslation } from 'react-i18next';
-import { getCollectionWhereKeyValue } from '../helpers/firebaseControl';
+"use client";
+import dynamic from "next/dynamic";
+import PropTypes from "prop-types";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { AppContext } from "./AppProvider";
+import styles from "../styles/lawyersRequestForm.module.scss";
+import countries from "i18n-iso-countries";
+import ukLocale from "i18n-iso-countries/langs/uk.json";
+import ruLocale from "i18n-iso-countries/langs/ru.json";
+import enLocale from "i18n-iso-countries/langs/en.json";
+import { useTranslation } from "react-i18next";
+import { getCollectionWhereKeyValue } from "../helpers/firebaseControl";
 import {
   getFirestore,
   collection,
   query,
   where,
   getDocs,
-} from 'firebase/firestore';
-import 'firebase/firestore';
+} from "firebase/firestore";
+import "firebase/firestore";
 import {
   fieldInputForForm,
   inputTypes,
@@ -26,90 +26,93 @@ import {
   placeHolder,
   requestNameToKeyMap,
   requestTypeMap,
-} from '../helpers/constant';
-import { useRouter } from 'next/router';
+} from "../helpers/constant";
+import { useRouter } from "next/router";
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
 countries.registerLocale(enLocale);
 
 // Динамічне підключення PDF-компонента
-const LawyersRequest = dynamic(() => import('./DownloadPDF'), {
+const LawyersRequest = dynamic(() => import("./DownloadPDF"), {
   ssr: false,
 });
-const Agreement = dynamic(() => import('./Agreement'), { ssr: false });
-const Contract = dynamic(() => import('./Contract'), { ssr: false });
+const Agreement = dynamic(() => import("./Agreement"), { ssr: false });
+const Contract = dynamic(() => import("./Contract"), { ssr: false });
 
 export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userData, setUserData] = useState(null);
   const [statusRenewUser, setStatusRenewUser] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [userRequests, setUserRequests] = useState([]);
   const [userRequest, setUserRequest] = useState([]);
   const [tck, setTck] = useState([]);
-
-  const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const [orderId, setOrderId] = useState();
+  const language = currentLanguage === "ua" ? "uk" : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
 
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
-  const title = request?.[currentLanguage]?.title || 'Default Payment Title';
+  const title = request?.[currentLanguage]?.title || "Default Payment Title";
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     id: Math.floor(Date.now() * Math.random()).toString(),
-    uid: user?.uid || '',
-    citizenship: '', //ВСІ ФОРМИ
-    name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: '', //ВСІ ФОРМИ
-    birthday: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    uid: user?.uid || "",
+    paymentStatus: paymentStatus,
+    orderId: orderId,
+    citizenship: "", //ВСІ ФОРМИ
+    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: "", //ВСІ ФОРМИ
+    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
-      address: '',
-      city: '',
-      country: '',
+      address: "",
+      city: "",
+      country: "",
     }, //РАЦС
-    requesterBirthday: '', //РАЦС
-    requesterName: '', //РАЦС
+    requesterBirthday: "", //РАЦС
+    requesterName: "", //РАЦС
     requesterFile: [], //РАЦС
     //дані про смерть
-    deadName: '', //РАЦС
-    deadDeathDay: '', //РАЦС
-    deadBirthday: '', //РАЦС
-    deadRelationship: '', //РАЦС
+    deadName: "", //РАЦС
+    deadDeathDay: "", //РАЦС
+    deadBirthday: "", //РАЦС
+    deadRelationship: "", //РАЦС
     dateCreating: new Date() //ВСІ ФОРМИ
-      .toLocaleDateString('ru-RU', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
+      .toLocaleDateString("ru-RU", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       }),
     recipient: {
-      name: '', //МОУ і ТЦК
-      address: '', //МОУ і ТЦК
+      name: "", //МОУ і ТЦК
+      address: "", //МОУ і ТЦК
     },
-    servicemanPIB: '', //МОУ і ТЦК
-    rank: '', //МОУ і ТЦК
-    unit: '', //МОУ і ТЦК
-    date: { start: '', end: '' }, //АДПСУ, МОУ і ТЦК
+    servicemanPIB: "", //МОУ і ТЦК
+    rank: "", //МОУ і ТЦК
+    unit: "", //МОУ і ТЦК
+    date: { start: "", end: "" }, //АДПСУ, МОУ і ТЦК
     // ПАСПОРТИ
-    abroadPassnum: '', //АДПСУ
-    passport: '', //АДПСУ, ЗАМІСТЬ passportNum
-    pmjNum: '', //АДПСУ,
+    abroadPassnum: "", //АДПСУ
+    passport: "", //АДПСУ, ЗАМІСТЬ passportNum
+    pmjNum: "", //АДПСУ,
     // Подружжя (дані супругів)
-    couplePIB1: '', //РАЦС
-    couplePIB2: '', //РАЦС
-    coupleBirthday1: '', //РАЦС
-    coupleBirthday2: '', //РАЦС
+    couplePIB1: "", //РАЦС
+    couplePIB2: "", //РАЦС
+    coupleBirthday1: "", //РАЦС
+    coupleBirthday2: "", //РАЦС
     // (дату надання довідки про місце проживання)
-    dateResidence: '', //РАЦС
-    placeResidence: '', //РАЦС
-    eventDate: '', //МВС
-    eventTime: '', //МВС
-    eventPlace: '', //МВС
-    inn: '', //ПФУ і ДПСУ
-    propertyAddress: '', //ВПО
+    dateResidence: "", //РАЦС
+    placeResidence: "", //РАЦС
+    eventDate: "", //МВС
+    eventTime: "", //МВС
+    eventPlace: "", //МВС
+    inn: "", //ПФУ і ДПСУ
+    propertyAddress: "", //ВПО
     request: request,
   });
 
@@ -121,24 +124,24 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const filterFieldsByRequestType = requestEn => {
-    const typeKey = requestNameToKeyMap[requestEn] || '';
+  const filterFieldsByRequestType = (requestEn) => {
+    const typeKey = requestNameToKeyMap[requestEn] || "";
     return requestTypeMap[typeKey] || [];
   };
   const visibleFields = filterFieldsByRequestType(requestEnTitle);
 
   const getNestedValue = (obj, path) => {
     return path
-      .split('.')
+      .split(".")
       .reduce((acc, key) => (acc ? acc[key] : undefined), obj);
   };
 
   const isFormValid = () => {
     // console.log(visibleFields);
-    return visibleFields.every(field => {
+    return visibleFields.every((field) => {
       const value = getNestedValue(formData, field);
 
-      if (field === 'fatherName') {
+      if (field === "fatherName") {
         return true;
       }
 
@@ -146,21 +149,23 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         return value.size > 0;
       }
 
-      return typeof value === 'string' ? value.trim() !== '' : Boolean(value);
+      return typeof value === "string" ? value.trim() !== "" : Boolean(value);
     });
   };
 
   useEffect(() => {
     if (user) {
-      getCollectionWhereKeyValue('userRequests', 'uid', user.uid).then(res => {
-        if (res) {
-          setUserRequests(
-            res.sort(
-              (a, b) => new Date(a.dateCreating) - new Date(b.dateCreating)
-            )
-          );
+      getCollectionWhereKeyValue("userRequests", "uid", user.uid).then(
+        (res) => {
+          if (res) {
+            setUserRequests(
+              res.sort(
+                (a, b) => new Date(a.dateCreating) - new Date(b.dateCreating)
+              )
+            );
+          }
         }
-      });
+      );
     }
   }, [user, isLoading]);
 
@@ -168,8 +173,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     const getUserData = async () => {
       if (user) {
         const db = getFirestore(); // Initialize Firestore
-        const userCollection = collection(db, 'users');
-        const userQuery = query(userCollection, where('uid', '==', user.uid));
+        const userCollection = collection(db, "users");
+        const userQuery = query(userCollection, where("uid", "==", user.uid));
 
         try {
           const snapshot = await getDocs(userQuery);
@@ -178,10 +183,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             setUserData(userData);
             handleDocuSign(userData);
           } else {
-            console.log('User data not found');
+            console.log("User data not found");
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         }
       }
     };
@@ -195,8 +200,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     const getRecipient = async () => {
       try {
         const recipient = await getCollectionWhereKeyValue(
-          'recipient',
-          'name',
+          "recipient",
+          "name",
           requestRecipient
         );
         // console.log(recipient);
@@ -205,7 +210,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           const recipientName = recipient[0].application;
           const recipientAddress = recipient[0].address;
 
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             recipient: { name: recipientName, address: recipientAddress },
           }));
@@ -213,7 +218,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
         return;
       } catch (error) {
-        console.error('Error saving request to Firestore:', error);
+        console.error("Error saving request to Firestore:", error);
         throw error;
       }
     };
@@ -224,40 +229,40 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     const fetchCollection = async () => {
       try {
         const db = getFirestore();
-        const querySnapshot = await getDocs(collection(db, 'tck'));
+        const querySnapshot = await getDocs(collection(db, "tck"));
 
-        const data = querySnapshot.docs.map(doc => ({
+        const data = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        const uniqueData = Array.from(new Set(data.map(item => item.id))).map(
-          id => data.find(item => item.id === id)
+        const uniqueData = Array.from(new Set(data.map((item) => item.id))).map(
+          (id) => data.find((item) => item.id === id)
         );
         setTck(uniqueData);
       } catch (error) {
-        console.error('Error fetching collection: ', error);
+        console.error("Error fetching collection: ", error);
       }
     };
 
     fetchCollection();
   }, []);
 
-  const generatePDFPreview = async type => {
+  const generatePDFPreview = async (type) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post('/api/pdf/preview-pdf', {
+      const response = await axios.post("/api/pdf/preview-pdf", {
         formData,
         type,
       });
       const pdfBase64 = response.data.pdfBase64;
-      const pdfBuffer = Buffer.from(pdfBase64, 'base64'); // Декодуємо Base64
-      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+      const pdfBuffer = Buffer.from(pdfBase64, "base64"); // Декодуємо Base64
+      const blob = new Blob([pdfBuffer], { type: "application/pdf" });
 
       // Створюємо тимчасовий URL для файлу
       const blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl, '_blank');
+      window.open(blobUrl, "_blank");
     } catch (err) {
       console.error(`Error generating ${type} PDF preview:`, err);
       setError(`Failed to generate ${type} PDF preview.`);
@@ -266,12 +271,17 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     }
   };
 
-  const savePDF = async () => {
+  const savePDF = async (orderId) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.post('/api/pdf/save-pdf', {
-        formData,
+      const response = await axios.post("/api/pdf/save-pdf", {
+        // formData,
+        formData: {
+          ...formData,
+          idPost: orderId,
+          orderId: orderId,
+        },
         selectedDocuments,
         uid: user?.uid,
       });
@@ -279,117 +289,200 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       // Отримуємо сформовані PDF-файли
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
       setUserRequest(response.data);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         agreement: agreementPDF,
         contract: contractPDF,
         pdfDocUrl: lawyersRequestPDF,
       }));
     } catch (err) {
-      console.error('Error saving documents:', err);
-      setError('Failed to save documents.');
+      console.error("Error saving documents:", err);
+      setError("Failed to save documents.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChangeForFile = async e => {
+  const handleChangeForFile = async (e) => {
     e.preventDefault();
     const { name, files } = e.target;
 
-    if (name === 'requesterFile' && files.length > 0) {
-      setFormData(prevData => ({
+    if (name === "requesterFile" && files.length > 0) {
+      setFormData((prevData) => ({
         ...prevData,
         [name]: files[0],
       }));
     }
   };
 
-  const handleCheckboxChange = async e => {
+  const handleCheckboxChange = async (e) => {
     const { name, checked } = e.target;
-    setSelectedDocuments(prev => ({ ...prev, [name]: checked }));
+    setSelectedDocuments((prev) => ({ ...prev, [name]: checked }));
 
     // if (checked) {
     //   generatePDFPreview(name);
     // }
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    console.log(formData);
+  const [paymentChecking, setPaymentChecking] = useState(false);
+
+  let paymentCheckInterval;
+
+  const checkPaymentStatus = async (orderId) => {
+    if (!orderId) {
+      console.error("No order ID found");
+      return;
+    }
 
     try {
+      const response = await fetch("/api/liqpay/check-payment-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: orderId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // console.log("Payment status:", data);
+
+      setFormData((prev) => ({ ...prev, paymentStatus: data.status }));
+      setPaymentStatus(data.status);
+
+      if (data.status === "success") {
+        // alert("Оплата успішна!");
+
+        setUserRequests((prevRequests) =>
+          prevRequests.map((req) =>
+            req.orderId === orderId ? { ...req, status: "paid" } : req
+          )
+        );
+
+        await fetch("/api/liqpay/update-payment-status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: user.uid,
+            order_id: orderId,
+            status: data.status,
+          }),
+        });
+        handleDocuSign();
+        clearInterval(paymentCheckInterval);
+      }
+      // } else if (data.status === "error") {
+      //   alert(t("Payment failed or not found."));
+      // }
+    } catch (error) {
+      console.error("Error checking payment status:", error);
+      alert(t("Error checking payment status. Please try again later."));
+    } finally {
+      setPaymentChecking(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setPaymentStatus(null);
+    let newOrderId;
+    try {
+      newOrderId = `order_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+
+      setOrderId(newOrderId);
+
+      const updatedFormData = {
+        ...formData,
+        orderId: newOrderId,
+        idPost: newOrderId,
+      };
+
+      setFormData(updatedFormData);
+
       const returnUrl = `${window.location.origin}${router.asPath}`;
 
-      const paymentResponse = await fetch('/api/liqpay', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const paymentResponse = await fetch("/api/liqpay/liqpay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: '0.1',
-          currency: 'UAH',
-          description: title || 'Payment',
+          amount: "0.1",
+          currency: "UAH",
+          description: title || "Payment",
           currentLanguage: currentLanguage,
           returnUrl,
-          order_id: `order_${Date.now()}_${Math.random()
-            .toString(36)
-            .substr(2, 9)}`,
+          order_id: newOrderId,
         }),
       });
 
       if (!paymentResponse.ok) {
-        throw new Error('Error initializing payment');
+        throw new Error("Error initializing payment");
       }
 
       const paymentData = await paymentResponse.json();
-      const paymentForm = document.createElement('form');
-      paymentForm.method = 'POST';
-      paymentForm.action = 'https://www.liqpay.ua/api/3/checkout';
-      paymentForm.acceptCharset = 'utf-8';
-      paymentForm.target = '_blank';
 
-      const inputData = document.createElement('input');
-      inputData.type = 'hidden';
-      inputData.name = 'data';
+      const paymentForm = document.createElement("form");
+      paymentForm.method = "POST";
+      paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+      paymentForm.acceptCharset = "utf-8";
+      paymentForm.target = "_blank";
+
+      const inputData = document.createElement("input");
+      inputData.type = "hidden";
+      inputData.name = "data";
       inputData.value = paymentData.data;
 
-      const inputSignature = document.createElement('input');
-      inputSignature.type = 'hidden';
-      inputSignature.name = 'signature';
+      const inputSignature = document.createElement("input");
+      inputSignature.type = "hidden";
+      inputSignature.name = "signature";
       inputSignature.value = paymentData.signature;
 
       paymentForm.appendChild(inputData);
       paymentForm.appendChild(inputSignature);
-
       document.body.appendChild(paymentForm);
+
       paymentForm.submit();
+      document.body.removeChild(paymentForm);
+      paymentCheckInterval = setInterval(
+        () => checkPaymentStatus(newOrderId),
+        5000
+      );
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      console.error("Error:", error);
+      setPaymentStatus("error");
+      setFormData((prev) => ({ ...prev, paymentStatus: "error" }));
     } finally {
-      savePDF();
+      savePDF(newOrderId);
+      setIsLoading(false);
       setStatusRenewUser(true);
     }
   };
 
-  // console.log(userRequest);
+  useEffect(() => {
+    if (orderId) {
+      setFormData((prev) => ({ ...prev, orderId }));
+    }
+  }, [orderId]);
+
   const handleDocuSign = async () => {
-    const res = await fetch('/api/docusign', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/docusign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         signerEmail: userRequest?.request?.userEmail,
         signerName: userCredentials.name,
-        ccEmail: 'vlad_np@ukr.net',
-        ccName: 'vlad',
+        ccEmail: "vlad_np@ukr.net",
+        ccName: "vlad",
         doc2File: userRequest?.request?.pdfAgreement,
         doc3File: userRequest?.request?.pdfContract,
       }),
     });
 
     const data = await res.json();
-    console.log('setMessage', data);
+    console.log("setMessage", data);
     if (res.ok) {
       setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
     } else {
@@ -402,14 +495,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setError(null);
 
     try {
-      const response = await fetch('/api/pdf/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/pdf/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: formData.id,
           // recipient: formData.recipient,
           // // recipient: { address: formData.recipient.address },
-          recipient: { address: 'julia_js@bigmir.net' },
+          recipient: { address: "julia_js@bigmir.net" },
         }),
       });
 
@@ -420,18 +513,18 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
       const data = await response.json();
       if (response.ok) {
-        console.log('Email успішно відправлено:', data.message);
+        console.log("Email успішно відправлено:", data.message);
       } else {
-        console.error('Помилка:', data.error);
+        console.error("Помилка:", data.error);
       }
     } catch (err) {
-      console.error('Помилка під час відправки запиту:', err);
+      console.error("Помилка під час відправки запиту:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getCountriesByLanguage = lang => {
+  const getCountriesByLanguage = (lang) => {
     return Object.entries(countries.getNames(lang)).map(([code, name]) => ({
       value: code,
       label: name,
@@ -455,39 +548,39 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     <>
       <div className={styles.orderForm}>
         <form onSubmit={handleSubmit} className={styles.orderForm__form}>
-          <h1>{t('Create a lawyer request')}:</h1>
+          <h1>{t("Create a lawyer request")}:</h1>
           <ul>
             <button
               type="button"
               className={styles.orderForm__form_button_fill}
               onClick={() => {
-                setFormData(prevData => ({
+                setFormData((prevData) => ({
                   ...prevData,
-                  name: userCredentials?.name || '',
-                  surname: userCredentials?.surname || '',
-                  fatherName: userCredentials?.fatherName || '',
-                  email: userCredentials?.email || '',
-                  birthday: userCredentials?.birthday || '',
-                  citizenship: userCredentials?.citizenship || '',
-                  passport: userCredentials?.passport || '',
+                  name: userCredentials?.name || "",
+                  surname: userCredentials?.surname || "",
+                  fatherName: userCredentials?.fatherName || "",
+                  email: userCredentials?.email || "",
+                  birthday: userCredentials?.birthday || "",
+                  citizenship: userCredentials?.citizenship || "",
+                  passport: userCredentials?.passport || "",
                   residence: {
-                    address: userCredentials?.address_1 || '',
-                    city: userCredentials?.city || '',
-                    country: userCredentials?.country || '',
+                    address: userCredentials?.address_1 || "",
+                    city: userCredentials?.city || "",
+                    country: userCredentials?.country || "",
                   },
-                  inn: userCredentials?.inn || '',
+                  inn: userCredentials?.inn || "",
                 }));
               }}
             >
-              {t('Fill fields')}
+              {t("Fill fields")}
             </button>
 
-            {visibleFields.map(field => {
-              const value = getNestedValue(formData, field) || '';
+            {visibleFields.map((field) => {
+              const value = getNestedValue(formData, field) || "";
               const isDanger =
                 patternInput[field] && !patternInput[field].test(value);
-              const inputType = inputTypes[field] || 'text';
-              const isFatherName = field === 'fatherName';
+              const inputType = inputTypes[field] || "text";
+              const isFatherName = field === "fatherName";
               const inputClass = isFatherName
                 ? styles.orderForm__form_select
                 : isDanger
@@ -498,15 +591,15 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                 <li key={field}>
                   <label className={styles.orderForm__form_lable}>
                     <span className={styles.orderForm__form_span}>
-                      {t(fieldInputForForm[field]) || field}:{' '}
-                      {field !== 'fatherName' && (
+                      {t(fieldInputForForm[field]) || field}:{" "}
+                      {field !== "fatherName" && (
                         <span className={styles.orderForm__form_required}>
                           *
                         </span>
                       )}
                     </span>
 
-                    {field === 'citizenship' ? (
+                    {field === "citizenship" ? (
                       <select
                         className={
                           !value
@@ -515,9 +608,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         }
                         name={field}
                         value={value}
-                        onChange={e => {
+                        onChange={(e) => {
                           const { name, value } = e.target;
-                          setFormData(prevData => ({
+                          setFormData((prevData) => ({
                             ...prevData,
                             [name]: value,
                           }));
@@ -525,15 +618,15 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         required
                       >
                         <option value="" disabled>
-                          {t('Select a country')}
+                          {t("Select a country")}
                         </option>
-                        {countryList.map(country => (
+                        {countryList.map((country) => (
                           <option key={country.value} value={country.label}>
                             {country.label}
                           </option>
                         ))}
                       </select>
-                    ) : field === 'recipient.name' ? (
+                    ) : field === "recipient.name" ? (
                       <select
                         className={
                           !value
@@ -541,38 +634,38 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                             : styles.orderForm__form_select
                         }
                         name="recipient.name"
-                        value={formData.recipient?.name || ''}
-                        onChange={e => {
+                        value={formData.recipient?.name || ""}
+                        onChange={(e) => {
                           const { value } = e.target;
 
-                          const selectedTCK = tck.find(t => t.name === value);
+                          const selectedTCK = tck.find((t) => t.name === value);
 
-                          setFormData(prevData => ({
+                          setFormData((prevData) => ({
                             ...prevData,
                             recipient: {
                               ...prevData.recipient,
                               name: value,
-                              address: selectedTCK?.email || '',
+                              address: selectedTCK?.email || "",
                             },
                           }));
                         }}
                         required
                       >
                         <option value="" disabled>
-                          {t('Select a TCK')}
+                          {t("Select a TCK")}
                         </option>
-                        {tck.map(tck => (
+                        {tck.map((tck) => (
                           <option key={tck.id} value={tck.name}>
                             {tck.name}
                           </option>
                         ))}
                       </select>
-                    ) : field === 'recipient.address' ? (
+                    ) : field === "recipient.address" ? (
                       <input
                         className={inputClass}
                         type="text"
                         name="recipient.address"
-                        value={formData.recipient?.address || ''}
+                        value={formData.recipient?.address || ""}
                         readOnly
                       />
                     ) : (
@@ -580,35 +673,35 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                         className={inputClass}
                         type={inputType}
                         name={field}
-                        value={inputType !== 'file' ? value : undefined}
+                        value={inputType !== "file" ? value : undefined}
                         pattern={patternInput[field]?.source || undefined}
-                        placeholder={placeHolder[field] || ''}
-                        onChange={e => {
+                        placeholder={placeHolder[field] || ""}
+                        onChange={(e) => {
                           const { name, value, files } = e.target;
 
-                          if (name === 'requesterFile' && files?.length > 0) {
+                          if (name === "requesterFile" && files?.length > 0) {
                             handleChangeForFile(e);
-                          } else if (name.startsWith('recipient.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("recipient.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               recipient: {
                                 ...prevData.recipient,
                                 [key]: value,
                               },
                             }));
-                          } else if (name.startsWith('residence.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("residence.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               residence: {
                                 ...prevData.residence,
                                 [key]: value,
                               },
                             }));
-                          } else if (name.startsWith('date.')) {
-                            const key = name.split('.')[1];
-                            setFormData(prevData => ({
+                          } else if (name.startsWith("date.")) {
+                            const key = name.split(".")[1];
+                            setFormData((prevData) => ({
                               ...prevData,
                               date: {
                                 ...prevData.date,
@@ -616,7 +709,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                               },
                             }));
                           } else {
-                            setFormData(prevData => ({
+                            setFormData((prevData) => ({
                               ...prevData,
                               [name]: value,
                             }));
@@ -634,7 +727,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
                           : styles.form__validate__hide
                       }
                     >
-                      {t('Please use pattern')}: {placeHolder[field]}
+                      {t("Please use pattern")}: {placeHolder[field]}
                     </span>
                   )}
                 </li>
@@ -646,12 +739,12 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             type="button"
             className={styles.orderForm__form_button}
             onClick={() => {
-              generatePDFPreview('lawyersRequest');
+              generatePDFPreview("lawyersRequest");
             }}
           >
-            {isLoading ? t('Generating...') : t('Lawyer`s request generate')}
+            {isLoading ? t("Generating...") : t("Lawyer`s request generate")}
           </button>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <div className={styles.checkbox_wrapper_29}>
             <div>
@@ -669,9 +762,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               <label
                 className={styles.label}
                 htmlFor="agreement-checkbox"
-                onClick={() => generatePDFPreview('agreement')}
+                onClick={() => generatePDFPreview("agreement")}
               >
-                {t('I consent to the processing of personal data')}
+                {t("I consent to the processing of personal data")}
               </label>
             </div>
 
@@ -690,10 +783,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
               <label
                 className={styles.label}
                 htmlFor="contract-checkbox"
-                onClick={() => generatePDFPreview('contract')}
+                onClick={() => generatePDFPreview("contract")}
               >
                 {t(
-                  'I consent to the conclusion of a legal assistance agreement.'
+                  "I consent to the conclusion of a legal assistance agreement."
                 )}
               </label>
             </div>
@@ -704,7 +797,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             type="submit"
             className={styles.orderForm__form_button}
           >
-            {isLoading ? t('Saving...') : t('Next')}
+            {isLoading ? t("Saving...") : t("Next")}
           </button>
 
           <button
@@ -712,7 +805,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             type="button"
             className={styles.orderForm__form_button}
           >
-            {isLoading ? t('Sending') : t('Send')}
+            {isLoading ? t("Sending") : t("Send")}
           </button>
         </form>
       </div>
