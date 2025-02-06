@@ -49,6 +49,116 @@ export default function HistoryPage() {
     }
   }, [user]);
 
+  const [paymentStatus, setPaymentStatus] = useState(null);
+  let paymentCheckInterval;
+
+  const checkPaymentStatus = async (orderId) => {
+    if (!orderId) {
+      console.error("No order ID provided");
+      return;
+    }
+
+    try {
+      // console.log(`Перевірка статусу для orderId: ${orderId}`);
+
+      const response = await fetch("/api/check-payment-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: orderId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        // alert(t("Payment successful!"));
+
+        setUserRequests((prevRequests) =>
+          prevRequests.map((req) =>
+            req.orderId === orderId ? { ...req, status: "paid" } : req
+          )
+        );
+
+        await fetch("/api/update-payment-status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: user.uid,
+            order_id: orderId,
+            status: "paid",
+          }),
+        });
+
+        clearInterval(paymentCheckInterval);
+      }
+    } catch (error) {
+      console.error("Error checking payment status:", error);
+      alert(t("Error checking payment status. Please try again later."));
+    }
+  };
+
+  const handlePayment = async (request) => {
+    try {
+      const { title, orderId } = request;
+
+      if (!orderId) {
+        console.error("No orderId found for this request");
+        return;
+      }
+
+      const paymentResponse = await fetch("/api/liqpay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: "0.1",
+          currency: "UAH",
+          description: title || "Payment",
+          order_id: orderId,
+        }),
+      });
+
+      if (!paymentResponse.ok) {
+        throw new Error("Error initializing payment");
+      }
+
+      const paymentData = await paymentResponse.json();
+
+      const paymentForm = document.createElement("form");
+      paymentForm.method = "POST";
+      paymentForm.action = "https://www.liqpay.ua/api/3/checkout";
+      paymentForm.acceptCharset = "utf-8";
+      paymentForm.target = "_blank";
+
+      const inputData = document.createElement("input");
+      inputData.type = "hidden";
+      inputData.name = "data";
+      inputData.value = paymentData.data;
+
+      const inputSignature = document.createElement("input");
+      inputSignature.type = "hidden";
+      inputSignature.name = "signature";
+      inputSignature.value = paymentData.signature;
+
+      paymentForm.appendChild(inputData);
+      paymentForm.appendChild(inputSignature);
+      document.body.appendChild(paymentForm);
+
+      paymentForm.submit();
+      document.body.removeChild(paymentForm);
+
+      paymentCheckInterval = setInterval(
+        () => checkPaymentStatus(orderId),
+        5000
+      );
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      setPaymentStatus("error");
+    }
+  };
+
   return user ? (
     <Layout
       type="service page"
@@ -111,6 +221,21 @@ export default function HistoryPage() {
                               {it.title}
                             </span>
                           </li>
+                          {it.status === "pending" && (
+                            <button
+                              className={styl.payButton}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handlePayment({
+                                  title: it.title,
+                                  orderId: it.orderId,
+                                });
+                              }}
+                            >
+                              {t("Pay Now")}
+                            </button>
+                          )}
+
                           <li
                             className={styl.profile__item}
                             style={{ alignItems: "center" }}
