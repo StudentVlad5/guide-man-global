@@ -5,7 +5,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { updateDocumentInCollection } from "../../helpers/firebaseControl";
+import { updateDocumentInCollection } from "../../../helpers/firebaseControl";
 
 export default async function handler(req, res) {
   console.log("Received update request:", req.body);

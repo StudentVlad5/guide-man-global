@@ -60,15 +60,15 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   const [formData, setFormData] = useState({
     id: Math.floor(Date.now() * Math.random()).toString(),
-    uid: user?.uid || '',
+    uid: user?.uid || "",
     paymentStatus: paymentStatus,
     orderId: orderId,
-    citizenship: '', //ВСІ ФОРМИ
-    name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: '', //ВСІ ФОРМИ
-    birthday: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    citizenship: "", //ВСІ ФОРМИ
+    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: "", //ВСІ ФОРМИ
+    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
       address: "",
       city: "",
@@ -335,7 +335,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     }
 
     try {
-      const response = await fetch("/api/check-payment-status", {
+      const response = await fetch("/api/liqpay/check-payment-status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order_id: orderId }),
@@ -360,7 +360,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           )
         );
 
-        await fetch("/api/update-payment-status", {
+        await fetch("/api/liqpay/update-payment-status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -369,7 +369,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             status: data.status,
           }),
         });
-
+        handleDocuSign();
         clearInterval(paymentCheckInterval);
       }
       // } else if (data.status === "error") {
@@ -405,7 +405,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
       const returnUrl = `${window.location.origin}${router.asPath}`;
 
-      const paymentResponse = await fetch("/api/liqpay", {
+      const paymentResponse = await fetch("/api/liqpay/liqpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
