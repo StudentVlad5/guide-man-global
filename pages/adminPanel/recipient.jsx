@@ -4,41 +4,29 @@ import styl from '../../styles/lawyersRequestForm.module.scss';
 import st from '../../styles/formPage.module.scss';
 import { db } from '../../firebase';
 import { Modal } from '../../components/Modal';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import Link from 'next/link';
+import Image from 'next/image';
 import { placeHolder, patternInput } from '../../helpers/constant';
 import { updateDocumentInCollection } from '../../helpers/firebaseControl';
-import Image from 'next/image';
 
-const PAGE_SIZE = 10;
-
-export default function AdminOrders() {
-  const [orders, setOrders] = useState([]);
-  const [page, setPage] = useState(1);
+export default function AdminRecipient() {
+  const [recipient, setRecipient] = useState([]);
   const [search, setSearch] = useState('');
-  const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [editOrder, setEditOrder] = useState(null);
+  const [editRecipient, setEditRecipient] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
-  const [checkFetch, setcheckFetch] = useState(false);
+  const [checkFetch, setCheckFetch] = useState(false);
 
   useEffect(() => {
-    fetchOrders();
-  }, [page, search]);
+    fetchRecipient();
+  }, [search]);
 
   useEffect(() => {
     if (checkFetch) {
       const renewFetch = setTimeout(() => {
-        fetchUsers();
+        fetchRecipient();
       }, 2000);
       return () => {
         clearTimeout(renewFetch);
@@ -46,107 +34,91 @@ export default function AdminOrders() {
     }
   }, [checkFetch, isModal]);
 
-  const fetchOrders = async () => {
+  const fetchRecipient = async () => {
     setLoading(true);
-    const ordersRef = collection(db, 'userRequests');
-    let q = query(ordersRef, orderBy('name'), limit(PAGE_SIZE));
+    const recipientRef = collection(db, 'recipient');
+    let q = query(recipientRef, orderBy('title'));
 
     if (search) {
       q = query(
-        ordersRef,
-        where('name', '>=', search),
-        where('name', '<=', search + '\uf8ff'),
-        orderBy('name'),
-        limit(PAGE_SIZE)
+        recipientRef,
+        where('title', '>=', search),
+        where('title', '<=', search + '\uf8ff'),
+        orderBy('title')
       );
     }
 
-    if (page > 1 && lastVisible) {
-      q = query(q, startAfter(lastVisible));
-    }
-
     const querySnapshot = await getDocs(q);
-    const userList = querySnapshot.docs.map(doc => ({
+    const recipientList = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
-    setOrders([...userList]);
-    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-    setLastVisible(lastVisibleDoc);
-
+    setRecipient([...recipientList]);
     setLoading(false);
   };
+  // console.log(editRecipient);
 
   const handleEdit = id => {
     setIsModal(true);
-    setEditOrder(orders.find(it => it.id === id));
+    setEditRecipient(recipient.find(it => it.id === id));
   };
 
   const handleDelete = async el => {
     try {
-      await removeDocumentFromCollection(`${el.type}`, el.idPost);
+      await removeDocumentFromCollection(`recipient`, el.idPost);
+      setEditRecipient(recipient.find(it => it.id === id));
     } catch (error) {
       alert(error);
     }
   };
 
-  const handlePageChange = newPage => {
-    setPage(newPage);
-  };
-
   const handleSearchChange = e => {
     setSearch(e.target.value);
-    setPage(1);
   };
 
   const handleModal = () => {
-    setcheckFetch(true);
+    setCheckFetch(true);
     setIsModal(!isModal);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     const check = updateDocumentInCollection(
-      'userRequests',
-      { ...editOrder },
-      editOrder.id
+      'recipient',
+      { ...editRecipient },
+      editRecipient.id
     );
     if (check) {
       setIsModal(false);
-      setEditOrder('');
+      setEditRecipient('');
     }
   };
   return (
     <div className={styles.main}>
       <h1>
-        <Link href="/adminPanel"> ← Панель администраторa</Link> / Заказы
+        <Link href="/adminPanel"> ← Панель администраторa</Link> / Адрес
+        госорганов
       </h1>
       <div className={styles.category}>
         <div>
-          <h1>Поиск запросов клиентов</h1>
+          <h1>Поиск госоргана</h1>
           <input
             type="text"
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по имени"
+            placeholder="Поиск по названию"
           />
 
-          {/* Table displaying user data */}
-          {orders && (
+          {/* Table displaying recipient data */}
+          {recipient && (
             <table className={styles.tablewidth}>
               <thead>
                 <tr>
                   <th className={styles.tableHead}>Name</th>
-                  <th className={`${styles.tableHead} ${styles.tableHide}`}>
-                    Surname
-                  </th>
-                  <th className={`${styles.tableHead}`}>dateCreating</th>
-                  <th className={`${styles.tableHead} ${styles.tableHide}`}>
-                    Email
-                  </th>
                   <th className={`${styles.tableHead}`}>Title</th>
-                  <th className={`${styles.tableHead}`}>Status</th>
+                  <th className={`${styles.tableHead}`}>Application</th>
+                  <th className={`${styles.tableHead}`}>Address</th>
                   <th className={styles.tableHead}>Actions</th>
                 </tr>
               </thead>
@@ -156,26 +128,24 @@ export default function AdminOrders() {
                     <td colSpan="3">Loading...</td>
                   </tr>
                 ) : (
-                  orders.map(order => (
-                    <tr key={order.id}>
-                      <td className={styles.tableHead}>{order?.name}</td>
-                      <td className={`${styles.tableHead} ${styles.tableHide}`}>
-                        {order?.surname}
+                  recipient.map(recipient => (
+                    <tr key={recipient.id}>
+                      <td className={styles.tableHead}>{recipient?.name}</td>
+                      <td className={`${styles.tableHead}`}>
+                        {recipient?.title}
                       </td>
                       <td className={`${styles.tableHead}`}>
-                        {order?.dateCreating}
+                        {recipient?.application}
                       </td>
-                      <td className={`${styles.tableHead} ${styles.tableHide}`}>
-                        {order?.email}
+                      <td className={`${styles.tableHead}`}>
+                        {recipient?.address}
                       </td>
-                      <td className={`${styles.tableHead}`}>{order?.title}</td>
-                      <td className={`${styles.tableHead}`}>{order?.status}</td>
                       <td
                         className={styles.tableHead}
                         style={{ textAlign: 'center' }}
                       >
                         <button
-                          onClick={() => handleEdit(order.id)}
+                          onClick={() => handleEdit(recipient.id)}
                           style={{ border: 'none' }}
                         >
                           <Image
@@ -186,7 +156,7 @@ export default function AdminOrders() {
                           />
                         </button>
                         <button
-                          onClick={() => handleDelete(order)}
+                          onClick={() => handleDelete(recipient)}
                           style={{ border: 'none', marginLeft: '10px' }}
                         >
                           <Image
@@ -203,38 +173,22 @@ export default function AdminOrders() {
               </tbody>
             </table>
           )}
-
-          {/* Pagination */}
-          <div>
-            <button
-              disabled={page === 1}
-              onClick={() => handlePageChange(page - 1)}
-            >
-              Previous
-            </button>
-            <button
-              disabled={!lastVisible}
-              onClick={() => handlePageChange(page + 1)}
-            >
-              Next
-            </button>
-          </div>
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные пользователя'}
+            title={'Редактировать данные'}
             handleModal={handleModal}
             form={
               <form className={st.form}>
                 <ul className="flexWrap">
-                  {Object.keys(editOrder) &&
-                    Object.keys(editOrder).map(it => {
-                      return Array.isArray(editOrder[it]) ||
-                        typeof editOrder[it] === 'object'
-                        ? Object.keys(editOrder[it]).map((i, ind) => {
+                  {Object.keys(editRecipient) &&
+                    Object.keys(editRecipient).map(it => {
+                      return Array.isArray(editRecipient[it]) ||
+                        typeof editRecipient[it] === 'object'
+                        ? Object.keys(editRecipient[it]).map((i, ind) => {
                             if (
-                              !Array.isArray(editOrder[it[i]]) &&
-                              typeof editOrder[it[i]] === 'object'
+                              !Array.isArray(editRecipient[it[i]]) &&
+                              typeof editRecipient[it[i]] === 'object'
                             )
                               return (
                                 <li key={ind} className={st.form__li}>
@@ -255,7 +209,7 @@ export default function AdminOrders() {
                                     type="text"
                                     id={ind}
                                     name={i}
-                                    value={editOrder[it[i]]}
+                                    value={editRecipient[it[i]]}
                                     pattern={patternInput[it[i]]?.source}
                                     placeholder={placeHolder[it[i]]}
                                     onChange={e => {
@@ -269,10 +223,10 @@ export default function AdminOrders() {
                                       } else {
                                         setValidateStatus(false);
                                       }
-                                      setEditOrder({
-                                        ...editOrder,
+                                      setEditRecipient({
+                                        ...editRecipient,
                                         [it]: {
-                                          ...editOrder[it],
+                                          ...editRecipient[it],
                                           [i]: e.currentTarget.value,
                                         },
                                       });
@@ -297,7 +251,7 @@ export default function AdminOrders() {
                               <input
                                 className={
                                   patternInput[it] &&
-                                  !patternInput[it].test(editOrder[it])
+                                  !patternInput[it].test(editRecipient[it])
                                     ? st.form__input__danger
                                     : styl.orderForm__form_input
                                 }
@@ -311,7 +265,7 @@ export default function AdminOrders() {
                                 type="text"
                                 id={it}
                                 name={it}
-                                value={editOrder[it]}
+                                value={editRecipient[it]}
                                 pattern={patternInput[it]?.source}
                                 placeholder={placeHolder[it]}
                                 onChange={e => {
@@ -323,8 +277,8 @@ export default function AdminOrders() {
                                   } else {
                                     setValidateStatus(false);
                                   }
-                                  setEditOrder({
-                                    ...editOrder,
+                                  setEditRecipient({
+                                    ...editRecipient,
                                     [it]: e.currentTarget.value,
                                   });
                                 }}

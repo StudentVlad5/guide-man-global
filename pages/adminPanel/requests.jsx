@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import styles from '../../styles/adminPanel.module.scss';
 import { db } from '../../firebase';
 import {
-  deleteImageFromStorage,
+  getCollection,
+  addDocumentToCollection,
+  updateDocumentInCollection,
+  deleteDocumentFromCollection,
   removeDocumentFromCollection,
 } from '../../helpers/firebaseControl';
 import { Modal } from '../../components/Modal';
 import { InformationForm } from '../../components/InformationForm';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function AdminRequests() {
   const [requests, setRequests] = useState([]);

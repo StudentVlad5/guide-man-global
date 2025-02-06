@@ -143,6 +143,23 @@ export default function AdminPanel() {
             <div className={styles.body__item}>
               <div
                 className={styles.body__item__content}
+                onClick={() => handleClickCategory('recipient')}
+              >
+                Адреса госорганов
+              </div>
+
+              {/* <button
+                name="recipient"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'адресат')}
+              >
+                +
+              </button> */}
+            </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
                 onClick={() => handleClickCategory('users')}
               >
                 Пользователи
@@ -154,7 +171,7 @@ export default function AdminPanel() {
                 className={styles.body__item__content}
                 onClick={() => handleClickCategory('users_requests')}
               >
-                Заказы
+                Запросы пользователей
               </div>
             </div>
           </div>
