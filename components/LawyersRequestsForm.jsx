@@ -314,8 +314,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             status: data.status,
           }),
         });
-        handleSendEmail(formData.id);
         handleDocuSign();
+        handleSendEmail(formData.id);
         clearInterval(paymentCheckInterval);
       }
       // } else if (data.status === "error") {
