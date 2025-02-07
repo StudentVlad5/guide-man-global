@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import styles from '../../styles/adminPanel.module.scss';
-import styl from '../../styles/lawyersRequestForm.module.scss';
-import st from '../../styles/formPage.module.scss';
-import { db } from '../../firebase';
-import { Modal } from '../../components/Modal';
+import { useEffect, useState } from "react";
+import styles from "../../styles/adminPanel.module.scss";
+import styl from "../../styles/lawyersRequestForm.module.scss";
+import st from "../../styles/formPage.module.scss";
+import { db } from "../../firebase";
+import { Modal } from "../../components/Modal";
 import {
   collection,
   getDocs,
@@ -12,24 +12,26 @@ import {
   orderBy,
   limit,
   startAfter,
-} from 'firebase/firestore';
-import Link from 'next/link';
-import Image from 'next/image';
-import { placeHolder, patternInput } from '../../helpers/constant';
-import saveCredentials from '../api/userProfile';
+} from "firebase/firestore";
+import Link from "next/link";
+import Image from "next/image";
+import { placeHolder, patternInput } from "../../helpers/constant";
+import saveCredentials from "../api/userProfile";
 
 const PAGE_SIZE = 10;
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [lastVisible, setLastVisible] = useState(null);
+  const [checkPage, setCheckPage] = useState(1);
+  const [countOFPages, setCountOFPages] = useState(1);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
   const [checkFetch, setcheckFetch] = useState(false);
+  const [lastVisiblePerPage, setLastVisiblePerPage] = useState({});
 
   useEffect(() => {
     fetchUsers();
@@ -48,41 +50,66 @@ export default function AdminUsers() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const usersRef = collection(db, 'users');
-    let q = query(usersRef, orderBy('name'), limit(PAGE_SIZE));
+    const usersRef = collection(db, "users");
+    let q = query(usersRef, orderBy("email"), limit(PAGE_SIZE));
 
     if (search) {
       q = query(
         usersRef,
-        where('name', '>=', search),
-        where('name', '<=', search + '\uf8ff'),
-        orderBy('name'),
+        where("email", ">=", search),
+        where("email", "<=", search + "\uf8ff"),
+        orderBy("email"),
         limit(PAGE_SIZE)
       );
     }
 
-    if (page > 1 && lastVisible) {
-      q = query(q, startAfter(lastVisible));
+    if (page > 1 && lastVisiblePerPage[page - 1]) {
+      q = query(q, startAfter(lastVisiblePerPage[page - 1]));
+    } else if (page < checkPage && lastVisiblePerPage[page + 1] && page !== 1) {
+      q = query(q, startBefore(lastVisiblePerPage[page + 1]));
     }
 
     const querySnapshot = await getDocs(q);
-    const userList = querySnapshot.docs.map(doc => ({
+    const userList = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    setUsers([...userList]);
-    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-    setLastVisible(lastVisibleDoc);
 
+    setUsers(userList);
+
+    if (querySnapshot.docs.length > 0) {
+      setLastVisiblePerPage((prev) => ({
+        ...prev,
+        [page]: querySnapshot.docs[querySnapshot.docs.length - 1],
+      }));
+    }
+
+    setCheckPage(page);
+    try {
+      let querySnapshotCount = await getDocs(usersRef);
+      if (search) {
+        querySnapshotCount = await getDocs(
+          query(
+            usersRef,
+            where("email", ">=", search),
+            where("email", "<=", search + "\uf8ff")
+          )
+        );
+      }
+      const collectionLength = querySnapshotCount.size;
+      setCountOFPages(Math.ceil(collectionLength / PAGE_SIZE));
+    } catch (error) {
+      console.error("Error getting documents:", error);
+    }
     setLoading(false);
   };
 
-  const handleEdit = id => {
+  const handleEdit = (id) => {
     setIsModal(true);
-    setEditUser(users.find(it => it.id === id));
+    setEditUser(users.find((it) => it.id === id));
   };
 
-  const handleDelete = async el => {
+  const handleDelete = async (el) => {
     try {
       await removeDocumentFromCollection(`${el.type}`, el.idPost);
     } catch (error) {
@@ -90,11 +117,12 @@ export default function AdminUsers() {
     }
   };
 
-  const handlePageChange = newPage => {
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > countOFPages) return;
     setPage(newPage);
   };
 
-  const handleSearchChange = e => {
+  const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setPage(1);
   };
@@ -104,14 +132,14 @@ export default function AdminUsers() {
     setIsModal(!isModal);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const check = saveCredentials({
       ...editUser,
     });
     if (check) {
       setIsModal(false);
-      setEditUser('');
+      setEditUser("");
     }
   };
 
@@ -128,7 +156,7 @@ export default function AdminUsers() {
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Search by name"
+            placeholder="Search by email"
           />
 
           {/* Table displaying user data */}
@@ -159,7 +187,7 @@ export default function AdminUsers() {
                     <td colSpan="3">Loading...</td>
                   </tr>
                 ) : (
-                  users.map(user => (
+                  users.map((user) => (
                     <tr key={user.id}>
                       <td className={styles.tableHead}>{user?.name}</td>
                       <td className={`${styles.tableHead} ${styles.tableHide}`}>
@@ -177,11 +205,11 @@ export default function AdminUsers() {
                       </td>
                       <td
                         className={styles.tableHead}
-                        style={{ textAlign: 'center' }}
+                        style={{ textAlign: "center" }}
                       >
                         <button
                           onClick={() => handleEdit(user.id)}
-                          style={{ border: 'none' }}
+                          style={{ border: "none" }}
                         >
                           <Image
                             src="/edit_icon.svg"
@@ -192,7 +220,7 @@ export default function AdminUsers() {
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          style={{ border: 'none', marginLeft: '10px' }}
+                          style={{ border: "none", marginLeft: "10px" }}
                         >
                           <Image
                             src="/del.svg"
@@ -210,37 +238,41 @@ export default function AdminUsers() {
           )}
 
           {/* Pagination */}
-          <div>
+          <div className={styles.pagination}>
             <button
+              className={styles.pagination__button}
               disabled={page === 1}
               onClick={() => handlePageChange(page - 1)}
             >
               Previous
             </button>
             <button
-              disabled={!lastVisible}
+              className={styles.pagination__button}
+              disabled={page >= countOFPages}
               onClick={() => handlePageChange(page + 1)}
             >
               Next
             </button>
           </div>
+          <p>{`Текущая страница ${page}`}</p>
+          <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные пользователя'}
+            title={"Редактировать данные пользователя"}
             handleModal={handleModal}
             form={
               <form className={st.form}>
                 <ul className="flexWrap">
                   {Object.keys(editUser) &&
-                    Object.keys(editUser).map(it => {
+                    Object.keys(editUser).map((it) => {
                       return (
-                        it !== 'id' &&
-                        it !== 'uid' && (
+                        it !== "id" &&
+                        it !== "uid" && (
                           <li key={it} className={st.form__li}>
                             <span
                               className={styl.orderForm__form_span}
-                              style={{ color: '#fff' }}
+                              style={{ color: "#fff" }}
                             >
                               {it}:
                             </span>
@@ -252,11 +284,11 @@ export default function AdminUsers() {
                                   : styl.orderForm__form_input
                               }
                               style={{
-                                width: '100%',
-                                padding: '0 16px',
-                                height: '48px',
-                                display: 'flex',
-                                alignItems: 'center',
+                                width: "100%",
+                                padding: "0 16px",
+                                height: "48px",
+                                display: "flex",
+                                alignItems: "center",
                               }}
                               type="text"
                               id={it}
@@ -264,7 +296,7 @@ export default function AdminUsers() {
                               value={editUser[it]}
                               pattern={patternInput[it]?.source}
                               placeholder={placeHolder[it]}
-                              onChange={e => {
+                              onChange={(e) => {
                                 if (
                                   patternInput[it] &&
                                   !patternInput[it].test(e.target.value)
@@ -288,7 +320,7 @@ export default function AdminUsers() {
                                   : st.form__validate__hide
                               }
                             >
-                              {'Please use pattern'}: {placeHolder[it]}
+                              {"Please use pattern"}: {placeHolder[it]}
                             </span>
                           </li>
                         )
@@ -298,11 +330,11 @@ export default function AdminUsers() {
                 <button
                   type="submit"
                   className={`button ${st.form__button}`}
-                  style={{ marginTop: '20px' }}
-                  onClick={e => handleSubmit(e)}
+                  style={{ marginTop: "20px" }}
+                  onClick={(e) => handleSubmit(e)}
                   disabled={validateStatus}
                 >
-                  {'submit'}
+                  {"submit"}
                 </button>
               </form>
             }

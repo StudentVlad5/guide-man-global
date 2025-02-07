@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import styles from '../../styles/adminPanel.module.scss';
-import styl from '../../styles/lawyersRequestForm.module.scss';
-import st from '../../styles/formPage.module.scss';
-import { db } from '../../firebase';
-import { Modal } from '../../components/Modal';
+import { useEffect, useState } from "react";
+import styles from "../../styles/adminPanel.module.scss";
+import styl from "../../styles/lawyersRequestForm.module.scss";
+import st from "../../styles/formPage.module.scss";
+import { db } from "../../firebase";
+import { Modal } from "../../components/Modal";
 import {
   collection,
   getDocs,
@@ -12,24 +12,26 @@ import {
   orderBy,
   limit,
   startAfter,
-} from 'firebase/firestore';
-import Link from 'next/link';
-import { placeHolder, patternInput } from '../../helpers/constant';
-import { updateDocumentInCollection } from '../../helpers/firebaseControl';
-import Image from 'next/image';
+} from "firebase/firestore";
+import Link from "next/link";
+import { placeHolder, patternInput } from "../../helpers/constant";
+import { updateDocumentInCollection } from "../../helpers/firebaseControl";
+import Image from "next/image";
 
 const PAGE_SIZE = 10;
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [lastVisible, setLastVisible] = useState(null);
+  const [checkPage, setCheckPage] = useState(1);
+  const [countOFPages, setCountOFPages] = useState(1);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [editOrder, setEditOrder] = useState(null);
   const [validateStatus, setValidateStatus] = useState(false);
   const [checkFetch, setcheckFetch] = useState(false);
+  const [lastVisiblePerPage, setLastVisiblePerPage] = useState({});
 
   useEffect(() => {
     fetchOrders();
@@ -48,41 +50,64 @@ export default function AdminOrders() {
 
   const fetchOrders = async () => {
     setLoading(true);
-    const ordersRef = collection(db, 'userRequests');
-    let q = query(ordersRef, orderBy('name'), limit(PAGE_SIZE));
+    const ordersRef = collection(db, "userRequests");
+    let q = query(ordersRef, orderBy("email"), limit(PAGE_SIZE));
 
     if (search) {
       q = query(
         ordersRef,
-        where('name', '>=', search),
-        where('name', '<=', search + '\uf8ff'),
-        orderBy('name'),
+        where("email", ">=", search),
+        where("email", "<=", search + "\uf8ff"),
+        orderBy("email"),
         limit(PAGE_SIZE)
       );
     }
 
-    if (page > 1 && lastVisible) {
-      q = query(q, startAfter(lastVisible));
+    if (page > 1 && lastVisiblePerPage[page - 1]) {
+      q = query(q, startAfter(lastVisiblePerPage[page - 1]));
+    } else if (page < checkPage && lastVisiblePerPage[page + 1] && page !== 1) {
+      q = query(q, startBefore(lastVisiblePerPage[page + 1]));
     }
 
     const querySnapshot = await getDocs(q);
-    const userList = querySnapshot.docs.map(doc => ({
+    const userList = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    setOrders([...userList]);
-    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-    setLastVisible(lastVisibleDoc);
+    setOrders(userList);
+    if (querySnapshot.docs.length > 0) {
+      setLastVisiblePerPage((prev) => ({
+        ...prev,
+        [page]: querySnapshot.docs[querySnapshot.docs.length - 1],
+      }));
+    }
 
+    setCheckPage(page);
+    try {
+      let querySnapshotCount = await getDocs(ordersRef);
+      if (search) {
+        querySnapshotCount = await getDocs(
+          query(
+            ordersRef,
+            where("email", ">=", search),
+            where("email", "<=", search + "\uf8ff")
+          )
+        );
+      }
+      const collectionLength = querySnapshotCount.size;
+      setCountOFPages(Math.ceil(collectionLength / PAGE_SIZE));
+    } catch (error) {
+      console.error("Error getting documents:", error);
+    }
     setLoading(false);
   };
 
-  const handleEdit = id => {
+  const handleEdit = (id) => {
     setIsModal(true);
-    setEditOrder(orders.find(it => it.id === id));
+    setEditOrder(orders.find((it) => it.id === id));
   };
 
-  const handleDelete = async el => {
+  const handleDelete = async (el) => {
     try {
       await removeDocumentFromCollection(`${el.type}`, el.idPost);
     } catch (error) {
@@ -90,11 +115,12 @@ export default function AdminOrders() {
     }
   };
 
-  const handlePageChange = newPage => {
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > countOFPages) return;
     setPage(newPage);
   };
 
-  const handleSearchChange = e => {
+  const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setPage(1);
   };
@@ -104,18 +130,19 @@ export default function AdminOrders() {
     setIsModal(!isModal);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const check = updateDocumentInCollection(
-      'userRequests',
+      "userRequests",
       { ...editOrder },
       editOrder.id
     );
     if (check) {
       setIsModal(false);
-      setEditOrder('');
+      setEditOrder("");
     }
   };
+
   return (
     <div className={styles.main}>
       <h1>
@@ -129,7 +156,7 @@ export default function AdminOrders() {
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по имени"
+            placeholder="Поиск по email"
           />
 
           {/* Table displaying user data */}
@@ -156,7 +183,7 @@ export default function AdminOrders() {
                     <td colSpan="3">Loading...</td>
                   </tr>
                 ) : (
-                  orders.map(order => (
+                  orders.map((order) => (
                     <tr key={order.id}>
                       <td className={styles.tableHead}>{order?.name}</td>
                       <td className={`${styles.tableHead} ${styles.tableHide}`}>
@@ -172,11 +199,11 @@ export default function AdminOrders() {
                       <td className={`${styles.tableHead}`}>{order?.status}</td>
                       <td
                         className={styles.tableHead}
-                        style={{ textAlign: 'center' }}
+                        style={{ textAlign: "center" }}
                       >
                         <button
                           onClick={() => handleEdit(order.id)}
-                          style={{ border: 'none' }}
+                          style={{ border: "none" }}
                         >
                           <Image
                             src="/edit_icon.svg"
@@ -187,7 +214,7 @@ export default function AdminOrders() {
                         </button>
                         <button
                           onClick={() => handleDelete(order)}
-                          style={{ border: 'none', marginLeft: '10px' }}
+                          style={{ border: "none", marginLeft: "10px" }}
                         >
                           <Image
                             src="/del.svg"
@@ -205,52 +232,56 @@ export default function AdminOrders() {
           )}
 
           {/* Pagination */}
-          <div>
+          <div className={styles.pagination}>
             <button
+              className={styles.pagination__button}
               disabled={page === 1}
               onClick={() => handlePageChange(page - 1)}
             >
               Previous
             </button>
             <button
-              disabled={!lastVisible}
+              className={styles.pagination__button}
+              disabled={page >= countOFPages}
               onClick={() => handlePageChange(page + 1)}
             >
               Next
             </button>
           </div>
+          <p>{`Текущая страница ${page}`}</p>
+          <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные пользователя'}
+            title={"Редактировать данные пользователя"}
             handleModal={handleModal}
             form={
               <form className={st.form}>
                 <ul className="flexWrap">
                   {Object.keys(editOrder) &&
-                    Object.keys(editOrder).map(it => {
+                    Object.keys(editOrder).map((it) => {
                       return Array.isArray(editOrder[it]) ||
-                        typeof editOrder[it] === 'object'
+                        typeof editOrder[it] === "object"
                         ? Object.keys(editOrder[it]).map((i, ind) => {
                             if (
                               !Array.isArray(editOrder[it[i]]) &&
-                              typeof editOrder[it[i]] === 'object'
+                              typeof editOrder[it[i]] === "object"
                             )
                               return (
                                 <li key={ind} className={st.form__li}>
                                   <span
                                     className={styl.orderForm__form_span}
-                                    style={{ color: '#fff' }}
+                                    style={{ color: "#fff" }}
                                   >
                                     {i}:
                                   </span>
                                   <input
                                     style={{
-                                      width: '100%',
-                                      padding: '0 16px',
-                                      height: '48px',
-                                      display: 'flex',
-                                      alignItems: 'center',
+                                      width: "100%",
+                                      padding: "0 16px",
+                                      height: "48px",
+                                      display: "flex",
+                                      alignItems: "center",
                                     }}
                                     type="text"
                                     id={ind}
@@ -258,7 +289,7 @@ export default function AdminOrders() {
                                     value={editOrder[it[i]]}
                                     pattern={patternInput[it[i]]?.source}
                                     placeholder={placeHolder[it[i]]}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                       if (
                                         patternInput[it[i]] &&
                                         !patternInput[it[i]].test(
@@ -278,19 +309,19 @@ export default function AdminOrders() {
                                       });
                                     }}
                                   />
-                                  <span style={{ color: '#fff' }}>
+                                  <span style={{ color: "#fff" }}>
                                     {placeHolder[it[i]] &&
-                                      'Please use pattern:' +
+                                      "Please use pattern:" +
                                         placeHolder[it[i]]}
                                   </span>
                                 </li>
                               );
                           })
-                        : it !== 'id' && (
+                        : it !== "id" && (
                             <li key={it} className={st.form__li}>
                               <span
                                 className={styl.orderForm__form_span}
-                                style={{ color: '#fff' }}
+                                style={{ color: "#fff" }}
                               >
                                 {it}:
                               </span>
@@ -302,11 +333,11 @@ export default function AdminOrders() {
                                     : styl.orderForm__form_input
                                 }
                                 style={{
-                                  width: '100%',
-                                  padding: '0 16px',
-                                  height: '48px',
-                                  display: 'flex',
-                                  alignItems: 'center',
+                                  width: "100%",
+                                  padding: "0 16px",
+                                  height: "48px",
+                                  display: "flex",
+                                  alignItems: "center",
                                 }}
                                 type="text"
                                 id={it}
@@ -314,7 +345,7 @@ export default function AdminOrders() {
                                 value={editOrder[it]}
                                 pattern={patternInput[it]?.source}
                                 placeholder={placeHolder[it]}
-                                onChange={e => {
+                                onChange={(e) => {
                                   if (
                                     patternInput[it] &&
                                     !patternInput[it].test(e.target.value)
@@ -329,9 +360,9 @@ export default function AdminOrders() {
                                   });
                                 }}
                               />
-                              <span style={{ color: '#fff' }}>
+                              <span style={{ color: "#fff" }}>
                                 {placeHolder[it] &&
-                                  'Please use pattern:' + placeHolder[it]}
+                                  "Please use pattern:" + placeHolder[it]}
                               </span>
                             </li>
                           );
@@ -340,11 +371,11 @@ export default function AdminOrders() {
                 <button
                   type="submit"
                   className={`button ${st.form__button}`}
-                  style={{ marginTop: '20px' }}
-                  onClick={e => handleSubmit(e)}
+                  style={{ marginTop: "20px" }}
+                  onClick={(e) => handleSubmit(e)}
                   disabled={validateStatus}
                 >
-                  {'submit'}
+                  {"submit"}
                 </button>
               </form>
             }
