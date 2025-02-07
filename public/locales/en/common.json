@@ -127,6 +127,12 @@
     "p": "You may have used an invalid link or this page has been removed",
     "button": "Return to previous page"
   },
+  "status": {
+    "pending": "Awaiting payment",
+    "paid": "Paid",
+    "signed": "Documents signed",
+    "done": "Completed"
+  },
   "Name": "Name",
   "Surname": "Surname",
   "Fathername": "Fathername",

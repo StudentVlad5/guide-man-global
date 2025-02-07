@@ -16,6 +16,9 @@ import SideBar from "../../components/SideBar";
 import "firebase/firestore";
 import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
 import Link from "next/link";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { useLawyerRequest } from "../../hooks/useLawyerRequest";
 
 export default function HistoryPage() {
   const [userRequests, setUserRequests] = useState([]);
@@ -24,6 +27,8 @@ export default function HistoryPage() {
   const { user } = useContext(AppContext);
   const [checkInfo, setCheckInfo] = useState([]);
   console.log("userRequests", userRequests);
+
+  const { handleSendEmail, handleDocuSign } = useLawyerRequest();
 
   useEffect(() => {
     let arr = [];
@@ -72,9 +77,12 @@ export default function HistoryPage() {
       }
 
       const data = await response.json();
+      const successfulRequest = userRequests.find(
+        (req) => req.orderId === orderId
+      );
 
       if (data.status === "success") {
-        alert(t("Payment successful!"));
+        // alert(t("Payment successful!"));
 
         setUserRequests((prevRequests) =>
           prevRequests.map((req) =>
@@ -92,11 +100,12 @@ export default function HistoryPage() {
           }),
         });
 
+        handleDocuSign();
+        handleSendEmail(successfulRequest.id);
         clearInterval(paymentCheckInterval);
       }
     } catch (error) {
       console.error("Error checking payment status:", error);
-      alert(t("Error checking payment status. Please try again later."));
     }
   };
 
@@ -249,6 +258,8 @@ export default function HistoryPage() {
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
+                              data-tooltip-id="tooltip"
+                              data-tooltip-content={t("status.pending")}
                             ></div>
                             <div
                               className={
@@ -267,6 +278,8 @@ export default function HistoryPage() {
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
+                              data-tooltip-id="tooltip"
+                              data-tooltip-content={t("status.paid")}
                             ></div>
                             <div
                               className={
@@ -281,6 +294,8 @@ export default function HistoryPage() {
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
+                              data-tooltip-id="tooltip"
+                              data-tooltip-content={t("status.signed")}
                             ></div>
                             <div
                               className={
@@ -295,7 +310,10 @@ export default function HistoryPage() {
                                   ? `${styl.round} ${styl.green}`
                                   : styl.round
                               }
+                              data-tooltip-id="tooltip"
+                              data-tooltip-content={t("status.done")}
                             ></div>
+                            <Tooltip id="tooltip" place="top" effect="solid" />
                           </li>
                           <li
                             className={styl.profile__item}

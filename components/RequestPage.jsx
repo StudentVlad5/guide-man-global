@@ -11,6 +11,7 @@ import { QRCode } from "react-qrcode-logo";
 import { useEffect, useState } from "react";
 import LawyersRequestForm from "./LawyersRequestsForm";
 import { auth } from "../helpers/firebaseControl";
+import { useLawyerRequest } from "../hooks/useLawyerRequest";
 
 export default function LawyersRequestPage({ item, buttonName, linkPath }) {
   const { locale } = useRouter();
@@ -28,6 +29,10 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
   const handleOpenForm = () => {
     setIsActiveForm((prevState) => !prevState);
   };
+
+  const { handleSubmit, isLoading, response } = useLawyerRequest({
+    request: item,
+  });
 
   return (
     <div className={styles.itemPage}>
@@ -79,7 +84,13 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
             </button>
             {isActiveForm && (
               <div style={{ marginTop: 60, marginBottom: 60 }}>
-                <LawyersRequestForm currentLanguage={locale} request={item} />
+                <LawyersRequestForm
+                  currentLanguage={locale}
+                  request={item}
+                  onSubmit={handleSubmit}
+                  isLoading={isLoading}
+                  response={response}
+                />
               </div>
             )}
           </div>
@@ -92,7 +103,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                 ? "Чтобы заказать услугу необходимо зарегистрироваться."
                 : "To order the service you need to register."}
             </p>
-            
+
             <Link
               href="/registration"
               className={styles.buttonDiv__button}
