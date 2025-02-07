@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useState, useContext } from "react";
+// import React, { useContext, useState } from "react";
 import { AppContext } from "../components/AppProvider";
 
 export const useLawyerRequest = (request) => {
-  const { user, userCredentials } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [paymentStatus, setPaymentStatus] = useState("");
-  const [userRequest, setUserRequest] = useState([]);
+  // const [userRequest, setUserRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
@@ -68,15 +69,15 @@ export const useLawyerRequest = (request) => {
     request: request,
   });
 
-  const handleDocuSign = async () => {
+  const handleDocuSign = async (userRequest) => {
     const res = await fetch("/api/docusign", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         signerEmail: userRequest?.request?.userEmail,
-        signerName: userCredentials.name,
-        ccEmail: "vlad_np@ukr.net",
-        ccName: "vlad",
+        signerName: userRequest?.request?.name,
+        ccEmail: "julia.j.shcherban@gmail.com",
+        ccName: "julia.j.shcherban",
         doc2File: userRequest?.request?.pdfAgreement,
         doc3File: userRequest?.request?.pdfContract,
       }),
