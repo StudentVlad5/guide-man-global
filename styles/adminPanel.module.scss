@@ -175,7 +175,7 @@
   font-family: "Trebuchet MS", sans-serif;
   transition: all 0.3s ease;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin: 20px 0;
   @include onMobile {
     width: 100%;
   }
@@ -198,5 +198,25 @@
 .tableHide {
   @include onSmallDesktop {
     display: none;
+  }
+}
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 10px;
+  @include onMobile {
+    gap: 5px;
+  }
+  &__button {
+    background-color: $white1;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: $gray;
+    }
   }
 }
