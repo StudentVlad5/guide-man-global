@@ -26,7 +26,6 @@ export default function HistoryPage() {
   const { locale, pathname } = useRouter();
   const { user } = useContext(AppContext);
   const [checkInfo, setCheckInfo] = useState([]);
-  console.log("userRequests", userRequests);
 
   const { handleSendEmail, handleDocuSign } = useLawyerRequest();
 

@@ -1,12 +1,12 @@
-import { db } from '../../firebase';
-import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore'; // Import required Firestore functions
-import { getCollectionWhereKeyValue } from '../../helpers/firebaseControl';
+import { db } from "../../firebase";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
 
 export default async function saveCredentials(userCredentials) {
   try {
     const users = await getCollectionWhereKeyValue(
-      'users',
-      'uid',
+      "users",
+      "uid",
       userCredentials.uid
     );
 
@@ -16,23 +16,20 @@ export default async function saveCredentials(userCredentials) {
     }
 
     const user = users[0];
-    const userRef = doc(db, 'users', user.idPost);
-    // const userRef = doc(db, 'users', userCredentials.uid); // Get a reference to the document using the uid
+    const userRef = doc(db, "users", user.idPost);
     const docSnapshot = await getDoc(userRef);
 
     if (docSnapshot.exists()) {
-      // If the document exists, update the data
       await updateDoc(userRef, userCredentials);
-      console.log('Credentials updated successfully!');
+      console.log("Credentials updated successfully!");
     } else {
-      // If the document doesn't exist, create it
       await setDoc(userRef, userCredentials);
-      console.log('Credentials saved successfully (new user).');
+      console.log("Credentials saved successfully (new user).");
     }
 
-    return 1; // Success
+    return 1;
   } catch (error) {
-    console.error('Error saving credentials: ', error);
-    return 0; // Error occurred
+    console.error("Error saving credentials: ", error);
+    return 0;
   }
 }

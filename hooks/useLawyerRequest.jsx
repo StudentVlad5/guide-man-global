@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-// import React, { useContext, useState } from "react";
 import { AppContext } from "../components/AppProvider";
+import { getCollectionWhereKeyValue } from "../helpers/firebaseControl";
 
 export const useLawyerRequest = (request) => {
   const { user } = useContext(AppContext);
@@ -69,26 +69,59 @@ export const useLawyerRequest = (request) => {
     request: request,
   });
 
-  const handleDocuSign = async (userRequest) => {
-    const res = await fetch("/api/docusign", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        signerEmail: userRequest?.request?.userEmail,
-        signerName: userRequest?.request?.name,
-        ccEmail: "julia.j.shcherban@gmail.com",
-        ccName: "julia.j.shcherban",
-        doc2File: userRequest?.request?.pdfAgreement,
-        doc3File: userRequest?.request?.pdfContract,
-      }),
-    });
+  const handleDocuSign = async (order_id) => {
+    let userRequest = null; // Use null for clearer checks
+    try {
+      if (order_id) {
+       await getCollectionWhereKeyValue("userRequests", "orderId", order_id).then(
+          (res) => {
+            if (res) {
+              console.log("res", res);
+              userRequest = res[0];
+            }
+          }
+        );
+      }
+      console.log("userRequest", userRequest);
+      if (userRequest) {
+        const { userEmail, name, pdfAgreement, pdfContract } =
+          userRequest || {};
+        console.log(userEmail && name && pdfAgreement && pdfContract);
+        if (userEmail && name && pdfAgreement && pdfContract) {
+          const res = await fetch("/api/docusign", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              signerEmail: userEmail,
+              signerName: name,
+              ccEmail: "julia.j.shcherban@gmail.com",
+              ccName: "julia.j.shcherban",
+              doc2File: pdfAgreement,
+              doc3File: pdfContract,
+            }),
+          });
 
-    const data = await res.json();
-    console.log("setMessage", data);
-    if (res.ok) {
-      setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
-    } else {
-      setMessage(`Error: ${data.error}`);
+          // Check if the response is ok and handle it
+          const data = await res.json();
+          console.log("setMessage", data);
+
+          if (res.ok) {
+            setMessage(
+              `Envelope sent successfully! Envelope ID: ${data.envelopeId}`
+            );
+          } else {
+            // Handle errors more gracefully
+            setMessage(`Error: ${data.error || "Unknown error"}`);
+          }
+        } else {
+          setMessage("Missing necessary data in the user request.");
+        }
+      } else {
+        setMessage("No matching user request found.");
+      }
+    } catch (error) {
+      console.error("Error during DocuSign request:", error);
+      setMessage("An error occurred while processing the request.");
     }
   };
 
