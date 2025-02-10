@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+// import React, { useContext, useState } from "react";
 import { AppContext } from '../components/AppProvider';
 
 export const useLawyerRequest = request => {
@@ -73,7 +74,7 @@ export const useLawyerRequest = request => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        signerEmail: userRequest?.request?.email, //userEmail
+        signerEmail: userRequest?.request?.userEmail,
         signerName: userRequest?.request?.name,
         ccEmail: 'julia.j.shcherban@gmail.com',
         ccName: 'julia.j.shcherban',

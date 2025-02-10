@@ -83,7 +83,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   };
 
   const isFormValid = () => {
-    // console.log(visibleFields);
     return visibleFields.every(field => {
       const value = getNestedValue(formData, field);
 
@@ -125,8 +124,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           if (!snapshot.empty) {
             const userData = snapshot.docs[0].data();
             setUserData(userData);
-            // console.log('userRequest', userRequest);
-            handleDocuSign(userRequest);
+            // handleDocuSign(userRequest);
           } else {
             console.log('User data not found');
           }
@@ -270,10 +268,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const handleCheckboxChange = async e => {
     const { name, checked } = e.target;
     setSelectedDocuments(prev => ({ ...prev, [name]: checked }));
-
-    // if (checked) {
-    //   generatePDFPreview(name);
-    // }
   };
 
   const [paymentChecking, setPaymentChecking] = useState(false);
@@ -354,7 +348,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       };
 
       setFormData(updatedFormData);
-
+      savePDF(newOrderId);
       const returnUrl = `${window.location.origin}${router.asPath}`;
 
       const paymentResponse = await fetch('/api/liqpay/liqpay', {
@@ -407,7 +401,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       setPaymentStatus('error');
       setFormData(prev => ({ ...prev, paymentStatus: 'error' }));
     } finally {
-      savePDF(newOrderId);
+      // savePDF(newOrderId);
+      setTimeout(() => handleDocuSign(newOrderId), 5000);
       setIsLoading(false);
       setStatusRenewUser(true);
     }

@@ -40,29 +40,6 @@ export const AppProvider = ({ children }) => {
 
   const locale = router.locale;
 
-  // const getData = async () => {
-  //   try {
-  //     const newsTitles = await getTitleOfPosts('news', locale);
-  //     const questionsTitles = await getTitleOfPosts('questions', locale);
-  //     const explanationsTitles = await getTitleOfPosts('explanations', locale);
-  //     const servicesTitles = await getTitleOfServices(locale);
-  //     const citizenshipTitles = await getTitleOfPosts('citizenship', locale);
-  //     const requestsTitles = await getTitleOfPosts('requests', locale);
-  //     setTitleArr([
-  //       ...newsTitles,
-  //       ...questionsTitles,
-  //       ...explanationsTitles,
-  //       ...servicesTitles,
-  //       ...requestsTitles,
-  //       ...citizenshipTitles,
-  //     ]);
-  //     setServicesArray(servicesTitles);
-  //     setRequestsArray(requestsTitles);
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
-
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser(user || null);
@@ -72,7 +49,6 @@ export const AppProvider = ({ children }) => {
         (res) => {
           if (res[0].role === "admin") {
             setUserRole(res[0].role);
-            // router.push("adminPanel");
           }
         }
       );
@@ -110,7 +86,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const db = getFirestore(); // Initialize Firestore
+      const db = getFirestore();
       const userCollection = collection(db, "users");
       const userQuery = query(userCollection, where("uid", "==", user.uid));
 
@@ -120,7 +96,9 @@ export const AppProvider = ({ children }) => {
           const userData = snapshot.docs[0].data();
           const checkData = {};
           Object.keys(fieldInput).map((it) => {
-            return (checkData[it] = userData[it]);
+            return userData[it]
+              ? (checkData[it] = userData[it])
+              : (checkData[it] = "");
           });
 
           setUserCredentials((prevCredentials) => ({
