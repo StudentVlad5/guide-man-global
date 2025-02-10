@@ -72,6 +72,62 @@ export const parseAttachments = emailBody => {
   return attachments;
 };
 
+import { Buffer } from 'buffer';
+
+export const parseEmailBody = emailBody => {
+  let cleanBody = emailBody;
+  const attachments = [];
+
+  // 🔍 Регулярний вираз для пошуку вкладень у Base64
+  const attachmentRegex =
+    /Content-Type:\s*([\w\/\-\.\+]+);\s*name="(.*?)"\s*Content-Disposition:\s*attachment;\s*filename="(.*?)"\s*Content-Transfer-Encoding:\s*base64\s*\n([\s\S]*?)\n--/g;
+  let match;
+
+  while ((match = attachmentRegex.exec(emailBody)) !== null) {
+    const mimeType = match[1].trim(); // MIME-тип (наприклад, application/pdf)
+    let filename = match[2].trim(); // Оригінальна назва файлу
+    const base64Content = match[4].replace(/\n/g, '').trim(); // Вміст файлу у Base64
+
+    // 📝 Декодуємо `=?utf-8?B?...?=` у нормальну назву
+    if (filename.includes('=?utf-8?B?')) {
+      try {
+        filename = Buffer.from(
+          filename.replace(/=\?utf-8\?B\?|=\?/g, ''),
+          'base64'
+        ).toString('utf-8');
+      } catch (err) {
+        console.error(`❌ Помилка декодування назви файлу: ${filename}`, err);
+      }
+    }
+
+    // ✂️ Скорочуємо довгі назви
+    if (filename.length > 30) {
+      const ext = filename.split('.').pop(); // Отримуємо розширення
+      filename = filename.substring(0, 25) + '...' + ext; // Обрізаємо назву
+    }
+
+    attachments.push({
+      filename,
+      content: Buffer.from(base64Content, 'base64'),
+      encoding: 'base64',
+      mimeType,
+    });
+
+    // 🔥 Видаляємо вкладення з `body`, залишаючи тільки текст
+    cleanBody = cleanBody.replace(match[0], '');
+  }
+
+  // 🧹 Видаляємо службові заголовки
+  cleanBody = cleanBody
+    .replace(/--[\w\d:-]+\n/g, '')
+    .replace(/Content-Type:.*\n/g, '')
+    .replace(/Content-Disposition:.*\n/g, '')
+    .replace(/Content-Transfer-Encoding:.*\n/g, '')
+    .trim();
+
+  return { cleanBody, attachments };
+};
+
 export const sendEmail = async ({
   to,
   subject,
@@ -99,11 +155,7 @@ export const sendEmail = async ({
       subject,
       text,
       html,
-      attachments: attachments.map(file => ({
-        filename: file.filename,
-        content: file.content,
-        encoding: 'base64',
-      })),
+      attachments,
     };
 
     const info = await transporter.sendMail(mailOptions);

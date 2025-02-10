@@ -2,7 +2,7 @@ import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
 } from './firebaseControl.js';
-import { sendEmail, parseAttachments } from './prepareAttachments.js';
+import { sendEmail, parseEmailBody } from './prepareAttachments.js';
 import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
@@ -27,10 +27,10 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    if (!hasAttachments) {
-      console.log('Вкладень у email немає. Спробуємо витягти їх із body...');
-      attachments = parseAttachments(body);
-    }
+    const { cleanBody, parsedAttachments } = parseEmailBody(body);
+    attachments = [...attachments, ...parsedAttachments];
+
+    console.log('Оброблені вкладення:', attachments);
 
     const requestId = match[1].trim();
     console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
@@ -47,9 +47,9 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    if (userRequest.status !== 'done') {
+    if (userRequest.status !== 'done' || userRequest.status === 'sent') {
       // Захист від подвійної обробки
-      if (userRequest.status === 'done' || userRequest.status === 'sent') {
+      if (userRequest.status === 'done') {
         console.log(`Запит ${requestId} вже оброблено. Пропускаємо.`);
         return;
       }
@@ -73,7 +73,7 @@ export const processIncomingEmail = async email => {
       const emailContent = `
       <p>Шановний клієнте,</p>
       <p>Ми отримали відповідь на ваш ${userRequest.title}:</p>
-      <blockquote>${body}</blockquote>
+      <blockquote>${cleanBody}</blockquote>
       <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
     `;
 
