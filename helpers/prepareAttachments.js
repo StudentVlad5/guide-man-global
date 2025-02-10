@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import fs from 'fs';
 import fetch from 'node-fetch';
+import { updateDocumentInCollection } from './firebaseControl';
 
 export const prepareAttachments = async pdfFiles => {
   try {
@@ -18,6 +19,7 @@ export const prepareAttachments = async pdfFiles => {
             return {
               filename: file.name,
               content: Buffer.from(buffer),
+              encoding: 'base64',
             };
           } catch (error) {
             console.error(`Помилка при завантаженні файлу ${file.url}:`, error);
@@ -30,6 +32,7 @@ export const prepareAttachments = async pdfFiles => {
             return {
               filename: file.name,
               content: buffer,
+              encoding: 'base64',
             };
           } catch (error) {
             console.error(
@@ -47,6 +50,26 @@ export const prepareAttachments = async pdfFiles => {
     console.error('Помилка під час підготовки вкладень:', error);
     throw error;
   }
+};
+
+export const parseAttachments = emailBody => {
+  const attachments = [];
+  const regex =
+    /Content-Disposition: attachment;\s*filename="([^"]+)"\s*Content-Transfer-Encoding: base64\s*\n([\s\S]*?)\n--/g;
+  let match;
+
+  while ((match = regex.exec(emailBody)) !== null) {
+    const filename = match[1].trim();
+    const base64Content = match[2].replace(/\n/g, '').trim();
+
+    attachments.push({
+      filename,
+      content: Buffer.from(base64Content, 'base64'),
+      encoding: 'base64',
+    });
+  }
+
+  return attachments;
 };
 
 export const sendEmail = async ({
@@ -75,22 +98,26 @@ export const sendEmail = async ({
       to,
       subject,
       text,
-      html, // HTML-версія листа
-      attachments, // Додаткові файли
+      html,
+      attachments: attachments.map(file => ({
+        filename: file.filename,
+        content: file.content,
+        encoding: 'base64',
+      })),
     };
 
     const info = await transporter.sendMail(mailOptions);
     console.log(`Лист успішно відправлено: ${info.messageId}`);
 
-    // // Після успішної відправки оновлюємо статус у Firestore
-    // if (requestId) {
-    //   await updateDocumentInCollection(
-    //     'userRequests',
-    //     { status: 'sent' },
-    //     requestId
-    //   );
-    //   console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
-    // }
+    // Після успішної відправки оновлюємо статус у Firestore
+    if (requestId) {
+      await updateDocumentInCollection(
+        'userRequests',
+        { status: 'sent' },
+        requestId
+      );
+      console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
+    }
 
     return info;
   } catch (error) {

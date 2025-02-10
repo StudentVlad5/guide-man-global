@@ -65,8 +65,8 @@ export default function AdminRecipient() {
 
   const handleDelete = async el => {
     try {
-      await removeDocumentFromCollection(`recipient`, el.idPost);
-      setEditRecipient(recipient.find(it => it.id === id));
+      await removeDocumentFromCollection(`recipient`, el.id);
+      fetchRecipient();
     } catch (error) {
       alert(error);
     }
