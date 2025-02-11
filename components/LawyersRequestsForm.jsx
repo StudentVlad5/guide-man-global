@@ -127,8 +127,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           if (!snapshot.empty) {
             const userData = snapshot.docs[0].data();
             setUserData(userData);
-            console.log("userRequest", userRequest);
-            handleDocuSign(userRequest);
+            // console.log("userRequest", userRequest);
+            // handleDocuSign(userRequest);
           } else {
             console.log("User data not found");
           }
@@ -236,6 +236,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       // Отримуємо сформовані PDF-файли
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
       setUserRequest(response.data);
+      handleDocuSign(response.data);
       setFormData((prev) => ({
         ...prev,
         agreement: agreementPDF,
@@ -315,7 +316,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             status: data.status,
           }),
         });
-        handleDocuSign(userRequest);
+        // handleDocuSign(userRequest);
         handleSendEmail(formData.id);
         clearInterval(paymentCheckInterval);
       }
