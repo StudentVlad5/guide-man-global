@@ -236,12 +236,12 @@ export const Contract = ({ data }) => {
             <View style={styles.list}>
               <Text style={styles.textNoIndent}>Клієнт</Text>
               <Text style={styles.textNoIndent}>{PIB(data)}</Text>
-              <Text style={styles.textNoIndent}>(підпис)</Text>
+              <Text style={styles.textNoIndent}>_______</Text>
             </View>
             <View style={styles.list}>
               <Text style={styles.textNoIndent}>Адвокат</Text>
               <Text style={styles.textNoIndent}>Строгий Валерій Федорович</Text>
-              <Text style={styles.textNoIndent}>(підпис)</Text>
+              <Text style={styles.textNoIndent}>_______</Text>
             </View>
           </View>
         </View>

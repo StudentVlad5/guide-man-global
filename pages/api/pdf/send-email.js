@@ -1,6 +1,9 @@
 import path from 'path';
 import fs from 'fs';
-import { getCollectionWhereKeyValue } from '../../../helpers/firebaseControl';
+import {
+  getCollectionWhereKeyValue,
+  updateDocumentInCollection,
+} from '../../../helpers/firebaseControl';
 import {
   prepareAttachments,
   sendEmail,
@@ -73,6 +76,12 @@ export default async function handler(req, res) {
       attachments,
       requestId: id, // Передаємо ID для оновлення статусу
     });
+
+    // Після успішної відправки оновлюємо статус у Firestore
+    if (id) {
+      await updateDocumentInCollection('userRequests', { status: 'sent' }, id);
+      console.log(`Статус запиту ${id} оновлено на 'sent'`);
+    }
 
     return res.status(200).json({
       success: true,

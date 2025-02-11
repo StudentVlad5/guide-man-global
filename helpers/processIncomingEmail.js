@@ -2,7 +2,11 @@ import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
 } from './firebaseControl.js';
-import { sendEmail, parseEmailBody } from './prepareAttachments.js';
+import {
+  sendEmail,
+  parseEmailBody,
+  decodeMimeFilename,
+} from './prepareAttachments.js';
 import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
@@ -13,10 +17,27 @@ export const processIncomingEmail = async email => {
 
     console.log('Отримано новий лист:', { subject, body, attachments });
 
+    // Парсимо вкладення та очищуємо body
+    const parsedData = parseEmailBody(body) || {
+      cleanedBody: '',
+      extractedAttachments: [],
+    };
+    const cleanedBody = parsedData?.cleanedBody || '';
+    const extractedAttachments = parsedData?.extractedAttachments || [];
+
+    const parsedAttachments = (extractedAttachments || []).map(file => ({
+      filename: decodeMimeFilename(file.filename || 'file'),
+      content: file.content,
+      encoding: 'base64',
+    }));
+
+    attachments = [...attachments, ...parsedAttachments];
+
+    console.log('Оброблені вкладення:', attachments);
+
     // Вилучення ідентифікатора запиту
     const regex = /ID[:\s]*([\d]+)/i;
-
-    const match = subject.match(regex) || body.match(regex);
+    const match = subject.match(regex) || cleanedBody.match(regex);
     const hasId = !!match; // true, якщо ID знайдено
     const hasAttachments = email.attachments && email.attachments.length > 0;
 
@@ -26,11 +47,6 @@ export const processIncomingEmail = async email => {
       );
       return;
     }
-
-    const { cleanBody, parsedAttachments } = parseEmailBody(body);
-    attachments = [...attachments, ...parsedAttachments];
-
-    console.log('Оброблені вкладення:', attachments);
 
     const requestId = match[1].trim();
     console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
@@ -47,47 +63,45 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    if (userRequest.status !== 'done' || userRequest.status === 'sent') {
-      // Захист від подвійної обробки
-      if (userRequest.status === 'done') {
-        console.log(`Запит ${requestId} вже оброблено. Пропускаємо.`);
-        return;
-      }
+    // Захист від подвійної обробки
+    if (userRequest.status === 'done') {
+      console.log(`Запит ${requestId} вже оброблено. Пропускаємо.`);
+      return;
+    }
 
-      // Оновлюємо статус запиту на 'done'
-      await updateDocumentInCollection(
-        'userRequests',
-        {
-          status: 'done',
-          responseDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-        },
-        requestId
-      );
+    // Оновлюємо статус запиту на 'done'
+    await updateDocumentInCollection(
+      'userRequests',
+      {
+        status: 'done',
+        responseDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+      },
+      requestId
+    );
 
-      console.log(
-        `Статус запиту ${requestId} оновлено на 'done'. Дата відповіді збережена.`
-      );
+    console.log(
+      `Статус запиту ${requestId} оновлено на 'done'. Дата відповіді збережена.`
+    );
 
-      // Надсилання листа користувачу
-      const userEmail = userRequest.userEmail;
-      const emailContent = `
+    // Надсилання листа користувачу
+    const userEmail = userRequest.userEmail;
+    const emailContent = `
       <p>Шановний клієнте,</p>
       <p>Ми отримали відповідь на ваш ${userRequest.title}:</p>
-      <blockquote>${cleanBody}</blockquote>
+      <blockquote>${cleanedBody}</blockquote>
       <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
     `;
 
-      await sendEmail({
-        to: userEmail,
-        subject: `Відповідь на ${userRequest.title} ${requestId}`,
-        text: `Вітаємо! Ми отримали відповідь на ваш ${userRequest.title}.`,
-        html: emailContent,
-        attachments,
-        requestId,
-      });
+    await sendEmail({
+      to: userEmail,
+      subject: `Відповідь на ${userRequest.title} ${requestId}`,
+      text: `Вітаємо! Ми отримали відповідь на ваш ${userRequest.title}.`,
+      html: emailContent,
+      attachments,
+      requestId,
+    });
 
-      console.log(`Лист із запитом ${requestId} успішно відправлено.`);
-    }
+    console.log(`Лист із запитом ${requestId} успішно відправлено.`);
   } catch (error) {
     console.error('Помилка під час обробки листа:', error);
   }
