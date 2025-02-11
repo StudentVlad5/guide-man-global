@@ -74,58 +74,52 @@ export const parseAttachments = emailBody => {
 
 import { Buffer } from 'buffer';
 
-export const parseEmailBody = emailBody => {
-  let cleanBody = emailBody;
-  const attachments = [];
-
-  // 🔍 Регулярний вираз для пошуку вкладень у Base64
-  const attachmentRegex =
-    /Content-Type:\s*([\w\/\-\.\+]+);\s*name="(.*?)"\s*Content-Disposition:\s*attachment;\s*filename="(.*?)"\s*Content-Transfer-Encoding:\s*base64\s*\n([\s\S]*?)\n--/g;
-  let match;
-
-  while ((match = attachmentRegex.exec(emailBody)) !== null) {
-    const mimeType = match[1].trim(); // MIME-тип (наприклад, application/pdf)
-    let filename = match[2].trim(); // Оригінальна назва файлу
-    const base64Content = match[4].replace(/\n/g, '').trim(); // Вміст файлу у Base64
-
-    // 📝 Декодуємо `=?utf-8?B?...?=` у нормальну назву
-    if (filename.includes('=?utf-8?B?')) {
-      try {
-        filename = Buffer.from(
-          filename.replace(/=\?utf-8\?B\?|=\?/g, ''),
+export const decodeMimeFilename = encodedName => {
+  try {
+    return encodedName.startsWith('=?')
+      ? Buffer.from(
+          encodedName.split('?B?')[1].split('?=')[0],
           'base64'
-        ).toString('utf-8');
-      } catch (err) {
-        console.error(`❌ Помилка декодування назви файлу: ${filename}`, err);
-      }
-    }
+        ).toString('utf-8')
+      : encodedName;
+  } catch (error) {
+    console.error('Помилка декодування назви файлу:', error);
+    return 'attachment';
+  }
+};
 
-    // ✂️ Скорочуємо довгі назви
-    if (filename.length > 30) {
-      const ext = filename.split('.').pop(); // Отримуємо розширення
-      filename = filename.substring(0, 25) + '...' + ext; // Обрізаємо назву
-    }
-
-    attachments.push({
-      filename,
-      content: Buffer.from(base64Content, 'base64'),
-      encoding: 'base64',
-      mimeType,
-    });
-
-    // 🔥 Видаляємо вкладення з `body`, залишаючи тільки текст
-    cleanBody = cleanBody.replace(match[0], '');
+export const parseEmailBody = body => {
+  if (!body) {
+    console.error('Помилка: body не визначено.');
+    return { cleanedBody: '', extractedAttachments: [] };
   }
 
-  // 🧹 Видаляємо службові заголовки
-  cleanBody = cleanBody
-    .replace(/--[\w\d:-]+\n/g, '')
-    .replace(/Content-Type:.*\n/g, '')
-    .replace(/Content-Disposition:.*\n/g, '')
-    .replace(/Content-Transfer-Encoding:.*\n/g, '')
+  let extractedAttachments = [];
+
+  // Видаляємо закодовані файли з body та залишаємо лише текст
+  const cleanedBody = body
+    .replace(
+      /--[\w\d-]+[\s\S]*?Content-Transfer-Encoding: base64[\s\S]*?(?=--[\w\d-]+|$)/g,
+      match => {
+        const filenameMatch = match.match(/filename="([^"]+)"/);
+        const base64Match = match.match(
+          /Content-Transfer-Encoding: base64\s+([\s\S]+)/
+        );
+
+        if (filenameMatch && base64Match) {
+          extractedAttachments.push({
+            filename: decodeMimeFilename(filenameMatch[1]),
+            content: Buffer.from(base64Match[1].trim(), 'base64'),
+            encoding: 'base64',
+          });
+        }
+
+        return ''; // Повертаємо порожній рядок, щоб видалити вкладення
+      }
+    )
     .trim();
 
-  return { cleanBody, attachments };
+  return { cleanedBody, extractedAttachments };
 };
 
 export const sendEmail = async ({
@@ -161,15 +155,15 @@ export const sendEmail = async ({
     const info = await transporter.sendMail(mailOptions);
     console.log(`Лист успішно відправлено: ${info.messageId}`);
 
-    // Після успішної відправки оновлюємо статус у Firestore
-    if (requestId) {
-      await updateDocumentInCollection(
-        'userRequests',
-        { status: 'sent' },
-        requestId
-      );
-      console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
-    }
+    // // Після успішної відправки оновлюємо статус у Firestore
+    // if (requestId) {
+    //   await updateDocumentInCollection(
+    //     'userRequests',
+    //     { status: 'sent' },
+    //     requestId
+    //   );
+    //   console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
+    // }
 
     return info;
   } catch (error) {

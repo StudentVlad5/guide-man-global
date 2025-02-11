@@ -2,7 +2,11 @@ import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
 } from './firebaseControl.js';
-import { sendEmail, parseEmailBody } from './prepareAttachments.js';
+import {
+  sendEmail,
+  parseEmailBody,
+  decodeMimeFilename,
+} from './prepareAttachments.js';
 import { format } from 'date-fns';
 
 export const processIncomingEmail = async email => {
@@ -13,10 +17,27 @@ export const processIncomingEmail = async email => {
 
     console.log('Отримано новий лист:', { subject, body, attachments });
 
+    // Парсимо вкладення та очищуємо body
+    const parsedData = parseEmailBody(body) || {
+      cleanedBody: '',
+      extractedAttachments: [],
+    };
+    const cleanedBody = parsedData?.cleanedBody || '';
+    const extractedAttachments = parsedData?.extractedAttachments || [];
+
+    const parsedAttachments = (extractedAttachments || []).map(file => ({
+      filename: decodeMimeFilename(file.filename || 'file'),
+      content: file.content,
+      encoding: 'base64',
+    }));
+
+    attachments = [...attachments, ...parsedAttachments];
+
+    console.log('Оброблені вкладення:', attachments);
+
     // Вилучення ідентифікатора запиту
     const regex = /ID[:\s]*([\d]+)/i;
-
-    const match = subject.match(regex) || body.match(regex);
+    const match = subject.match(regex) || cleanedBody.match(regex);
     const hasId = !!match; // true, якщо ID знайдено
     const hasAttachments = email.attachments && email.attachments.length > 0;
 
@@ -26,11 +47,6 @@ export const processIncomingEmail = async email => {
       );
       return;
     }
-
-    const { cleanBody, parsedAttachments } = parseEmailBody(body);
-    attachments = [...attachments, ...parsedAttachments];
-
-    console.log('Оброблені вкладення:', attachments);
 
     const requestId = match[1].trim();
     console.log(`Знайдено ідентифікатор запиту: ${requestId}`);
@@ -44,6 +60,13 @@ export const processIncomingEmail = async email => {
 
     if (!userRequest) {
       console.log(`Запит із ID ${requestId} не знайдено.`);
+      return;
+    }
+
+    if (userRequest.status === 'sent' || userRequest.status === 'done') {
+      console.log(
+        `Запит ${requestId} вже оброблено (статус: ${userRequest.status}). Пропускаємо.`
+      );
       return;
     }
 
@@ -73,7 +96,7 @@ export const processIncomingEmail = async email => {
       const emailContent = `
       <p>Шановний клієнте,</p>
       <p>Ми отримали відповідь на ваш ${userRequest.title}:</p>
-      <blockquote>${cleanBody}</blockquote>
+      <blockquote>${cleanedBody}</blockquote>
       <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
     `;
 
