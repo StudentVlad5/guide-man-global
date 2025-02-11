@@ -123,8 +123,8 @@ async function sendEnvelope(args) {
           },
         },
         {
-          email: "vlad_np@ukr.net",
-          name: "VVVVVVVVVVV",
+          email: "julia.j.shcherban@gmail.com",
+          name: "Julia Golban",
           recipientId: "2", // Signer's recipient ID
           routingOrder: "2",
           tabs: {

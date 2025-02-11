@@ -108,6 +108,7 @@
   grid-template-columns: repeat(auto-fill, 270px);
   gap: 40px;
   justify-content: center;
+
   @include onMobile {
     justify-content: start;
   }
@@ -176,38 +177,47 @@
   transition: all 0.3s ease;
   cursor: pointer;
   margin: 20px 0;
+
   @include onMobile {
     width: 100%;
   }
 }
+
 .tablewidth {
-  width: calc(100vw * 0.9);
+  width: calc(100vw * 0.8);
+
   @include onMobile {
     overflow: hidden;
   }
 }
+
 .tableHead {
   padding: 6px;
   color: $dark;
   width: calc(100vw / 5);
+
   @include onMobile {
     max-width: 60px !important;
     overflow: hidden;
   }
 }
+
 .tableHide {
   @include onSmallDesktop {
     display: none;
   }
 }
+
 .pagination {
   display: flex;
   flex-direction: row;
   justify-content: start;
   gap: 10px;
+
   @include onMobile {
     gap: 5px;
   }
+
   &__button {
     background-color: $white1;
     border: none;
@@ -215,6 +225,7 @@
     padding: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+
     &:hover {
       background-color: $gray;
     }
