@@ -63,54 +63,45 @@ export const processIncomingEmail = async email => {
       return;
     }
 
-    if (userRequest.status === 'sent' || userRequest.status === 'done') {
-      console.log(
-        `Запит ${requestId} вже оброблено (статус: ${userRequest.status}). Пропускаємо.`
-      );
+    // Захист від подвійної обробки
+    if (userRequest.status === 'done') {
+      console.log(`Запит ${requestId} вже оброблено. Пропускаємо.`);
       return;
     }
 
-    if (userRequest.status !== 'done' || userRequest.status === 'sent') {
-      // Захист від подвійної обробки
-      if (userRequest.status === 'done') {
-        console.log(`Запит ${requestId} вже оброблено. Пропускаємо.`);
-        return;
-      }
+    // Оновлюємо статус запиту на 'done'
+    await updateDocumentInCollection(
+      'userRequests',
+      {
+        status: 'done',
+        responseDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+      },
+      requestId
+    );
 
-      // Оновлюємо статус запиту на 'done'
-      await updateDocumentInCollection(
-        'userRequests',
-        {
-          status: 'done',
-          responseDate: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-        },
-        requestId
-      );
+    console.log(
+      `Статус запиту ${requestId} оновлено на 'done'. Дата відповіді збережена.`
+    );
 
-      console.log(
-        `Статус запиту ${requestId} оновлено на 'done'. Дата відповіді збережена.`
-      );
-
-      // Надсилання листа користувачу
-      const userEmail = userRequest.userEmail;
-      const emailContent = `
+    // Надсилання листа користувачу
+    const userEmail = userRequest.userEmail;
+    const emailContent = `
       <p>Шановний клієнте,</p>
       <p>Ми отримали відповідь на ваш ${userRequest.title}:</p>
       <blockquote>${cleanedBody}</blockquote>
       <p>З повагою, адвокат<br/>В.Ф.Строгий</p>
     `;
 
-      await sendEmail({
-        to: userEmail,
-        subject: `Відповідь на ${userRequest.title} ${requestId}`,
-        text: `Вітаємо! Ми отримали відповідь на ваш ${userRequest.title}.`,
-        html: emailContent,
-        attachments,
-        requestId,
-      });
+    await sendEmail({
+      to: userEmail,
+      subject: `Відповідь на ${userRequest.title} ${requestId}`,
+      text: `Вітаємо! Ми отримали відповідь на ваш ${userRequest.title}.`,
+      html: emailContent,
+      attachments,
+      requestId,
+    });
 
-      console.log(`Лист із запитом ${requestId} успішно відправлено.`);
-    }
+    console.log(`Лист із запитом ${requestId} успішно відправлено.`);
   } catch (error) {
     console.error('Помилка під час обробки листа:', error);
   }
