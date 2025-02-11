@@ -155,16 +155,6 @@ export const sendEmail = async ({
     const info = await transporter.sendMail(mailOptions);
     console.log(`Лист успішно відправлено: ${info.messageId}`);
 
-    // // Після успішної відправки оновлюємо статус у Firestore
-    // if (requestId) {
-    //   await updateDocumentInCollection(
-    //     'userRequests',
-    //     { status: 'sent' },
-    //     requestId
-    //   );
-    //   console.log(`Статус запиту ${requestId} оновлено на 'sent'`);
-    // }
-
     return info;
   } catch (error) {
     console.error('Помилка при відправленні листа:', error);

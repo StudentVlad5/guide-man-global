@@ -240,7 +240,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
       setUserRequest(response.data);
       handleDocuSign(response.data);
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         agreement: agreementPDF,
         contract: contractPDF,
@@ -375,7 +375,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       paymentForm.method = 'POST';
       paymentForm.action = 'https://www.liqpay.ua/api/3/checkout';
       paymentForm.acceptCharset = 'utf-8';
-      paymentForm.target = '_blank';
+      // paymentForm.target = '_blank';
 
       const inputData = document.createElement('input');
       inputData.type = 'hidden';
