@@ -239,7 +239,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       // Отримуємо сформовані PDF-файли
       const { agreementPDF, contractPDF, lawyersRequestPDF } = response.data;
       setUserRequest(response.data);
-      setFormData(prev => ({
+      handleDocuSign(response.data);
+      setFormData((prev) => ({
         ...prev,
         agreement: agreementPDF,
         contract: contractPDF,
