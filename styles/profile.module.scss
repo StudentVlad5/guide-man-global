@@ -54,7 +54,7 @@
     padding: 10px 15px;
     text-decoration: none;
     color: #202020;
-    font-size: 20px;
+    font-size: 19px;
     font-family: "Trebuchet MS", sans-serif;
     line-height: 20px;
 
@@ -63,6 +63,7 @@
 
     @include onLaptop {
       font-size: 16px;
+    padding: 7px 10px;
       line-height: normal;
     }
 
