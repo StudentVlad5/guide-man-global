@@ -141,6 +141,18 @@
       text-decoration: underline;
     }
   }
+
+  &__price{
+    color: #202020;
+    font-size: 20px;
+    font-family: "Trebuchet MS", sans-serif;
+    border-style: hidden;
+    margin-bottom: 35px;
+
+    @include onMobile {
+      font-size: 16px;
+    }
+  }
 }
 
 .buttonDiv {

@@ -1,90 +1,96 @@
-import { useState, useContext } from 'react';
+import { useState, useContext } from "react";
 // import React, { useContext, useState } from "react";
-import { AppContext } from '../components/AppProvider';
+import { AppContext } from "../components/AppProvider";
 
-export const useLawyerRequest = request => {
+export const useLawyerRequest = (request) => {
   const { user } = useContext(AppContext);
-  const [paymentStatus, setPaymentStatus] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState("");
   // const [userRequest, setUserRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [orderId, setOrderId] = useState();
 
-  const [formData, setFormData] = useState({
+  // const [formData, setFormData] = useState({
+  const initialFormData = {
     id: Math.floor(Date.now() * Math.random()).toString(),
-    uid: user?.uid || '',
+    uid: user?.uid || "",
     paymentStatus: paymentStatus,
     orderId: orderId,
-    citizenship: '', //ВСІ ФОРМИ
-    name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: '', //ВСІ ФОРМИ
-    birthday: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    citizenship: "", //ВСІ ФОРМИ
+    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: "", //ВСІ ФОРМИ
+    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
-      address: '',
-      city: '',
-      country: '',
+      address: "",
+      city: "",
+      country: "",
     }, //РАЦС
-    requesterBirthday: '', //РАЦС
-    requesterName: '', //РАЦС
+    requesterBirthday: "", //РАЦС
+    requesterName: "", //РАЦС
     requesterFile: [], //РАЦС
     //дані про смерть
-    deadName: '', //РАЦС
-    deadDeathDay: '', //РАЦС
-    deadBirthday: '', //РАЦС
-    deadRelationship: '', //РАЦС
+    deadName: "", //РАЦС
+    deadDeathDay: "", //РАЦС
+    deadBirthday: "", //РАЦС
+    deadRelationship: "", //РАЦС
     dateCreating: new Date() //ВСІ ФОРМИ
-      .toLocaleDateString('ru-RU', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
+      .toLocaleDateString("ru-RU", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       }),
     recipient: {
-      name: '', //МОУ і ТЦК
-      address: '', //МОУ і ТЦК
+      name: "", //МОУ і ТЦК
+      address: "", //МОУ і ТЦК
     },
-    servicemanPIB: '', //МОУ і ТЦК
-    rank: '', //МОУ і ТЦК
-    unit: '', //МОУ і ТЦК
-    date: { start: '', end: '' }, //АДПСУ, МОУ і ТЦК
+    servicemanPIB: "", //МОУ і ТЦК
+    rank: "", //МОУ і ТЦК
+    unit: "", //МОУ і ТЦК
+    date: { start: "", end: "" }, //АДПСУ, МОУ і ТЦК
     // ПАСПОРТИ
-    abroadPassnum: '', //АДПСУ
-    passport: '', //АДПСУ, ЗАМІСТЬ passportNum
-    pmjNum: '', //АДПСУ,
+    abroadPassnum: "", //АДПСУ
+    passport: "", //АДПСУ, ЗАМІСТЬ passportNum
+    pmjNum: "", //АДПСУ,
     // Подружжя (дані супругів)
-    couplePIB1: '', //РАЦС
-    couplePIB2: '', //РАЦС
-    coupleBirthday1: '', //РАЦС
-    coupleBirthday2: '', //РАЦС
+    couplePIB1: "", //РАЦС
+    couplePIB2: "", //РАЦС
+    coupleBirthday1: "", //РАЦС
+    coupleBirthday2: "", //РАЦС
     // (дату надання довідки про місце проживання)
-    dateResidence: '', //РАЦС
-    placeResidence: '', //РАЦС
-    eventDate: '', //МВС
-    eventTime: '', //МВС
-    eventPlace: '', //МВС
-    inn: '', //ПФУ і ДПСУ
-    propertyAddress: '', //ВПО
+    dateResidence: "", //РАЦС
+    placeResidence: "", //РАЦС
+    eventDate: "", //МВС
+    eventTime: "", //МВС
+    eventPlace: "", //МВС
+    inn: "", //ПФУ і ДПСУ
+    propertyAddress: "", //ВПО
     request: request,
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
-  const handleDocuSign = async userRequest => {
-    const res = await fetch('/api/docusign', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  const resetFormData = () => {
+    setFormData(initialFormData);
+  };
+
+  const handleDocuSign = async (userRequest) => {
+    const res = await fetch("/api/docusign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         signerEmail: userRequest?.request?.userEmail,
         signerName: userRequest?.request?.name,
-        ccEmail: 'julia.j.shcherban@gmail.com',
-        ccName: 'julia.j.shcherban',
+        ccEmail: "julia.j.shcherban@gmail.com",
+        ccName: "julia.j.shcherban",
         doc2File: userRequest?.request?.pdfAgreement,
         doc3File: userRequest?.request?.pdfContract,
       }),
     });
 
     const data = await res.json();
-    console.log('setMessage', data);
+    console.log("setMessage", data);
     if (res.ok) {
       setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
     } else {
@@ -92,18 +98,18 @@ export const useLawyerRequest = request => {
     }
   };
 
-  const handleSendEmail = async formData => {
+  const handleSendEmail = async (formData) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/pdf/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/pdf/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: formData.id,
           // recipient: { address: formData.recipient.address },
-          recipient: { address: 'julia_js@bigmir.net' },
+          recipient: { address: "julia_js@bigmir.net" },
         }),
       });
 
@@ -114,16 +120,23 @@ export const useLawyerRequest = request => {
 
       const data = await response.json();
       if (response.ok) {
-        console.log('Email успішно відправлено:', data.message);
+        console.log("Email успішно відправлено:", data.message);
       } else {
-        console.error('Помилка:', data.error);
+        console.error("Помилка:", data.error);
       }
     } catch (err) {
-      console.error('Помилка під час відправки запиту:', err);
+      console.error("Помилка під час відправки запиту:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { formData, setFormData, handleSendEmail, handleDocuSign, request };
+  return {
+    formData,
+    setFormData,
+    handleSendEmail,
+    handleDocuSign,
+    request,
+    resetFormData,
+  };
 };

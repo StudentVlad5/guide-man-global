@@ -54,7 +54,7 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
             __html: getRightData(item, locale, "preview"),
           }}
         />
-
+        <p className={styles.itemPage__price}>{t("Price")}: 2000₴</p>
         {user ? (
           <div className={styles.buttonDiv}>
             <button
