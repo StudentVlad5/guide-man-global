@@ -97,8 +97,8 @@ export default function HistoryPage() {
           }),
         });
 
-        handleDocuSign();
-        handleSendEmail(successfulRequest.id);
+        handleDocuSign(successfulRequest);
+        handleSendEmail(successfulRequest);
         clearInterval(paymentCheckInterval);
       }
     } catch (error) {
