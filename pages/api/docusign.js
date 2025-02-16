@@ -74,25 +74,81 @@ async function sendEnvelope(args) {
   const doc2Base64 = await downloadFileAsBase64(envelopeArgs.doc2File);
   const doc3Base64 = await downloadFileAsBase64(envelopeArgs.doc3File);
 
-  const signHereTab = {
-    documentId: "1", // documentId 1 corresponds to doc2 (the Word doc)
-    recipientId: "1", // This corresponds to the signer (recipientId 1)
-    tabLabel: "Sign Here",
-    anchorString: "/sn1/", // Position it with an anchor text (optional, can use absolute position)
-    anchorYOffset: "10", // Y offset from anchor text (optional)
-    anchorXOffset: "10", // X offset from anchor text (optional)
-  };
+  const signHereTab = [
+    {
+      documentId: "1",
+      recipientId: "1",
+      tabLabel: "Sign Here",
+      anchorString: "**SIGN_HERE_1**", // Place tab near this text
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+    {
+      documentId: "2",
+      recipientId: "1",
+      tabLabel: "Sign Here",
+      anchorString: "**SIGN_HERE_2**",
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+  ];
 
-  // Define other tabs if needed (e.g., date fields, initial fields, etc.)
-  const dateSignedTab = {
-    documentId: "1", // documentId 1 corresponds to doc2 (the Word doc)
-    recipientId: "1", // This corresponds to the signer (recipientId 1)
-    tabLabel: "Date Signed",
-    anchorString: "/ds1/", // Anchor to a specific text in the document
-    anchorYOffset: "20", // Y offset (optional)
-    anchorXOffset: "20", // X offset (optional)
-    type: "DateSigned",
-  };
+  const dateSignedTab = [
+    {
+      documentId: "1",
+      recipientId: "1",
+      tabLabel: "Date Signed",
+      anchorString: "**DATE_HERE_1**", // Place date near this text
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+    {
+      documentId: "2",
+      recipientId: "1",
+      tabLabel: "Date Signed",
+      anchorString: "**DATE_HERE_2**",
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+  ];
+
+  const signHereTab2 = [
+    {
+      documentId: "1",
+      recipientId: "2",
+      tabLabel: "Sign Here",
+      anchorString: "**SIGN_HERE_3**", // Place tab near this text
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+    {
+      documentId: "2",
+      recipientId: "2",
+      tabLabel: "Sign Here",
+      anchorString: "**SIGN_HERE_4**",
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+  ];
+
+  const dateSignedTab2 = [
+    {
+      documentId: "1",
+      recipientId: "2",
+      tabLabel: "Date Signed",
+      anchorString: "**DATE_HERE_3**", // Place date near this text
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+    {
+      documentId: "2",
+      recipientId: "2",
+      tabLabel: "Date Signed",
+      anchorString: "**DATE_HERE_4**",
+      anchorXOffset: "0",
+      anchorYOffset: "0",
+    },
+  ];
 
   const envelopeDefinition = {
     emailSubject: "Please sign this document",
@@ -101,13 +157,13 @@ async function sendEnvelope(args) {
         documentBase64: doc2Base64,
         name: "Contract",
         fileExtension: "pdf",
-        documentId: "1", // Document ID should match the ID used in tabs
+        documentId: "1",
       },
       {
         documentBase64: doc3Base64,
         name: "Agreement",
         fileExtension: "pdf",
-        documentId: "2", // Document ID for second document
+        documentId: "2",
       },
     ],
     recipients: {
@@ -115,21 +171,21 @@ async function sendEnvelope(args) {
         {
           email: envelopeArgs.signerEmail,
           name: envelopeArgs.signerName,
-          recipientId: "1", // Signer's recipient ID
+          recipientId: "1",
           routingOrder: "1",
           tabs: {
-            signHereTabs: [signHereTab],
-            dateSignedTabs: [dateSignedTab], // Add date signed tab if needed
+            signHereTabs: signHereTab,
+            dateSignedTabs: dateSignedTab,
           },
         },
         {
           email: "julia.j.shcherban@gmail.com",
           name: "Julia Golban",
-          recipientId: "2", // Signer's recipient ID
+          recipientId: "2",
           routingOrder: "2",
           tabs: {
-            signHereTabs: [signHereTab],
-            dateSignedTabs: [dateSignedTab], // Add date signed tab if needed
+            signHereTabs: signHereTab2,
+            dateSignedTabs: dateSignedTab2,
           },
         },
       ],
@@ -137,12 +193,12 @@ async function sendEnvelope(args) {
         {
           email: envelopeArgs.ccEmail,
           name: envelopeArgs.ccName,
-          recipientId: "3", // CC's recipient ID
+          recipientId: "3",
           routingOrder: "3",
         },
       ],
     },
-    status: envelopeArgs.status, // 'sent' to send the envelope
+    status: envelopeArgs.status,
   };
 
   const dsApi = new docusign.ApiClient();
@@ -176,7 +232,9 @@ export default async function handler(req, res) {
       !signerEmail ||
       !signerName ||
       !ccEmail ||
-      !ccName | !doc2File | !doc3File
+      !ccName ||
+      !doc2File ||
+      !doc3File
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
