@@ -1,84 +1,91 @@
-'use client';
-import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+"use client";
+import React from "react";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: 'white',
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "white",
     paddingVertical: 50,
     paddingLeft: 100,
     paddingRight: 50,
-    fontFamily: 'Roboto',
+    fontFamily: "Roboto",
     fontSize: 11,
-    fontStyle: 'normal',
+    fontStyle: "normal",
     lineHeight: 1.3,
   },
   header: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     marginBottom: 20,
   },
   headerTitle: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
   title: {
     marginTop: 15,
     marginBottom: 15,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
   address: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     flexShrink: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     marginTop: 15,
     paddingRight: 50,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   section: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     textIndent: 30,
   },
   text: {
     textIndent: 30,
-    textAlign: 'justify',
+    textAlign: "justify",
   },
   textNoIndent: {
-    textAlign: 'justify',
+    textAlign: "justify",
   },
   bold: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   signature: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     flexShrink: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   list: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
     padding: 10,
-    width: '50%',
-    fontWeight: 'bold',
-    border: '1px solid black',
+    width: "50%",
+    fontWeight: "bold",
+    border: "1px solid black",
+  },
+  signaturePlaceholder: {
+    fontSize: 10,
+    minWidth: 50,
+    marginTop: 20,
+    textAlign: "left",
+    color: "white",
   },
 });
 
-const getValue = (value, fallback = '') => value || fallback;
-const PIB = value =>
-  [value?.surname, value?.name, value?.fatherName || '']
-    .filter(i => i)
-    .join(' ');
+const getValue = (value, fallback = "") => value || fallback;
+const PIB = (value) =>
+  [value?.surname, value?.name, value?.fatherName || ""]
+    .filter((i) => i)
+    .join(" ");
 
 export const Contract = ({ data }) => {
   return (
@@ -96,18 +103,18 @@ export const Contract = ({ data }) => {
         </View>
         <View style={styles.section}>
           <Text style={styles.text}>
-            <Text style={[styles.bold, { textIndent: '30' }]}>АДВОКАТ</Text>,
-            член Національної асоціації Адвокатів України,{' '}
+            <Text style={[styles.bold, { textIndent: "30" }]}>АДВОКАТ</Text>,
+            член Національної асоціації Адвокатів України,{" "}
             <Text style={styles.bold}>СТРОГИЙ ВАЛЕРІЙ ФЕДОРОВИЧ,</Text> який діє
             на підставі Свідоцтва про право на заняття адвокатською діяльністю
             №278 яке видане 18 липня 2005 року Радою адвокатів Чернігівської
-            області, з одного боку,{' '}
+            області, з одного боку,{" "}
           </Text>
           <Text style={styles.text}>
             <Text
               style={[
                 styles.bold,
-                { textIndent: '30', textTransform: 'uppercase' },
+                { textIndent: "30", textTransform: "uppercase" },
               ]}
             >
               КЛІЄНТ {PIB(data)}
@@ -118,18 +125,18 @@ export const Contract = ({ data }) => {
         </View>
         <Text style={styles.title}> 1. ПРЕДМЕТ ДОГОВОРУ </Text>
         <Text style={styles.textNoIndent}>
-          1.1. <Text style={styles.bold}>КЛІЄНТ</Text> доручає, а{' '}
+          1.1. <Text style={styles.bold}>КЛІЄНТ</Text> доручає, а{" "}
           <Text style={styles.bold}>АДВОКАТ</Text>, відповідно до чинного
-          законодавства України бере на себе обов’язок надати{' '}
+          законодавства України бере на себе обов’язок надати{" "}
           <Text style={styles.bold}>КЛІЄНТУ</Text> професійну правничу (правову)
           допомогу у всіх інстанціях (суди, правоохоронні органи, підприємства,
-          установи, організації незалежно від форми власності).{' '}
+          установи, організації незалежно від форми власності).{" "}
           <Text style={styles.bold}>КЛІЄНТ</Text> зобов’язується оплатити
           гонорар <Text style={styles.bold}>АДВОКАТУ</Text> в порядку та
           розмірах, передбачених цим Договором.
         </Text>
         <Text style={styles.textNoIndent}>
-          1.2. <Text style={styles.bold}>КЛІЄНТ</Text> зобов’язується надати{' '}
+          1.2. <Text style={styles.bold}>КЛІЄНТ</Text> зобов’язується надати{" "}
           <Text style={styles.bold}>АДВОКАТУ</Text> необхідну для виконання умов
           Договору інформацію та документацію, інформувати про всі суттєві зміни
           в процесі надання правової допомоги, які можуть вплинути на результат
@@ -161,7 +168,7 @@ export const Contract = ({ data }) => {
         </Text>
         <Text style={styles.textNoIndent}>
           3.2. <Text style={styles.bold}>АДВОКАТ</Text> не несе відповідальності
-          за наслідки, які пов’язані з наданням{' '}
+          за наслідки, які пов’язані з наданням{" "}
           <Text style={styles.bold}>КЛІЄНТОМ</Text> документів, які не
           відповідають дійсності.
         </Text>
@@ -186,38 +193,38 @@ export const Contract = ({ data }) => {
         </Text>
         <Text style={styles.textNoIndent}>
           4.2. Договір може бути достроково припинений за взаємною згодою сторін
-          або розірваний на вимогу однієї із Сторін. При цьому{' '}
-          <Text style={styles.bold}>КЛІЄНТ</Text> зобов’язаний оплатити{' '}
+          або розірваний на вимогу однієї із Сторін. При цьому{" "}
+          <Text style={styles.bold}>КЛІЄНТ</Text> зобов’язаний оплатити{" "}
           <Text style={styles.bold}>АДВОКАТУ</Text> гонорар за всю роботу, що
-          була виконана чи підготовлена до виконання, а{' '}
-          <Text style={styles.bold}>АДВОКАТ</Text> зобов’язаний повідомити{' '}
+          була виконана чи підготовлена до виконання, а{" "}
+          <Text style={styles.bold}>АДВОКАТ</Text> зобов’язаний повідомити{" "}
           <Text style={styles.bold}>КЛІЄНТА</Text> про можливі наслідки та
           ризики, пов’язані з достроковим припиненням (розірванням) договору.
         </Text>
         <Text style={styles.title}>5. ІНШІ УМОВИ </Text>
         <Text style={styles.textNoIndent}>
           5.1. Зміст цього Договору є предметом адвокатської таємниці, за
-          виключенням повноважень, наданих{' '}
-          <Text style={styles.bold}>АДВОКАТУ</Text>{' '}
+          виключенням повноважень, наданих{" "}
+          <Text style={styles.bold}>АДВОКАТУ</Text>{" "}
           <Text style={styles.bold}>КЛІЄНТОМ</Text> для виконання доручення.
         </Text>
         <Text style={styles.textNoIndent}>
-          5.2. Будь-які побажання, прохання або вказівки{' '}
+          5.2. Будь-які побажання, прохання або вказівки{" "}
           <Text style={styles.bold}>КЛІЄНТА</Text>, спрямовані на порушення
           закону, або суперечитимуть загальним засадам суспільства, не можуть
           бути виконані <Text style={styles.bold}>АДВОКАТОМ</Text>.
         </Text>
         <Text style={styles.textNoIndent}>
-          5.3. <Text style={styles.bold}>КЛІЄНТ</Text> не має права вимагати від{' '}
+          5.3. <Text style={styles.bold}>КЛІЄНТ</Text> не має права вимагати від{" "}
           <Text style={styles.bold}>АДВОКАТА</Text> засобів, способів і методів
           представництва, які заборонені законом, не відповідають правилам
-          адвокатської етики, можуть зашкодити інтересам{' '}
+          адвокатської етики, можуть зашкодити інтересам{" "}
           <Text style={styles.bold}>КЛІЄНТА</Text>.
         </Text>
         <Text style={styles.textNoIndent}>
           5.4. Будь-які зміни і доповнення до договору мають силу тільки в тому
           випадку, якщо вони оформлені в письмовому вигляді і підписані обома
-          Сторонами. У разі зміни характеру та обсягу послуг виконуваних{' '}
+          Сторонами. У разі зміни характеру та обсягу послуг виконуваних{" "}
           <Text style={styles.bold}>АДВОКАТОМ</Text> за Договором, Сторони
           повинні провести переговори про зміну умов Договору і укласти
           додаткову угоду до Договору.
@@ -236,12 +243,14 @@ export const Contract = ({ data }) => {
             <View style={styles.list}>
               <Text style={styles.textNoIndent}>Клієнт</Text>
               <Text style={styles.textNoIndent}>{PIB(data)}</Text>
-              <Text style={styles.textNoIndent}>_______</Text>
+              <Text style={styles.signaturePlaceholder}>S2</Text>
+              <Text style={styles.signaturePlaceholder}>D2</Text>
             </View>
             <View style={styles.list}>
               <Text style={styles.textNoIndent}>Адвокат</Text>
               <Text style={styles.textNoIndent}>Строгий Валерій Федорович</Text>
-              <Text style={styles.textNoIndent}>_______</Text>
+              <Text style={styles.signaturePlaceholder}>S4</Text>
+              <Text style={styles.signaturePlaceholder}>D4</Text>
             </View>
           </View>
         </View>
