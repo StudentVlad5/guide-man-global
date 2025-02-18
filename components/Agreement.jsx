@@ -188,7 +188,7 @@ export const Agreement = ({ data }) => {
           {/* <Text style={styles.signaturePlaceholder}>D1</Text> */}
           <Text style={styles.text}>{PIB(data)}</Text>
         </View>
-        <Text style={styles.signaturePlaceholder}>S3</Text>
+        {/* <Text style={styles.signaturePlaceholder}>S3</Text> */}
         {/* <Text style={styles.signaturePlaceholder}>D3</Text> */}
       </Page>
     </Document>
