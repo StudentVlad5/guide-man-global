@@ -250,7 +250,7 @@ export const Contract = ({ data }) => {
               <Text style={styles.textNoIndent}>Адвокат</Text>
               <Text style={styles.textNoIndent}>Строгий Валерій Федорович</Text>
               <Text style={styles.signaturePlaceholder}>S4</Text>
-              <Text style={styles.signaturePlaceholder}>D4</Text>
+              {/* <Text style={styles.signaturePlaceholder}>D4</Text> */}
             </View>
           </View>
         </View>

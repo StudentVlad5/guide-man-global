@@ -73,6 +73,7 @@ async function sendEnvelope(args) {
   // Download the files and encode them to base64
   const doc2Base64 = await downloadFileAsBase64(envelopeArgs.doc2File);
   const doc3Base64 = await downloadFileAsBase64(envelopeArgs.doc3File);
+  const doc4Base64 = await downloadFileAsBase64(envelopeArgs.doc4File);
 
   const signHereTab = [
     {
@@ -114,7 +115,7 @@ async function sendEnvelope(args) {
 
   const signHereTab2 = [
     {
-      documentId: "1",
+      documentId: "3",
       recipientId: "2",
       tabLabel: "Sign Here",
       anchorString: "S3",
@@ -133,7 +134,7 @@ async function sendEnvelope(args) {
 
   const dateSignedTab2 = [
     {
-      documentId: "1",
+      documentId: "3",
       recipientId: "2",
       tabLabel: "Date Signed",
       anchorString: "D3",
@@ -164,6 +165,12 @@ async function sendEnvelope(args) {
         name: "Agreement",
         fileExtension: "pdf",
         documentId: "2",
+      },
+      {
+        documentBase64: doc4Base64,
+        name: "Lawyer`s Request",
+        fileExtension: "pdf",
+        documentId: "3",
       },
     ],
     recipients: {
@@ -226,6 +233,7 @@ export default async function handler(req, res) {
       ccName,
       doc2File,
       doc3File,
+      doc4File,
     } = req.body;
 
     if (
@@ -234,7 +242,8 @@ export default async function handler(req, res) {
       !ccEmail ||
       !ccName ||
       !doc2File ||
-      !doc3File
+      !doc3File ||
+      !doc4File
     ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -250,6 +259,7 @@ export default async function handler(req, res) {
       status: "sent",
       doc2File,
       doc3File,
+      doc4File,
     };
 
     const args = {
