@@ -17,6 +17,7 @@
       flex-direction: column;
     }
   }
+
   &__wrap {
     display: flex;
     flex-direction: column;
@@ -24,6 +25,7 @@
     border-radius: 8px;
     border: 1px solid #caced8;
   }
+
   &__item {
     font-weight: 700;
     font-size: 12px;
@@ -32,6 +34,7 @@
     justify-items: center;
     align-items: center;
     text-align: center;
+
     &_link {
       font-size: 14px;
       padding-left: 20px;
@@ -39,6 +42,7 @@
       line-height: 100%;
     }
   }
+
   &__button {
     font-size: 12px;
     cursor: pointer;
@@ -54,16 +58,17 @@
     padding: 10px 15px;
     text-decoration: none;
     color: #202020;
-    font-size: 19px;
-    font-family: "Trebuchet MS", sans-serif;
-    line-height: 20px;
+    // font-size: 19px;
+    // font-family: "Trebuchet MS", sans-serif;
+    // line-height: 20px;
 
     transition: all 0.3s ease;
     cursor: pointer;
 
     @include onLaptop {
-      font-size: 16px;
-    padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px;
       line-height: normal;
     }
 
@@ -80,6 +85,7 @@
     }
   }
 }
+
 .round {
   width: 20px;
   height: 20px;
@@ -92,6 +98,7 @@
   height: 6px;
   background: gray;
 }
+
 .green {
   background: #77bb33;
 }

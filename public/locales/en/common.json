@@ -131,6 +131,7 @@
     "pending": "Awaiting payment",
     "paid": "Paid",
     "signed": "Documents signed",
+    "sent": "Documents sent",
     "done": "Completed"
   },
   "Name": "Name",
