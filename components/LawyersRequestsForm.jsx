@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { AppContext } from './AppProvider';
 import styles from '../styles/lawyersRequestForm.module.scss';
@@ -53,6 +53,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
+  const hasExecuted = useRef(false);
 
   const requestEnTitle = request.ua.title;
   const requestRecipient = request.recipient;
@@ -129,7 +130,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           if (!snapshot.empty) {
             const userData = snapshot.docs[0].data();
             setUserData(userData);
-            // handleDocuSign(userRequest);
           } else {
             console.log('User data not found');
           }
@@ -194,23 +194,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
     fetchCollection();
   }, []);
-
-  useEffect(() => {
-    if (
-      paymentStatus === 'success'
-      // &&
-      // userRequest.request.status === 'paid' &&
-      // userRequest.request.status !== 'sent' &&
-      // userRequest.request.status !== 'done'
-    ) {
-      handleDocuSign(userRequest);
-      handleSendEmail(formData);
-    }
-    console.log(
-      ' useEffect ~ userRequest.status:',
-      userRequest?.request?.status
-    );
-  }, [paymentStatus]);
 
   const generatePDFPreview = async type => {
     setIsLoading(true);
@@ -425,6 +408,14 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       setFormData(prev => ({ ...prev, orderId }));
     }
   }, [orderId]);
+
+  useEffect(() => {
+    if (paymentStatus === 'success' && !hasExecuted.current) {
+      hasExecuted.current = true;
+      handleDocuSign(userRequest);
+      handleSendEmail(formData);
+    }
+  }, [paymentStatus]);
 
   const getCountriesByLanguage = lang => {
     return Object.entries(countries.getNames(lang)).map(([code, name]) => ({
