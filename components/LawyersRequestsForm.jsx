@@ -196,10 +196,20 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   }, []);
 
   useEffect(() => {
-    if (paymentStatus === 'success') {
+    if (
+      paymentStatus === 'success'
+      // &&
+      // userRequest.request.status === 'paid' &&
+      // userRequest.request.status !== 'sent' &&
+      // userRequest.request.status !== 'done'
+    ) {
       handleDocuSign(userRequest);
       handleSendEmail(formData);
     }
+    console.log(
+      ' useEffect ~ userRequest.status:',
+      userRequest?.request?.status
+    );
   }, [paymentStatus]);
 
   const generatePDFPreview = async type => {
@@ -319,8 +329,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
             status: data.status,
           }),
         });
-        // handleDocuSign(userRequest);
-        // handleSendEmail(formData);
         clearInterval(paymentCheckInterval);
       }
       // } else if (data.status === "error") {
@@ -361,7 +369,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: '0.1',
+          amount: '2000',
           currency: 'UAH',
           description: title || 'Payment',
           currentLanguage: currentLanguage,
@@ -407,8 +415,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       setPaymentStatus('error');
       setFormData(prev => ({ ...prev, paymentStatus: 'error' }));
     } finally {
-      // savePDF(newOrderId);
-      // setTimeout(() => handleDocuSign(newOrderId), 5000);
       setIsLoading(false);
       setStatusRenewUser(true);
     }
