@@ -76,7 +76,7 @@ export default function LawyersRequests({ requests }) {
     setFilter(t('requests.allRequests'));
   }, [t]);
 
-  const uploadData = async () => {
+  const handleUploadData = async () => {
     const response = await fetch('/api/upload-json', {
       method: 'POST',
       headers: {
@@ -100,9 +100,22 @@ export default function LawyersRequests({ requests }) {
     }
   };
 
-  // useEffect(() => {
-  //   uploadData();
-  // }, []);
+  async function handleUploadOrders() {
+    try {
+      const response = await fetch('/api/pdf/uploadOrdersToFirestore', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error('Помилка завантаження ордерів:', error);
+    }
+  }
+
+  useEffect(() => {
+    // handleUploadData();
+    handleUploadOrders();
+  }, []);
 
   return (
     <Layout

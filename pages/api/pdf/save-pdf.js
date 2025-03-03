@@ -9,6 +9,8 @@ import {
   saveRequestToFirestore,
   uploadPDFToStorage,
 } from '../../../helpers/firebaseControl';
+import { assignOrderToUser } from '../../../helpers/assignOrder';
+import { updateOrderPDF } from './updateOrderPDF';
 import { LawyersRequest } from '../../../components/DownloadPDF';
 import { Agreement } from '../../../components/Agreement';
 import { Contract } from '../../../components/Contract';
@@ -88,6 +90,26 @@ export default async function handler(req, res) {
         generatedPDFs.contract = contractPDF;
       }
 
+      // Отримуємо наступний доступний ордер та оновлюємо його даними користувача
+      const orderData = await assignOrderToUser(uid, formData);
+      if (!orderData || !orderData.pdfUrl) {
+        throw new Error('Не вдалося отримати вільний ордер.');
+      }
+
+      console.log('Ордер призначено:', orderData.orderId);
+
+      // Оновлюємо ордер із заповненими даними користувача
+      const updatedOrderPdfBuffer = await updateOrderPDF(
+        orderData.pdfUrl,
+        formData
+      );
+      const uploadedOrderUrl = await uploadPDFToStorage(
+        updatedOrderPdfBuffer,
+        `orders/${orderData.orderId}.pdf`
+      );
+
+      console.log('Оновлений ордер збережено в Storage:', uploadedOrderUrl);
+
       // Завантажуємо файли в Firebase Storage
       const pdfUrls = {};
 
@@ -98,6 +120,9 @@ export default async function handler(req, res) {
         const fileUrl = await getDownloadURL(fileRef);
         pdfUrls[key] = fileUrl;
       }
+
+      // Додаємо оновлений ордер у pdfUrls
+      pdfUrls.order = uploadedOrderUrl;
 
       console.log('Generated PDF URLs:', pdfUrls);
 

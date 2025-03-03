@@ -30,13 +30,13 @@ export default async function handler(req, res) {
         .json({ error: 'Запити не знайдено для вказаного UID' });
     }
 
-    const { title, pdfLawyersRequest, pdfAgreement, order, requesterFile } =
+    const { title, pdfLawyersRequest, pdfAgreement, pdfOrder, requesterFile } =
       userRequests[0];
     // Формуємо масив файлів для відправлення
     const pdfFiles = [
       { name: 'lawyersRequest.pdf', url: pdfLawyersRequest },
       { name: 'agreement.pdf', url: pdfAgreement },
-      { name: 'order.pdf', url: order },
+      { name: 'order.pdf', url: pdfOrder },
     ];
 
     // Додаємо файли з поля "file" (масив або одиничний файл)

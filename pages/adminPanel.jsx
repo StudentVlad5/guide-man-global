@@ -174,6 +174,21 @@ export default function AdminPanel() {
                 Запросы пользователей
               </div>
             </div>
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('orders')}
+              >
+                Завантаження ордерів
+              </div>
+              {/* <button
+                name="order"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'ордер')}
+              >
+                +
+              </button> */}
+            </div>
           </div>
           <button className={styles.logout} onClick={handleSignOut}>
             Выход
