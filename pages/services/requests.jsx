@@ -114,7 +114,7 @@ export default function LawyersRequests({ requests }) {
 
   useEffect(() => {
     // handleUploadData();
-    handleUploadOrders();
+    // handleUploadOrders();
   }, []);
 
   return (

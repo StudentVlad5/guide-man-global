@@ -20,8 +20,8 @@
 }
 
 .logout {
-  width: 400px;
-  height: 85px;
+  width: 300px;
+  height: 65px;
   box-shadow: 1.672px 1.672px 6.688px rgba(0, 0, 0, 0.1);
   border-radius: 13.376px;
   border: none;
@@ -110,7 +110,7 @@
   justify-content: center;
 
   @include onMobile {
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   &__item {
@@ -170,7 +170,7 @@
 
 .searchPanel {
   background-color: #ffffff;
-  padding: 16px;
+  padding: 6px 10px;
   width: 517px;
   border-radius: 8px;
   font-family: "Trebuchet MS", sans-serif;
@@ -210,12 +210,26 @@
 
 .pagination {
   display: flex;
-  flex-direction: row;
-  justify-content: start;
-  gap: 10px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px;
 
   @include onMobile {
-    gap: 5px;
+    gap: 10px;
+  }
+
+  &__pages {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+
+    &__count {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 14px;
+    }
   }
 
   &__button {
@@ -228,6 +242,7 @@
 
     &:hover {
       background-color: $gray;
+      color: $white1;
     }
   }
 }

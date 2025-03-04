@@ -179,7 +179,7 @@ export default function AdminPanel() {
                 className={styles.body__item__content}
                 onClick={() => handleClickCategory('orders')}
               >
-                Завантаження ордерів
+                Загрузка ордеров
               </div>
               {/* <button
                 name="order"

@@ -150,11 +150,11 @@ export default function AdminOrders() {
   return (
     <div className={styles.main}>
       <h1>
-        <Link href="/adminPanel"> ← Панель администраторa</Link> / Заказы
+        <Link href="/adminPanel"> ← Панель администраторa</Link> / Запросы
       </h1>
       <div className={styles.category}>
         <div>
-          <h1>Поиск запросов клиентов</h1>
+          <h2>Поиск запросов клиентов</h2>
           <input
             type="text"
             value={search}
@@ -237,27 +237,31 @@ export default function AdminOrders() {
 
           {/* Pagination */}
           <div className={styles.pagination}>
-            <button
-              className={styles.pagination__button}
-              disabled={page === 1}
-              onClick={() => handlePageChange(page - 1)}
-            >
-              Previous
-            </button>
-            <button
-              className={styles.pagination__button}
-              disabled={page >= countOFPages}
-              onClick={() => handlePageChange(page + 1)}
-            >
-              Next
-            </button>
+            <div className={styles.pagination__pages}>
+              <button
+                className={styles.pagination__button}
+                disabled={page === 1}
+                onClick={() => handlePageChange(page - 1)}
+              >
+                Previous
+              </button>
+              <button
+                className={styles.pagination__button}
+                disabled={page >= countOFPages}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                Next
+              </button>
+            </div>
+            <div className={styles.pagination__pages__count}>
+              <p>{`Текущая страница ${page}`}</p>
+              <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
+            </div>
           </div>
-          <p>{`Текущая страница ${page}`}</p>
-          <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные пользователя'}
+            title={'Редактировать данные запроса пользователя'}
             handleModal={handleModal}
             form={
               <form className={st.form}>

@@ -1,7 +1,14 @@
-import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, getDoc, setDoc, doc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import fs from 'fs';
-import path from 'path';
+import formidable from 'formidable';
+
+export const config = {
+  api: {
+    bodyParser: false, // Вимикаємо автоматичний bodyParser, бо працюємо з FormData
+    sizeLimit: '10mb', // Збільшуємо обмеження
+  },
+};
 
 const db = getFirestore();
 const storage = getStorage();
@@ -12,40 +19,64 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Метод не дозволений' });
   }
 
+  const form = formidable({ multiples: true, keepExtensions: true });
+
   try {
-    console.log('Запуск uploadOrdersToFirestore');
+    const { files } = await new Promise((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) reject(err);
+        else resolve({ fields, files });
+      });
+    });
 
-    const ordersFolder = path.join(process.cwd(), 'public/orders');
-    const orderFiles = fs
-      .readdirSync(ordersFolder)
-      .filter(file => file.endsWith('.pdf'));
+    if (!files || !files.files) {
+      return res.status(400).json({ error: 'Файли не передані' });
+    }
 
-    for (let fileName of orderFiles) {
-      const orderId = fileName.replace('.pdf', '');
-      const filePath = path.join(ordersFolder, fileName);
-      const fileBuffer = fs.readFileSync(filePath);
+    const uploadedFiles = Array.isArray(files.files)
+      ? files.files
+      : [files.files];
+    let uploadedOrders = 0;
 
-      // Завантаження у Firebase Storage
+    for (let file of uploadedFiles) {
+      const filePath = file.filepath || file.path;
+      const fileBuffer = await fs.promises.readFile(filePath);
+      const fileName = file.originalFilename;
+      const id = fileName.replace('.pdf', ''); // Використовуємо ім'я файлу як ID
+
+      // Перевіряємо, чи ордер вже є в Firestore
+      const orderRef = doc(db, 'orders', id);
+      const orderSnapshot = await getDoc(orderRef);
+
+      if (orderSnapshot.exists()) {
+        console.log(`Ордер ${id} вже існує, пропускаємо.`);
+        continue;
+      }
+
+      // Завантажуємо в Firebase Storage
       const storageRef = ref(storage, `orders/${fileName}`);
       await uploadBytes(storageRef, fileBuffer);
       const fileUrl = await getDownloadURL(storageRef);
 
-      // Додавання у Firestore
+      // Додаємо запис у Firestore
       const orderData = {
-        orderId,
-        status: 'free', // Вільний ордер
+        id,
+        status: 'free',
         assignedTo: null,
         userData: null,
         pdfUrl: fileUrl,
       };
 
-      await setDoc(doc(collection(db, 'orders'), orderId), orderData);
-      console.log(`Ордер ${orderId} завантажено.`);
+      await setDoc(orderRef, orderData);
+      console.log(`Ордер ${id} завантажено.`);
+      uploadedOrders++;
     }
 
-    res.status(200).json({ message: 'Усі ордери успішно завантажено!' });
+    res.status(200).json({
+      message: `Успешно добавлено ${uploadedOrders} новых ордеров!`,
+    });
   } catch (error) {
-    console.error('Помилка під час завантаження ордерів:', error);
-    res.status(500).json({ error: 'Помилка під час завантаження ордерів' });
+    console.error('Помилка завантаження файлів:', error);
+    res.status(500).json({ error: 'Помилка завантаження файлів' });
   }
 }

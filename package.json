@@ -16,6 +16,7 @@
     "docusign-esign": "^8.0.1",
     "dotenv": "^16.0.3",
     "firebase": "^9.18.0",
+    "formidable": "^3.5.2",
     "fs": "^0.0.1-security",
     "gh-pages": "^5.0.0",
     "i18n-iso-countries": "^7.13.0",
