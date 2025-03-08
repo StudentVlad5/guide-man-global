@@ -40,7 +40,7 @@
   },
   "homePage": {
     "banner": {
-      "h1": "Послуги для іноземних громадян",
+      "h1": "Послуги для українців та іноземних громадян",
       "label_title1": "Оберіть послугу",
       "label_title2": "Тип послуги",
       "bannerDropdown": {
@@ -79,7 +79,7 @@
     "legalization": "Легалізація в Україні",
     "document": "Документ сервіс",
     "monitoring": "Моніторинг",
-    "requests": "Адвокатські запити",
+    "requests": "Адвокатські запити онлайн",
     "allServices": "Усі послуги"
   },
   "requests": {
@@ -203,5 +203,26 @@
   "Select a TCK": "Виберіть ТЦК",
   "Pay Now": "Оплатити зараз",
   "Price": "Вартість",
-  "Paid": "Оплачено"
+  "Paid": "Оплачено",
+  "Ask a question": "Задати питання",
+  "Feedback": "Зворотній зв'язок",
+  "The answer to the question will be provided during business hours.": "Відповідь на питання буде надана в робочі години.",
+  "Business hours": "Робочі години",
+  "Monday - Friday": "Понеділок - П’ятниця",
+  "If your question concerns an already submitted request, please provide your": "Якщо ваше питання стосується вже оформленого запиту, будь ласка, вкажіть своє",
+  "full name": "повне ім’я",
+  "and": "та",
+  "order number": "номер замовлення",
+  "(you will find it in the request history)": "(його ви знайдете в історії звернень)",
+  "Show less": "Показати менше",
+  "Show more": "Показати більше",
+  "Why is registration necessary?": "Чому необхідна реєстрація?",
+  "In order to use legal services and submit a request, you need to register.": "Для того щоб скористатися адвокатськими послугами та подати запит, вам необхідно зареєструватися.",
+  "Registration provides": "Реєстрація забезпечує",
+  "Personalization": "Персоналізацію",
+  "your data is automatically used in requests, which simplifies the process of their processing": "ваші дані автоматично використовуються у запитах, що спрощує процес їх оформлення",
+  "Saving requests history": "Збереження історії запитів",
+  "all your requests are stored in your personal account, and you can always return to them": "усі ваші звернення зберігаються у вашому особистому кабінеті, і ви завжди можете до них повернутися",
+  "Security and privacy": "Безпеку та конфіденційність",
+  "your data is securely protected, and only you and your lawyer have access to the information": "ваші дані надійно захищені, а доступ до інформації мають лише ви та адвокат"
 }

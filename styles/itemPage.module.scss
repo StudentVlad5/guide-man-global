@@ -1,5 +1,5 @@
 @import "./variables";
-@import './mixins';
+@import "./mixins";
 
 .itemPage {
   display: flex;
@@ -93,7 +93,6 @@
       font-weight: 700;
       margin-bottom: 15px;
 
-
       @include onMobile {
         font-size: 16px;
         line-height: 151%;
@@ -107,7 +106,6 @@
       letter-spacing: -0.75px;
       font-weight: 700;
       margin-bottom: 15px;
-
 
       @include onMobile {
         font-size: 14px;
@@ -123,11 +121,11 @@
       margin-bottom: 30px;
     }
 
-    &:nth-last-child(2) {
-      margin-bottom: 68px;
+    // &:nth-last-child(2) {
+    //   margin-bottom: 68px;
 
-      margin-bottom: 33px;
-    }
+    //   margin-bottom: 33px;
+    // }
   }
 
   &__underline {
@@ -142,7 +140,7 @@
     }
   }
 
-  &__price{
+  &__price {
     color: #202020;
     font-size: 20px;
     font-family: "Trebuchet MS", sans-serif;
@@ -211,13 +209,28 @@
 
   &__text {
     color: #202020;
-    font-size: 22px;
+    font-size: 20px;
     font-family: "Trebuchet MS", sans-serif;
     line-height: 20px;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
 
     @include onMobile {
       font-size: 18px;
     }
+
+    &_bold{
+      font-weight: bold;
+    }
   }
+}
+.showMoreButton {
+  background-color: transparent;
+  border: none;
+  text-align: right;
+  text-decoration: underline;
+  color: #202020;
+  font-size: 20px;
+  font-family: "Trebuchet MS", sans-serif;
+  line-height: 20px;
+  margin-bottom: 50px;
 }
