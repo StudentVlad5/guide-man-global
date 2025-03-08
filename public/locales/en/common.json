@@ -40,7 +40,7 @@
   },
   "homePage": {
     "banner": {
-      "h1": "Services for foreigners",
+      "h1": "Services for Ukrainians and foreigners",
       "label_title1": "Choose a service",
       "label_title2": "Type of service",
       "bannerDropdown": {
@@ -79,7 +79,7 @@
     "legalization": "Legalization in Ukraine",
     "document": "Document service",
     "monitoring": "Monitoring",
-    "requests": "Lawyer's requests",
+    "requests": "Lawyer's requests online",
     "allServices": "All services"
   },
   "requests": {
@@ -203,5 +203,26 @@
   "Select a TCK": "Select a TCK",
   "Pay Now": "Pay Now",
   "Price": "Price",
-  "Paid": "Paid"
+  "Paid": "Paid",
+  "Ask a question": "Ask a question",
+  "Feedback": "Feedback",
+  "The answer to the question will be provided during business hours.": "The answer to the question will be provided during business hours.",
+  "Business hours": "Business hours",
+  "Monday - Friday": "Monday - Friday",
+  "If your question concerns an already submitted request, please provide your": "If your question concerns an already submitted request, please provide your",
+  "full name": "full name",
+  "and": "and",
+  "order number": "order number",
+  "(you will find it in the request history)": "(you will find it in the request history)",
+  "Show less": "Show less",
+  "Show more": "Show more",
+  "Why is registration necessary?": "Why is registration necessary?",
+  "In order to use legal services and submit a request, you need to register.": "In order to use legal services and submit a request, you need to register.",
+  "Registration provides": "Registration provides",
+  "Personalization": "Personalization",
+  "your data is automatically used in requests, which simplifies the process of their processing": "your data is automatically used in requests, which simplifies the process of their processing",
+  "Saving requests history": "Saving requests history",
+  "all your requests are stored in your personal account, and you can always return to them": "all your requests are stored in your personal account, and you can always return to them",
+  "Security and privacy": "Security and privacy",
+  "your data is securely protected, and only you and your lawyer have access to the information": "your data is securely protected, and only you and your lawyer have access to the information"
 }

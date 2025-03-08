@@ -40,7 +40,7 @@
   },
   "homePage": {
     "banner": {
-      "h1": "Услуги для иностранных граждан",
+      "h1": "Услуги для украинцев и иностранных граждан",
       "label_title1": "Выберите услугу",
       "label_title2": "Тип услуги",
       "bannerDropdown": {
@@ -79,7 +79,7 @@
     "legalization": "Легализация в Украине",
     "document": "Документ сервис",
     "monitoring": "Мониторинг",
-    "requests": "Адвокатские запросы",
+    "requests": "Адвокатские запросы онлайн",
     "allServices": "Все услуги"
   },
   "requests": {
@@ -203,5 +203,26 @@
   "Select a TCK": "Выберите ТЦК",
   "Pay Now": "Оплатить сейчас",
   "Price": "Цена",
-  "Paid": "Оплачено"
+  "Paid": "Оплачено",
+  "Ask a question": "Задать вопрос",
+  "Feedback": "Обратная связь",
+  "The answer to the question will be provided during business hours.": "Ответ на вопрос будет предоставлен в рабочие часы.",
+  "Business hours": "Рабочие часы",
+  "Monday - Friday": "Понедельник - Пятница",
+  "If your question concerns an already submitted request, please provide your": "Если ваш вопрос касается уже оформленного запроса, пожалуйста, укажите свое",
+  "full name": "полное имя",
+  "and": "и",
+  "order number": "номер заказа",
+  "(you will find it in the request history)": "(его вы найдете в истории запросов)",
+  "Show less": "Показать меньше",
+  "Show more": "Показать больше",
+  "Why is registration necessary?": "Почему необходима регистрация?",
+  "In order to use legal services and submit a request, you need to register.": "Чтобы воспользоваться адвокатскими услугами и подать запрос, вам необходимо зарегистрироваться.",
+  "Registration provides": "Регистрация обеспечивает",
+  "Personalization": "Персонализацию",
+  "your data is automatically used in requests, which simplifies the process of their processing": "ваши данные автоматически используются в запросах, что упрощает процесс их оформления",
+  "Saving requests history": "Сохранение истории запросов",
+  "all your requests are stored in your personal account, and you can always return to them": "все ваши обращения хранятся в вашем личном кабинете, и вы всегда можете к ним вернуться",
+  "Security and privacy": "Безопасность и конфиденциальность",
+  "your data is securely protected, and only you and your lawyer have access to the information": "ваши данные надежно защищены, а доступ к информации имеете только вы и адвокат"
 }
