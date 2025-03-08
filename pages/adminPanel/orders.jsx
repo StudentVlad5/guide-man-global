@@ -45,14 +45,14 @@ export default function UploadOrders() {
   const fetchOrders = async () => {
     setLoading(true);
     const ordersRef = collection(db, 'orders');
-    let q = query(ordersRef, orderBy('id'), limit(PAGE_SIZE));
+    let q = query(ordersRef, orderBy('status'), limit(PAGE_SIZE));
 
     if (search) {
       q = query(
         ordersRef,
-        where('id', '>=', search),
-        where('id', '<=', search + '\uf8ff'),
-        orderBy('id'),
+        where('status', '>=', search),
+        where('status', '<=', search + '\uf8ff'),
+        orderBy('status'),
         limit(PAGE_SIZE)
       );
     }
@@ -83,8 +83,8 @@ export default function UploadOrders() {
         querySnapshotCount = await getDocs(
           query(
             ordersRef,
-            where('id', '>=', search),
-            where('id', '<=', search + '\uf8ff')
+            where('status', '>=', search),
+            where('status', '<=', search + '\uf8ff')
           )
         );
       }
@@ -151,7 +151,8 @@ export default function UploadOrders() {
 
     const formData = new FormData();
     files.forEach(file => {
-      const blob = new Blob([file.base64], { type: 'application/pdf' });
+      const byteArray = Buffer.from(file.base64, 'base64'); // Коректне декодування
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
       formData.append('files', blob, file.name);
     });
 
@@ -191,11 +192,11 @@ export default function UploadOrders() {
         <div>
           <h2>Поиск ордеров</h2>
           <input
-            type="number"
+            type="text"
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по id"
+            placeholder="Поиск по status"
           />
 
           {/* Table displaying user data */}

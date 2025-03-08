@@ -358,7 +358,6 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       pdfLawyersRequest: pdfUrls.lawyersRequest || '',
       pdfAgreement: pdfUrls.agreement || '',
       pdfContract: pdfUrls.contract || '',
-      // order: data.numberOrder || pdfUrls.contract,
       pdfOrder: pdfUrls.order,
       userEmail: user.email,
       status: 'pending',
@@ -418,7 +417,7 @@ export async function getNextAvailableOrder() {
       availableOrder.id
     );
 
-    return { orderId: availableOrder.id, fileUrl: availableOrder.fileUrl };
+    return { id: availableOrder.id, fileUrl: availableOrder.fileUrl };
   } catch (error) {
     console.error('Помилка отримання наступного ордера:', error);
     throw error;

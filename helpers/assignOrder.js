@@ -4,6 +4,7 @@ import {
   collection,
   query,
   where,
+  orderBy,
   getDocs,
 } from 'firebase/firestore';
 import { getCollectionWhereKeyValue } from './firebaseControl';
@@ -16,7 +17,7 @@ export async function assignOrderToUser(db, requestId, userData) {
   const q = query(
     ordersRef,
     where('status', '==', 'free'),
-    orderBy('orderId', 'asc') // Вибираємо найменший ORDER-0001, ORDER-0002...
+    orderBy('id', 'asc') // Вибираємо найменший ORDER-0001, ORDER-0002...
   );
   const ordersSnapshot = await getDocs(q);
 
@@ -40,7 +41,7 @@ export async function assignOrderToUser(db, requestId, userData) {
     });
 
     return {
-      orderId: firstOrderDoc.id,
+      id: firstOrderDoc.id,
       pdfUrl: orderDoc.data().pdfUrl,
     };
   });

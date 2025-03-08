@@ -40,7 +40,7 @@ Font.register({
 });
 
 export default async function handler(req, res) {
-  console.log('Request received:', req.method, req.body);
+  // console.log('Request received:', req.method, req.body);
 
   if (req.method === 'POST') {
     console.log({ message: 'The API is working!' });
@@ -91,12 +91,14 @@ export default async function handler(req, res) {
       }
 
       // Отримуємо наступний доступний ордер та оновлюємо його даними користувача
-      const orderData = await assignOrderToUser(uid, formData);
+      const orderData = await assignOrderToUser(db, formData.id, formData);
+      console.log(' save-pdf ~ orderData:', orderData);
+
       if (!orderData || !orderData.pdfUrl) {
         throw new Error('Не вдалося отримати вільний ордер.');
       }
 
-      console.log('Ордер призначено:', orderData.orderId);
+      console.log('Ордер призначено:', orderData.id);
 
       // Оновлюємо ордер із заповненими даними користувача
       const updatedOrderPdfBuffer = await updateOrderPDF(
@@ -105,7 +107,7 @@ export default async function handler(req, res) {
       );
       const uploadedOrderUrl = await uploadPDFToStorage(
         updatedOrderPdfBuffer,
-        `orders/${orderData.orderId}.pdf`
+        `orders/${orderData.id}.pdf`
       );
 
       console.log('Оновлений ордер збережено в Storage:', uploadedOrderUrl);
@@ -116,7 +118,9 @@ export default async function handler(req, res) {
       for (const [key, pdfBuffer] of Object.entries(generatedPDFs)) {
         const fileName = `documents/${key}-${Date.now()}.pdf`;
         const fileRef = ref(storage, fileName);
-        await uploadBytes(fileRef, pdfBuffer);
+        await uploadBytes(fileRef, pdfBuffer, {
+          contentType: 'application/pdf',
+        });
         const fileUrl = await getDownloadURL(fileRef);
         pdfUrls[key] = fileUrl;
       }

@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "@react-pdf/renderer": "^4.1.6",
     "@svgr/webpack": "^8.0.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -16,6 +17,7 @@
     "docusign-esign": "^8.0.1",
     "dotenv": "^16.0.3",
     "firebase": "^9.18.0",
+    "fontkit": "^2.0.4",
     "formidable": "^3.5.2",
     "fs": "^0.0.1-security",
     "gh-pages": "^5.0.0",
