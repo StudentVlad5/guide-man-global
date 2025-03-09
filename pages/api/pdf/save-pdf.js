@@ -48,7 +48,6 @@ export default async function handler(req, res) {
     const { formData, selectedDocuments, uid } = req.body;
 
     try {
-      console.log('Data for creating PDF:', formData);
       if (!uid) {
         console.error('Cannot save the file, please log in');
         throw new Error('UID is required to save the request');
@@ -92,7 +91,6 @@ export default async function handler(req, res) {
 
       // Отримуємо наступний доступний ордер та оновлюємо його даними користувача
       const orderData = await assignOrderToUser(db, formData.id, formData);
-      console.log(' save-pdf ~ orderData:', orderData);
 
       if (!orderData || !orderData.pdfUrl) {
         throw new Error('Не вдалося отримати вільний ордер.');
@@ -107,7 +105,8 @@ export default async function handler(req, res) {
       );
       const uploadedOrderUrl = await uploadPDFToStorage(
         updatedOrderPdfBuffer,
-        `orders/${orderData.id}.pdf`
+        `orders/${orderData.id}.pdf`,
+        storage
       );
 
       console.log('Оновлений ордер збережено в Storage:', uploadedOrderUrl);

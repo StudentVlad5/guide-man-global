@@ -377,7 +377,14 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
 };
 
 export const uploadPDFToStorage = async (pdfBuffer, fileName, storage) => {
-  const storageRef = ref(storage, `documents/${fileName}`);
+  if (!storage) {
+    throw new Error('Помилка: storage не визначено!');
+  }
+
+  if (!pdfBuffer || !fileName) {
+    throw new Error('Помилка: Неправильні параметри для збереження файлу!');
+  }
+  const storageRef = ref(storage, fileName);
 
   try {
     // Завантажуємо PDF у Firebase Storage
