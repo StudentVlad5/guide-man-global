@@ -96,13 +96,51 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
           </div>
         ) : (
           <div className={styles.buttonDiv}>
-            <p className={styles.buttonDiv__text}>
-              {locale === "ua"
-                ? "Щоб замовити послугу необхідно зареєструватися."
-                : locale === "ru"
-                ? "Чтобы заказать услугу необходимо зарегистрироваться."
-                : "To order the service you need to register."}
-            </p>
+            <div>
+              <p
+                className={styles.buttonDiv__text}
+                style={{ fontWeight: "bold" }}
+              >
+                {t("Why is registration necessary?")}
+              </p>
+
+              <p className={styles.buttonDiv__text}>
+                {t(
+                  "In order to use legal services and submit a request, you need to register."
+                )}
+                <br /> {t("Registration provides")}:
+              </p>
+
+              <ul>
+                <li>
+                  <p className={styles.buttonDiv__text}>
+                    <span className={styles.buttonDiv__text_bold}>
+                      {t("Personalization")}
+                    </span>{" "}
+                    - {t("your data is automatically used in requests, which simplifies the process of their processing")}.
+                  </p>
+                </li>
+                <li>
+                  <p className={styles.buttonDiv__text}>
+                    <span className={styles.buttonDiv__text_bold}>
+                      {t("Saving requests history")}
+                    </span>{" "}
+                    - {t("all your requests are stored in your personal account, and you can always return to them")}.
+                  </p>
+                </li>
+                <li>
+                  <p
+                    style={{ marginBottom: 45 }}
+                    className={styles.buttonDiv__text}
+                  >
+                    <span className={styles.buttonDiv__text_bold}>
+                      {t("Security and privacy")}
+                    </span>{" "}
+                    - {t("your data is securely protected, and only you and your lawyer have access to the information")}.
+                  </p>
+                </li>
+              </ul>
+            </div>
 
             <Link
               href="/registration"

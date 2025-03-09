@@ -1,14 +1,15 @@
-import Head from 'next/head';
-import i18n from 'i18next';
-import { appWithTranslation } from 'next-i18next';
-import { initReactI18next } from 'react-i18next';
-import nextI18NextConfig from '../next-i18next.config.js';
-import NextNProgress from 'nextjs-progressbar';
+import Head from "next/head";
+import i18n from "i18next";
+import { appWithTranslation } from "next-i18next";
+import { initReactI18next } from "react-i18next";
+import nextI18NextConfig from "../next-i18next.config.js";
+import NextNProgress from "nextjs-progressbar";
 
-require('dotenv').config();
-import '../styles/global.scss';
-import { AppProvider } from '../components/AppProvider';
-import { useEffect } from 'react';
+require("dotenv").config();
+import "../styles/global.scss";
+import { AppProvider } from "../components/AppProvider";
+import { useEffect } from "react";
+import { FeedbackForm } from "../components/FeedbackForm.jsx";
 
 i18n.use(initReactI18next).init(nextI18NextConfig);
 
@@ -16,11 +17,11 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const startScheduler = async () => {
       try {
-        const response = await fetch('/api/pdf/cron');
+        const response = await fetch("/api/pdf/cron");
         const data = await response.json();
         console.log(data.message);
       } catch (error) {
-        console.error('Помилка запуску планувальника:', error);
+        console.error("Помилка запуску планувальника:", error);
       }
     };
 
@@ -40,7 +41,9 @@ function MyApp({ Component, pageProps }) {
         height={3}
         showOnShallow={true}
       />
+
       <Component {...pageProps} />
+      <FeedbackForm />
     </AppProvider>
   );
 }

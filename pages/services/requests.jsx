@@ -112,10 +112,17 @@ export default function LawyersRequests({ requests }) {
     }
   }
 
+  //Для разового завантаження даних розкомітити необхідне, а після завантаження - закомітити назад
   useEffect(() => {
     // handleUploadData();
     // handleUploadOrders();
   }, []);
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <Layout
@@ -187,6 +194,30 @@ export default function LawyersRequests({ requests }) {
 
       <div className="page page-bigBottom">
         <div className="container">
+          <div>
+            <div className={stylesDesc.ItemPage}>
+              <h1 className={`page__title ${stylesDesc.itemPage__title}`}>
+                {getRightData(requestsDescription, locale, 'title')}
+              </h1>
+              <article
+                className={stylesDesc.itemPage__text}
+                style={{
+                  maxHeight: isExpanded ? 'none' : '100px',
+                  overflow: 'hidden',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: getRightData(requestsDescription, locale, 'text'),
+                }}
+              />
+              <button
+                onClick={toggleText}
+                className={stylesDesc.showMoreButton}
+              >
+                {isExpanded ? t('Show less') : t('Show more')}
+              </button>
+            </div>
+          </div>
+
           <div className={styles.servisesPage__content}>
             <div className={styles.servisesPage__section}>
               <ServisesButton
@@ -233,20 +264,6 @@ export default function LawyersRequests({ requests }) {
                 Img={Doc}
                 title={t('requests.stateMigrationService')}
                 values={stateMigrationService}
-              />
-            </div>
-          </div>
-
-          <div style={{ marginTop: 50 }}>
-            <div className={stylesDesc.ItemPage}>
-              <h1 className={`page__title ${stylesDesc.itemPage__title}`}>
-                {getRightData(requestsDescription, locale, 'title')}
-              </h1>
-              <article
-                className={stylesDesc.itemPage__text}
-                dangerouslySetInnerHTML={{
-                  __html: getRightData(requestsDescription, locale, 'text'),
-                }}
               />
             </div>
           </div>
