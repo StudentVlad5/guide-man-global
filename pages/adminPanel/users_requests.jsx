@@ -54,14 +54,14 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     setLoading(true);
     const ordersRef = collection(db, 'userRequests');
-    let q = query(ordersRef, orderBy('email'), limit(PAGE_SIZE));
+    let q = query(ordersRef, orderBy('id'), limit(PAGE_SIZE));
 
     if (search) {
       q = query(
         ordersRef,
-        where('email', '>=', search),
-        where('email', '<=', search + '\uf8ff'),
-        orderBy('email'),
+        where('id', '>=', search),
+        where('id', '<=', search + '\uf8ff'),
+        orderBy('id'),
         limit(PAGE_SIZE)
       );
     }
@@ -92,8 +92,8 @@ export default function AdminOrders() {
         querySnapshotCount = await getDocs(
           query(
             ordersRef,
-            where('email', '>=', search),
-            where('email', '<=', search + '\uf8ff')
+            where('id', '>=', search),
+            where('id', '<=', search + '\uf8ff')
           )
         );
       }
@@ -160,7 +160,7 @@ export default function AdminOrders() {
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по email"
+            placeholder="Поиск по id"
           />
 
           {/* Table displaying user data */}
