@@ -101,7 +101,7 @@ export default function AdminRecipient() {
       </h1>
       <div className={styles.category}>
         <div>
-          <h1>Поиск госоргана</h1>
+          <h2>Поиск госоргана</h2>
           <input
             type="text"
             value={search}
@@ -176,7 +176,7 @@ export default function AdminRecipient() {
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные'}
+            title={'Редактировать данные госоргана'}
             handleModal={handleModal}
             form={
               <form className={st.form}>

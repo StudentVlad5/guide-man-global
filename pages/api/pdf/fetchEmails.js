@@ -9,7 +9,7 @@ const imapConfig = {
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
-    authTimeout: 5000,
+    authTimeout: 50000,
     tlsOptions: { rejectUnauthorized: false, servername: 'imap.gmail.com' }, // Додаємо серверне ім'я
   },
 };

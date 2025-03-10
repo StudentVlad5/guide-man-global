@@ -79,6 +79,8 @@ export const useLawyerRequest = request => {
         signerName: userRequest?.request?.name,
         ccEmail: 'julia.j.shcherban@gmail.com',
         ccName: 'julia.j.shcherban',
+        // ccEmail: 'pcentr27@gmail.com',
+        // ccName: 'Строгий Валерій Федорович',
         doc2File: userRequest?.request?.pdfAgreement,
         doc3File: userRequest?.request?.pdfContract,
         doc4File: userRequest?.request?.pdfLawyersRequest,

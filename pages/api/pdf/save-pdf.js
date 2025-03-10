@@ -9,6 +9,8 @@ import {
   saveRequestToFirestore,
   uploadPDFToStorage,
 } from '../../../helpers/firebaseControl';
+import { assignOrderToUser } from '../../../helpers/assignOrder';
+import { updateOrderPDF } from './updateOrderPDF';
 import { LawyersRequest } from '../../../components/DownloadPDF';
 import { Agreement } from '../../../components/Agreement';
 import { Contract } from '../../../components/Contract';
@@ -38,7 +40,7 @@ Font.register({
 });
 
 export default async function handler(req, res) {
-  console.log('Request received:', req.method, req.body);
+  // console.log('Request received:', req.method, req.body);
 
   if (req.method === 'POST') {
     console.log({ message: 'The API is working!' });
@@ -46,7 +48,6 @@ export default async function handler(req, res) {
     const { formData, selectedDocuments, uid } = req.body;
 
     try {
-      console.log('Data for creating PDF:', formData);
       if (!uid) {
         console.error('Cannot save the file, please log in');
         throw new Error('UID is required to save the request');
@@ -88,16 +89,43 @@ export default async function handler(req, res) {
         generatedPDFs.contract = contractPDF;
       }
 
+      // Отримуємо наступний доступний ордер та оновлюємо його даними користувача
+      const orderData = await assignOrderToUser(db, formData.id, formData);
+
+      if (!orderData || !orderData.pdfUrl) {
+        throw new Error('Не вдалося отримати вільний ордер.');
+      }
+
+      console.log('Ордер призначено:', orderData.id);
+
+      // Оновлюємо ордер із заповненими даними користувача
+      const updatedOrderPdfBuffer = await updateOrderPDF(
+        orderData.pdfUrl,
+        formData
+      );
+      const uploadedOrderUrl = await uploadPDFToStorage(
+        updatedOrderPdfBuffer,
+        `orders/${orderData.id}.pdf`,
+        storage
+      );
+
+      console.log('Оновлений ордер збережено в Storage:', uploadedOrderUrl);
+
       // Завантажуємо файли в Firebase Storage
       const pdfUrls = {};
 
       for (const [key, pdfBuffer] of Object.entries(generatedPDFs)) {
         const fileName = `documents/${key}-${Date.now()}.pdf`;
         const fileRef = ref(storage, fileName);
-        await uploadBytes(fileRef, pdfBuffer);
+        await uploadBytes(fileRef, pdfBuffer, {
+          contentType: 'application/pdf',
+        });
         const fileUrl = await getDownloadURL(fileRef);
         pdfUrls[key] = fileUrl;
       }
+
+      // Додаємо оновлений ордер у pdfUrls
+      pdfUrls.order = uploadedOrderUrl;
 
       console.log('Generated PDF URLs:', pdfUrls);
 

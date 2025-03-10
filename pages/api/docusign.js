@@ -187,8 +187,10 @@ async function sendEnvelope(args) {
           },
         },
         {
-          email: 'pcentr27@gmail.com',
-          name: 'Строгий Валерій Федорович',
+          email: 'julia.j.shcherban@gmail.com',
+          name: 'Julia Golban',
+          // email: 'pcentr27@gmail.com',
+          // name: 'Строгий Валерій Федорович',
           recipientId: '2',
           routingOrder: '2',
           tabs: {

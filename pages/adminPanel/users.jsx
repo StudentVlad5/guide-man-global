@@ -152,7 +152,7 @@ export default function AdminUsers() {
       </h1>
       <div className={styles.category}>
         <div>
-          <h1>Users Search</h1>
+          <h2>Поиск пользователей</h2>
           <input
             type="text"
             value={search}
@@ -241,23 +241,27 @@ export default function AdminUsers() {
 
           {/* Pagination */}
           <div className={styles.pagination}>
-            <button
-              className={styles.pagination__button}
-              disabled={page === 1}
-              onClick={() => handlePageChange(page - 1)}
-            >
-              Previous
-            </button>
-            <button
-              className={styles.pagination__button}
-              disabled={page >= countOFPages}
-              onClick={() => handlePageChange(page + 1)}
-            >
-              Next
-            </button>
+            <div className={styles.pagination__pages}>
+              <button
+                className={styles.pagination__button}
+                disabled={page === 1}
+                onClick={() => handlePageChange(page - 1)}
+              >
+                Previous
+              </button>
+              <button
+                className={styles.pagination__button}
+                disabled={page >= countOFPages}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                Next
+              </button>
+            </div>
+            <div className={styles.pagination__pages__count}>
+              <p>{`Текущая страница ${page}`}</p>
+              <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
+            </div>
           </div>
-          <p>{`Текущая страница ${page}`}</p>
-          <p>{`Всего страниц в базе данных: ${countOFPages}`}</p>
         </div>
         {isModal && (
           <Modal

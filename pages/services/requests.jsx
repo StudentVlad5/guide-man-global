@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "next-i18next";
-import { PageNavigation } from "../../components/PageNavigation";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
+import { PageNavigation } from '../../components/PageNavigation';
 
-import { ServisesDropdown } from "../../components/ServisesDropdown";
-import { ServisesButton } from "../../components/ServisesButton";
-import { getRightData, getRightURL } from "../../helpers/rightData";
+import { ServisesDropdown } from '../../components/ServisesDropdown';
+import { ServisesButton } from '../../components/ServisesButton';
+import { getRightData, getRightURL } from '../../helpers/rightData';
 
-import requestsDescription from "../../data/requestsDescription.json";
-import { useRouter } from "next/router";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Layout } from "../../components/Layout";
+import requestsDescription from '../../data/requestsDescription.json';
+import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Layout } from '../../components/Layout';
 
-import Menu from "../../public/menu.svg";
-import Doc from "../../public/doc.svg";
+import Menu from '../../public/menu.svg';
+import Doc from '../../public/doc.svg';
 
-import styles from "../../styles/servicesPage.module.scss";
-import stylesDesc from "../../styles/itemPage.module.scss";
-import { getCollection } from "../../helpers/firebaseControl";
+import styles from '../../styles/servicesPage.module.scss';
+import stylesDesc from '../../styles/itemPage.module.scss';
+import { getCollection } from '../../helpers/firebaseControl';
 
-import { BASE_URL } from "../sitemap.xml";
+import { BASE_URL } from '../sitemap.xml';
 
 export default function LawyersRequests({ requests }) {
   // console.log('LawyersRequests ~ requests:', requests);
@@ -27,65 +27,64 @@ export default function LawyersRequests({ requests }) {
 
   const civilRegistryOffices = requests
     .filter(
-      (request) =>
-        request.requestType[locale] === t("requests.civilRegistryOffices")
+      request =>
+        request.requestType[locale] === t('requests.civilRegistryOffices')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const ministryOfInternalAffairs = requests
     .filter(
-      (request) =>
-        request.requestType[locale] === t("requests.ministryOfInternalAffairs")
+      request =>
+        request.requestType[locale] === t('requests.ministryOfInternalAffairs')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const internallyDisplacedPersons = requests
     .filter(
-      (request) =>
-        request.requestType[locale] === t("requests.internallyDisplacedPersons")
+      request =>
+        request.requestType[locale] === t('requests.internallyDisplacedPersons')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const pensionFund = requests
     .filter(
-      (request) => request.requestType[locale] === t("requests.pensionFund")
+      request => request.requestType[locale] === t('requests.pensionFund')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const ministryOfDefense = requests
     .filter(
-      (request) =>
-        request.requestType[locale] === t("requests.ministryOfDefense")
+      request => request.requestType[locale] === t('requests.ministryOfDefense')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const stateMigrationService = requests
     .filter(
-      (request) =>
-        request.requestType[locale] === t("requests.stateMigrationService")
+      request =>
+        request.requestType[locale] === t('requests.stateMigrationService')
     )
-    .map((request) => [getRightData(request, locale, "title"), request.path]);
+    .map(request => [getRightData(request, locale, 'title'), request.path]);
 
   const [isAllButtons, setIsAllButtons] = useState(false);
-  const [filter, setFilter] = useState(t("requests.allRequests"));
+  const [filter, setFilter] = useState(t('requests.allRequests'));
 
   const openAllButtons = () => {
     setIsAllButtons(!isAllButtons);
   };
 
   useEffect(() => {
-    setFilter(t("requests.allRequests"));
+    setFilter(t('requests.allRequests'));
   }, [t]);
 
-  const uploadData = async () => {
-    const response = await fetch("/api/upload-json", {
-      method: "POST",
+  const handleUploadData = async () => {
+    const response = await fetch('/api/upload-json', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fileName: "tck.json",
-        collectionName: "tck",
+        fileName: 'tck.json',
+        collectionName: 'tck',
         // fileName: 'dataRequests.json',
         // collectionName: 'requests',
       }),
@@ -101,21 +100,35 @@ export default function LawyersRequests({ requests }) {
     }
   };
 
+  async function handleUploadOrders() {
+    try {
+      const response = await fetch('/api/pdf/uploadOrdersToFirestore', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error('Помилка завантаження ордерів:', error);
+    }
+  }
+
+  //Для разового завантаження даних розкомітити необхідне, а після завантаження - закомітити назад
+  useEffect(() => {
+    // handleUploadData();
+    // handleUploadOrders();
+  }, []);
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleText = () => {
     setIsExpanded(!isExpanded);
   };
 
-  // useEffect(() => {
-  //   uploadData();
-  // }, []);
-
   return (
     <Layout
       type="requests page"
-      desctiption={`⭐${t("navbar.services")}⭐ ${t("head.home.description")}`}
-      h1={t("navbar.services")}
+      desctiption={`⭐${t('navbar.services')}⭐ ${t('head.home.description')}`}
+      h1={t('navbar.services')}
       script={`[
         {
             "@context": "http://schema.org",
@@ -128,7 +141,7 @@ export default function LawyersRequests({ requests }) {
                   "item":
                   {
                     "@id": "${BASE_URL}",
-                    "name": "${t("pageNavigation.main")}"
+                    "name": "${t('pageNavigation.main')}"
                   }
                 },
                 {
@@ -137,7 +150,7 @@ export default function LawyersRequests({ requests }) {
                   "item":
                   {
                     "@id": "${getRightURL(locale, pathname)}",
-                    "name": "${t("navbar.services")}"
+                    "name": "${t('navbar.services')}"
                   }
                 },
                 {
@@ -146,7 +159,7 @@ export default function LawyersRequests({ requests }) {
                   "item":
                   {
                     "@id": "${getRightURL(locale, pathname)}",
-                    "name": "${t("navbar.requests")}"
+                    "name": "${t('navbar.requests')}"
                   }
                 }
               ]
@@ -155,18 +168,18 @@ export default function LawyersRequests({ requests }) {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             "mainEntity": [
-              ${requests.map((el) => {
+              ${requests.map(el => {
                 return `{
               "@type": "Question",
               "name": "${el.requestType[locale]}: ${getRightData(
                   el,
                   locale,
-                  "title"
+                  'title'
                 )}",
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "${
-                  getRightData(el, locale, "text").slice(0, 250) + "..."
+                  getRightData(el, locale, 'text').slice(0, 250) + '...'
                 }"
               }
             }`;
@@ -184,23 +197,23 @@ export default function LawyersRequests({ requests }) {
           <div>
             <div className={stylesDesc.ItemPage}>
               <h1 className={`page__title ${stylesDesc.itemPage__title}`}>
-                {getRightData(requestsDescription, locale, "title")}
+                {getRightData(requestsDescription, locale, 'title')}
               </h1>
               <article
                 className={stylesDesc.itemPage__text}
                 style={{
-                  maxHeight: isExpanded ? "none" : "100px",
-                  overflow: "hidden",
+                  maxHeight: isExpanded ? 'none' : '100px',
+                  overflow: 'hidden',
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: getRightData(requestsDescription, locale, "text"),
+                  __html: getRightData(requestsDescription, locale, 'text'),
                 }}
               />
               <button
                 onClick={toggleText}
                 className={stylesDesc.showMoreButton}
               >
-                {isExpanded ? t("Show less") : t("Show more")}
+                {isExpanded ? t('Show less') : t('Show more')}
               </button>
             </div>
           </div>
@@ -217,25 +230,25 @@ export default function LawyersRequests({ requests }) {
             <div className={styles.servisesPage__section}>
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.civilRegistryOffices")}
+                title={t('requests.civilRegistryOffices')}
                 values={civilRegistryOffices}
               />
 
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.ministryOfInternalAffairs")}
+                title={t('requests.ministryOfInternalAffairs')}
                 values={ministryOfInternalAffairs}
               />
 
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.internallyDisplacedPersons")}
+                title={t('requests.internallyDisplacedPersons')}
                 values={internallyDisplacedPersons}
               />
 
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.pensionFund")}
+                title={t('requests.pensionFund')}
                 values={pensionFund}
               />
             </div>
@@ -243,13 +256,13 @@ export default function LawyersRequests({ requests }) {
             <div className={styles.servisesPage__section}>
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.ministryOfDefense")}
+                title={t('requests.ministryOfDefense')}
                 values={ministryOfDefense}
               />
 
               <ServisesDropdown
                 Img={Doc}
-                title={t("requests.stateMigrationService")}
+                title={t('requests.stateMigrationService')}
                 values={stateMigrationService}
               />
             </div>
@@ -261,9 +274,9 @@ export default function LawyersRequests({ requests }) {
 }
 
 export async function getStaticProps({ locale }) {
-  const requests = await getCollection("requests");
+  const requests = await getCollection('requests');
   return {
-    props: { requests, ...(await serverSideTranslations(locale, ["common"])) },
+    props: { requests, ...(await serverSideTranslations(locale, ['common'])) },
     revalidate: 10,
   };
 }

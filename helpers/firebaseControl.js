@@ -358,7 +358,7 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
       pdfLawyersRequest: pdfUrls.lawyersRequest || '',
       pdfAgreement: pdfUrls.agreement || '',
       pdfContract: pdfUrls.contract || '',
-      order: data.numberOrder || pdfUrls.contract,
+      pdfOrder: pdfUrls.order,
       userEmail: user.email,
       status: 'pending',
       ...restData,
@@ -377,7 +377,14 @@ export const saveRequestToFirestore = async (db, uid, data, pdfUrls) => {
 };
 
 export const uploadPDFToStorage = async (pdfBuffer, fileName, storage) => {
-  const storageRef = ref(storage, `documents/${fileName}`);
+  if (!storage) {
+    throw new Error('Помилка: storage не визначено!');
+  }
+
+  if (!pdfBuffer || !fileName) {
+    throw new Error('Помилка: Неправильні параметри для збереження файлу!');
+  }
+  const storageRef = ref(storage, fileName);
 
   try {
     // Завантажуємо PDF у Firebase Storage
@@ -393,3 +400,45 @@ export const uploadPDFToStorage = async (pdfBuffer, fileName, storage) => {
     throw error;
   }
 };
+
+export async function getNextAvailableOrder() {
+  try {
+    // Отримуємо всі ордери з бази Firestore
+    const orders = await getCollection('orders');
+
+    if (!orders || orders.length === 0) {
+      throw new Error('Ордери відсутні у базі.');
+    }
+
+    // Знаходимо перший вільний ордер
+    const availableOrder = orders.find(order => !order.used);
+
+    if (!availableOrder) {
+      throw new Error('Всі ордери використані.');
+    }
+
+    // Оновлюємо статус ордера на "used"
+    await updateDocumentInCollection(
+      'orders',
+      { used: true },
+      availableOrder.id
+    );
+
+    return { id: availableOrder.id, fileUrl: availableOrder.fileUrl };
+  } catch (error) {
+    console.error('Помилка отримання наступного ордера:', error);
+    throw error;
+  }
+}
+
+export async function uploadUpdatedOrder(requestId, pdfUrl) {
+  try {
+    const requestRef = doc(db, 'userRequests', requestId);
+    await updateDoc(requestRef, { pdfOrder: pdfUrl });
+
+    console.log(`Ордер збережено в userRequests ${requestId}: ${pdfUrl}`);
+  } catch (error) {
+    console.error('Помилка при оновленні ордера:', error);
+    throw error;
+  }
+}
