@@ -45,14 +45,14 @@ export default function UploadOrders() {
   const fetchOrders = async () => {
     setLoading(true);
     const ordersRef = collection(db, 'orders');
-    let q = query(ordersRef, orderBy('status'), limit(PAGE_SIZE));
+    let q = query(ordersRef, orderBy('id'), limit(PAGE_SIZE));
 
     if (search) {
       q = query(
         ordersRef,
-        where('status', '>=', search),
-        where('status', '<=', search + '\uf8ff'),
-        orderBy('status'),
+        where('id', '>=', search),
+        where('id', '<=', search + '\uf8ff'),
+        orderBy('id'),
         limit(PAGE_SIZE)
       );
     }
@@ -83,8 +83,8 @@ export default function UploadOrders() {
         querySnapshotCount = await getDocs(
           query(
             ordersRef,
-            where('status', '>=', search),
-            where('status', '<=', search + '\uf8ff')
+            where('id', '>=', search),
+            where('id', '<=', search + '\uf8ff')
           )
         );
       }
@@ -196,7 +196,7 @@ export default function UploadOrders() {
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по status"
+            placeholder="Поиск по id"
           />
 
           {/* Table displaying user data */}
@@ -208,9 +208,12 @@ export default function UploadOrders() {
                   <th className={`${styles.tableHead} ${styles.tableHide}`}>
                     Status
                   </th>
-                  <th className={`${styles.tableHead}`}>AssignedTo</th>
+                  <th className={`${styles.tableHead}`}>Request ID</th>
                   <th className={`${styles.tableHead} ${styles.tableHide}`}>
-                    UserData
+                    Request title
+                  </th>
+                  <th className={`${styles.tableHead} ${styles.tableHide}`}>
+                    Recipient
                   </th>
                   <th className={`${styles.tableHead}`}>Url</th>
                   <th className={styles.tableHead}>Actions</th>
@@ -232,7 +235,10 @@ export default function UploadOrders() {
                         {order?.assignedTo}
                       </td>
                       <td className={`${styles.tableHead} ${styles.tableHide}`}>
-                        {order?.userData}
+                        {order?.userData?.request?.ua.title}
+                      </td>
+                      <td className={`${styles.tableHead} ${styles.tableHide}`}>
+                        {order?.userData?.recipient.name}
                       </td>
                       <td className={`${styles.tableHead}`}>{order?.pdfUrl}</td>
                       <td

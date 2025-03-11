@@ -96,13 +96,15 @@ export const useLawyerRequest = request => {
     }
   };
 
-  const handleSendEmail = async formData => {
+  const handleSendEmail = async (formData, status) => {
     try {
       const response = await fetch('/api/pdf/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: formData.id,
+          status,
+          userEmail: formData.email,
           // recipient: { address: formData.recipient.address },
           recipient: { address: 'julia_js@bigmir.net' },
         }),
