@@ -28,7 +28,10 @@ import {
   requestTypeMap,
 } from '../helpers/constant';
 import { useLawyerRequest } from '../hooks/useLawyerRequest';
-import { getCollectionWhereKeyValue } from '../helpers/firebaseControl';
+import {
+  getCollectionWhereKeyValue,
+  updateDocumentInCollection,
+} from '../helpers/firebaseControl';
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -418,9 +421,28 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
       // 2. Викликаємо DocuSign для підписання
       handleDocuSign(userRequest)
-        .then(() => {
-          // 3. Після підписання - надсилаємо email користувачу
-          handleSendEmail(formData, 'signed');
+        .then(async () => {
+          // 3. Оновлюємо статус на 'signed' в Firestore перед відправкою email
+          await updateDocumentInCollection(
+            'userRequests',
+            { status: 'signed' },
+            formData.id
+          );
+          console.log(`Статус запиту ${formData.id} оновлено на 'signed'`);
+
+          // 4. Надсилаємо email користувачу після підписання
+          await handleSendEmail(formData, 'signed');
+
+          // 5. Тепер оновлюємо статус на 'sent' в Firestore
+          await updateDocumentInCollection(
+            'userRequests',
+            { status: 'sent' },
+            formData.id
+          );
+          console.log(`Статус запиту ${formData.id} оновлено на 'sent'`);
+
+          // 6. Надсилаємо email до держоргану після оновлення статусу на 'sent'
+          await handleSendEmail(formData, 'sent');
         })
         .catch(error => console.error('Error signing document:', error));
     }

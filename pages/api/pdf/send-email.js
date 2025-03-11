@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Метод не дозволено' });
   }
 
-  const { id, recipient } = req.body;
+  const { id, status, userEmail, recipient } = req.body;
 
   try {
     // Завантаження файлів із Firestore
@@ -33,31 +33,41 @@ export default async function handler(req, res) {
     const { title, pdfLawyersRequest, pdfAgreement, pdfOrder, requesterFile } =
       userRequests[0];
     // Формуємо масив файлів для відправлення
-    const pdfFiles = [
-      { name: 'lawyersRequest.pdf', url: pdfLawyersRequest },
-      { name: 'agreement.pdf', url: pdfAgreement },
-      { name: 'order.pdf', url: pdfOrder },
-    ];
+    // const pdfFiles = [
+    //   { name: 'lawyersRequest.pdf', url: pdfLawyersRequest },
+    //   { name: 'agreement.pdf', url: pdfAgreement },
+    //   { name: 'order.pdf', url: pdfOrder },
+    // ];
 
-    // Додаємо файли з поля "file" (масив або одиничний файл)
-    if (Array.isArray(requesterFile)) {
-      requesterFile.forEach((f, index) => {
-        if (f.url) {
-          pdfFiles.push({ name: `file-${index + 1}.pdf`, url: f.url });
-        }
-      });
-    } else if (requesterFile?.url) {
-      pdfFiles.push({ name: 'file.pdf', url: requesterFile.url });
-    }
+    // Визначаємо, які файли відправляти
+    const pdfFiles = [{ name: 'lawyersRequest.pdf', url: pdfLawyersRequest }];
 
-    const certificatePath = path.join(
-      process.cwd(),
-      'public',
-      'images',
-      'certificate.pdf'
-    );
-    if (fs.existsSync(certificatePath)) {
-      pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
+    if (status === 'sent') {
+      pdfFiles.push(
+        { name: 'agreement.pdf', url: pdfAgreement },
+        { name: 'order.pdf', url: pdfOrder }
+      );
+
+      // Додаємо файли з поля "file" (масив або одиничний файл)
+      if (Array.isArray(requesterFile)) {
+        requesterFile.forEach((f, index) => {
+          if (f.url) {
+            pdfFiles.push({ name: `file-${index + 1}.pdf`, url: f.url });
+          }
+        });
+      } else if (requesterFile?.url) {
+        pdfFiles.push({ name: 'file.pdf', url: requesterFile.url });
+      }
+
+      const certificatePath = path.join(
+        process.cwd(),
+        'public',
+        'images',
+        'certificate.pdf'
+      );
+      if (fs.existsSync(certificatePath)) {
+        pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
+      }
     }
 
     // Перевіряємо, чи є шляхи до файлів
@@ -68,24 +78,48 @@ export default async function handler(req, res) {
     // Підготовка вкладень
     const attachments = await prepareAttachments(pdfFiles);
 
+    // Визначаємо текст повідомлення для клієнта в залежності від статусу запиту
+    let emailContent = '';
+    if (status === 'paid') {
+      emailContent = `Ваш адвокатський запит "${title}" ID ${id} прийнято.`;
+    } else if (status === 'signed') {
+      emailContent = `Ваш адвокатський запит "${title}" ID ${id} підписано та направлено до ${recipient.address}. Очікуйте на відповідь.`;
+    } else if (status === 'sent') {
+      emailContent = `Вітаю, направляю ${title} ID ${id}.`;
+    }
+
+    // Оновлюємо статус у Firestore
+    if (id) {
+      let newStatus = status;
+      if (status === 'signed') {
+        newStatus = 'sent'; // Оновлюємо статус тільки після підписання та надсилання
+      }
+      await updateDocumentInCollection(
+        'userRequests',
+        { status: newStatus },
+        id
+      );
+      console.log(`Статус запиту ${id} оновлено на '${newStatus}'`);
+    }
+
+    // Кому надсилати?
+    const recipientEmail = status === 'sent' ? recipient?.address : userEmail;
+    if (!recipientEmail) {
+      throw new Error('Не знайдено email отримувача.');
+    }
+
     // Відправка листа
     await sendEmail({
-      to: recipient.address,
+      to: recipientEmail,
       subject: `${title} ID ${id}`,
-      text: `Вітаю, направляю ${title} ID ${id}.`,
+      text: emailContent,
       attachments,
       requestId: id, // Передаємо ID для оновлення статусу
     });
 
-    // Після успішної відправки оновлюємо статус у Firestore
-    if (id) {
-      await updateDocumentInCollection('userRequests', { status: 'sent' }, id);
-      console.log(`Статус запиту ${id} оновлено на 'sent'`);
-    }
-
     return res.status(200).json({
       success: true,
-      message: `Email відправлено на ${recipient.address}`,
+      message: `Email відправлено на ${recipientEmail}`,
       // messageId: info.messageId,
     });
   } catch (error) {
