@@ -1,5 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
@@ -10,7 +11,6 @@ import ukLocale from 'i18n-iso-countries/langs/uk.json';
 import ruLocale from 'i18n-iso-countries/langs/ru.json';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { useTranslation } from 'react-i18next';
-import { getCollectionWhereKeyValue } from '../helpers/firebaseControl';
 import {
   getFirestore,
   collection,
@@ -27,8 +27,8 @@ import {
   requestNameToKeyMap,
   requestTypeMap,
 } from '../helpers/constant';
-import { useRouter } from 'next/router';
 import { useLawyerRequest } from '../hooks/useLawyerRequest';
+import { getCollectionWhereKeyValue } from '../helpers/firebaseControl';
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -412,8 +412,17 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   useEffect(() => {
     if (paymentStatus === 'success' && !hasExecuted.current) {
       hasExecuted.current = true;
-      handleDocuSign(userRequest);
-      handleSendEmail(formData);
+
+      // 1. Надсилаємо перший email користувачу після оплати
+      handleSendEmail(formData, 'paid');
+
+      // 2. Викликаємо DocuSign для підписання
+      handleDocuSign(userRequest)
+        .then(() => {
+          // 3. Після підписання - надсилаємо email користувачу
+          handleSendEmail(formData, 'signed');
+        })
+        .catch(error => console.error('Error signing document:', error));
     }
   }, [paymentStatus]);
 
