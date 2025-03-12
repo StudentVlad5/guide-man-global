@@ -91,6 +91,7 @@ export const useLawyerRequest = request => {
     console.log('setMessage', data);
     if (res.ok) {
       setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
+      return data.envelopeId;
     } else {
       setMessage(`Error: ${data.error}`);
     }
