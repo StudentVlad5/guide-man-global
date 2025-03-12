@@ -14,7 +14,10 @@ import styl from "../../styles/profile.module.scss";
 import s from "../../styles/formPage.module.scss";
 import SideBar from "../../components/SideBar";
 import "firebase/firestore";
-import { getCollectionWhereKeyValue } from "../../helpers/firebaseControl";
+import {
+  getCollectionWhereKeyValue,
+  updateDocumentInCollection,
+} from "../../helpers/firebaseControl";
 import Link from "next/link";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -100,8 +103,34 @@ export default function HistoryPage() {
             status: data.status,
           }),
         });
+        console.log("successfulRequest", successfulRequest);
+        handleDocuSign(successfulRequest)
+          .then(async (envelop_id) => {
+            // 3. Оновлюємо статус на 'signed' в Firestore перед відправкою email
+            await updateDocumentInCollection(
+              "userRequests",
+              { envelop_id },
+              orderId
+            );
+            console.log(
+              `Статус запиту ${orderId} оновлено на 'signed' and ${envelop_id}}`
+            );
 
-        handleDocuSign(successfulRequest);
+            // 4. Надсилаємо email користувачу після підписання
+            await handleSendEmail(formData, "signed");
+
+            // 5. Тепер оновлюємо статус на 'sent' в Firestore
+            await updateDocumentInCollection(
+              "userRequests",
+              { status: "sent" },
+              formData.id
+            );
+            console.log(`Статус запиту ${formData.id} оновлено на 'sent'`);
+
+            // 6. Надсилаємо email до держоргану після оновлення статусу на 'sent'
+            await handleSendEmail(formData, "sent");
+          })
+          .catch((error) => console.error("Error signing document:", error));
         handleSendEmail(successfulRequest);
         clearInterval(paymentCheckInterval);
       }
