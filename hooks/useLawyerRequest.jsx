@@ -5,13 +5,13 @@ export const useLawyerRequest = request => {
   const { user } = useContext(AppContext);
   const [paymentStatus, setPaymentStatus] = useState('');
   const [message, setMessage] = useState('');
-  const [orderId, setOrderId] = useState();
+  const [orderPayId, setOrderPayId] = useState();
 
   const initialFormData = {
     id: Math.floor(Date.now() * Math.random()).toString(),
     uid: user?.uid || '',
     paymentStatus: paymentStatus,
-    orderId: orderId,
+    orderPayId: orderPayId,
     citizenship: '', //ВСІ ФОРМИ
     name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
     surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
