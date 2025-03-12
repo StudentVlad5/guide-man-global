@@ -3,21 +3,22 @@ import { AppContext } from "../components/AppProvider";
 
 export const useLawyerRequest = (request) => {
   const { user } = useContext(AppContext);
-  const [paymentStatus, setPaymentStatus] = useState("");
-  const [message, setMessage] = useState("");
-  const [orderId, setOrderId] = useState();
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const [message, setMessage] = useState('');
+  const [orderPayId, setOrderPayId] = useState();
+
 
   const initialFormData = {
     id: Math.floor(Date.now() * Math.random()).toString(),
     uid: user?.uid || "",
     paymentStatus: paymentStatus,
-    orderId: orderId,
-    citizenship: "", //ВСІ ФОРМИ
-    name: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    surname: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    fatherName: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
-    email: "", //ВСІ ФОРМИ
-    birthday: "", //АДПСУ, РАЦС, МОУ і ТЦК, МВС
+    orderPayId: orderPayId,
+    citizenship: '', //ВСІ ФОРМИ
+    name: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    surname: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    fatherName: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС, ПФУ і ДПСУ, ВПО
+    email: '', //ВСІ ФОРМИ
+    birthday: '', //АДПСУ, РАЦС, МОУ і ТЦК, МВС
     residence: {
       address: "",
       city: "",

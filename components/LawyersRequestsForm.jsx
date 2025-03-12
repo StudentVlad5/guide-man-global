@@ -51,9 +51,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const [userRequests, setUserRequests] = useState([]);
   const [userRequest, setUserRequest] = useState([]);
   const [tck, setTck] = useState([]);
-  const [paymentStatus, setPaymentStatus] = useState("");
-  const [orderId, setOrderId] = useState();
-  const language = currentLanguage === "ua" ? "uk" : currentLanguage;
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const [orderPayId, setOrderPayId] = useState();
+  const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
   const hasExecuted = useRef(false);
@@ -224,7 +224,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     }
   };
 
-  const savePDF = async (orderId) => {
+  const savePDF = async orderPayId => {
     setIsLoading(true);
     setError(null);
     try {
@@ -232,8 +232,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
         // formData,
         formData: {
           ...formData,
-          idPost: orderId,
-          orderId: orderId,
+          idPost: orderPayId,
+          orderPayId: orderPayId,
         },
         selectedDocuments,
         uid: user?.uid,
@@ -277,17 +277,17 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
   let paymentCheckInterval;
 
-  const checkPaymentStatus = async (orderId) => {
-    if (!orderId) {
-      console.error("No order ID found");
+  const checkPaymentStatus = async orderPayId => {
+    if (!orderPayId) {
+      console.error('No order ID found');
       return;
     }
 
     try {
-      const response = await fetch("/api/liqpay/check-payment-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_id: orderId }),
+      const response = await fetch('/api/liqpay/check-payment-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderPayId }),
       });
 
       if (!response.ok) {
@@ -302,9 +302,9 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       if (data.status === "success") {
         // alert("Оплата успішна!");
 
-        setUserRequests((prevRequests) =>
-          prevRequests.map((req) =>
-            req.orderId === orderId ? { ...req, status: "paid" } : req
+        setUserRequests(prevRequests =>
+          prevRequests.map(req =>
+            req.orderPayId === orderPayId ? { ...req, status: 'paid' } : req
           )
         );
 
@@ -313,7 +313,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             uid: user.uid,
-            order_id: orderId,
+            order_id: orderPayId,
             status: data.status,
           }),
         });
@@ -334,22 +334,22 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     e.preventDefault();
     setIsLoading(true);
     setPaymentStatus(null);
-    let newOrderId;
+    let newOrderPayId;
     try {
-      newOrderId = `order_${Date.now()}_${Math.random()
+      newOrderPayId = `order_${Date.now()}_${Math.random()
         .toString(36)
         .substr(2, 9)}`;
 
-      setOrderId(newOrderId);
+        setOrderPayId(newOrderPayId);
 
       const updatedFormData = {
         ...formData,
-        orderId: newOrderId,
-        idPost: newOrderId,
+        orderPayId: newOrderPayId,
+        idPost: newOrderPayId,
       };
 
       setFormData(updatedFormData);
-      savePDF(newOrderId);
+      savePDF(newOrderPayId);
       // resetFormData();
       const returnUrl = `${window.location.origin}${router.asPath}`;
 
@@ -362,7 +362,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
           description: title || "Payment",
           currentLanguage: currentLanguage,
           returnUrl,
-          order_id: newOrderId,
+          order_id: newOrderPayId,
         }),
       });
 
@@ -395,7 +395,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
       paymentForm.submit();
       document.body.removeChild(paymentForm);
       paymentCheckInterval = setInterval(
-        () => checkPaymentStatus(newOrderId),
+        () => checkPaymentStatus(newOrderPayId),
         500
       );
     } catch (error) {
@@ -409,10 +409,10 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   };
 
   useEffect(() => {
-    if (orderId) {
-      setFormData((prev) => ({ ...prev, orderId }));
+    if (orderPayId) {
+      setFormData(prev => ({ ...prev, orderPayId }));
     }
-  }, [orderId]);
+  }, [orderPayId]);
 
   useEffect(() => {
     if (paymentStatus === "success" && !hasExecuted.current) {

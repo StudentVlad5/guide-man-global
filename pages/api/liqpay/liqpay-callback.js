@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       status: paymentData.status,
       amount: paymentData.amount,
       currency: paymentData.currency,
-      orderId: paymentData.order_id,
+      orderPayId: paymentData.order_id,
       timestamp: new Date().toISOString(),
     };
 
@@ -43,4 +43,4 @@ export default async function handler(req, res) {
   }
 }
 
-export const getPaymentStatus = orderId => paymentStatuses.get(orderId);
+export const getPaymentStatus = orderPayId => paymentStatuses.get(orderPayId);

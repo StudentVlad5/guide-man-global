@@ -61,19 +61,19 @@ export default function HistoryPage() {
   const [paymentStatus, setPaymentStatus] = useState(null);
   let paymentCheckInterval;
 
-  const checkPaymentStatus = async (orderId) => {
-    if (!orderId) {
+  const checkPaymentStatus = async (orderPayId) => {
+    if (!orderPayId) {
       console.error("No order ID provided");
       return;
     }
 
     try {
-      // console.log(`Перевірка статусу для orderId: ${orderId}`);
+      // console.log(`Перевірка статусу для orderPayId: ${orderPayId}`);
 
       const response = await fetch("/api/liqpay/check-payment-status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_id: orderId }),
+        body: JSON.stringify({ order_id: orderPayId }),
       });
 
       if (!response.ok) {
@@ -82,7 +82,7 @@ export default function HistoryPage() {
 
       const data = await response.json();
       const successfulRequest = userRequests.find(
-        (req) => req.orderId === orderId
+        (req) => req.orderPayId === orderPayId
       );
 
       if (data.status === "success") {
@@ -90,7 +90,7 @@ export default function HistoryPage() {
 
         setUserRequests((prevRequests) =>
           prevRequests.map((req) =>
-            req.orderId === orderId ? { ...req, status: "paid" } : req
+            req.orderPayId === orderPayId ? { ...req, status: "paid" } : req
           )
         );
 
@@ -99,7 +99,7 @@ export default function HistoryPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             uid: user.uid,
-            order_id: orderId,
+            order_id: orderPayId,
             status: data.status,
           }),
         });
@@ -141,10 +141,10 @@ export default function HistoryPage() {
 
   const handlePayment = async (request) => {
     try {
-      const { title, orderId } = request;
+      const { title, orderPayId } = request;
 
-      if (!orderId) {
-        console.error("No orderId found for this request");
+      if (!orderPayId) {
+        console.error("No orderPayId found for this request");
         return;
       }
 
@@ -155,7 +155,7 @@ export default function HistoryPage() {
           amount: "0.1",
           currency: "UAH",
           description: title || "Payment",
-          order_id: orderId,
+          order_id: orderPayId,
         }),
       });
 
@@ -189,7 +189,7 @@ export default function HistoryPage() {
       document.body.removeChild(paymentForm);
 
       paymentCheckInterval = setInterval(
-        () => checkPaymentStatus(orderId),
+        () => checkPaymentStatus(orderPayId),
         5000
       );
     } catch (error) {
@@ -277,7 +277,7 @@ export default function HistoryPage() {
                                   e.preventDefault();
                                   handlePayment({
                                     title: it.title,
-                                    orderId: it.orderId,
+                                    orderPayId: it.orderPayId,
                                   });
                                 }}
                               >
