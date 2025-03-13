@@ -133,7 +133,11 @@ export default function HistoryPage() {
                 orderData.pdfUrl,
                 successfulRequest
               );
-              console.log('Ордер оновлено:', updatedPDF);
+              if (updatedPDF) {
+                console.log('Ордер оновлено:', updatedPDF);
+              } else {
+                console.error('Не вдалося оновити ордер');
+              }
             }
 
             // 3. Надсилаємо email користувачу після підписання

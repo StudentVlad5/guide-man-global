@@ -9,26 +9,40 @@ const imapConfig = {
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
-    authTimeout: 50000,
+    authTimeout: 10000,
     tlsOptions: { rejectUnauthorized: false, servername: 'imap.gmail.com' }, // Додаємо серверне ім'я
   },
 };
 
 let activeConnections = 0;
-const MAX_CONNECTIONS = 10; // Обмеження на кількість одночасних з'єднань
+const MAX_CONNECTIONS = 5; // Обмеження на кількість одночасних з'єднань
+const CHECK_INTERVAL = 5 * 60 * 1000; // Перевірка раз на 5 хвилин
+let lastCheckTime = 0; // Час останнього запуску
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export const fetchEmails = async () => {
+  const now = Date.now();
+
+  if (now - lastCheckTime < CHECK_INTERVAL) {
+    console.warn(
+      `Чекати перед наступним викликом: ${
+        (CHECK_INTERVAL - (now - lastCheckTime)) / 1000
+      } сек.`
+    );
+    return;
+  }
+
   if (activeConnections >= MAX_CONNECTIONS) {
     console.warn("Досягнуто ліміту одночасних з'єднань. Очікування...");
-    await delay(1000); // Затримка 1 секунда
+    await delay(30000); // Затримка 30 секунд перед повторною спробою
     return fetchEmails(); // Рекурсивний виклик після затримки
   }
 
   activeConnections++;
+  lastCheckTime = Date.now(); // Оновлюємо час останнього запиту
 
   let connection;
   try {
@@ -86,7 +100,7 @@ export const fetchEmails = async () => {
 
     connection.end(); // Закриття з'єднання
   } catch (error) {
-    console.error('Error fetching emails:', error);
+    console.error('Помилка при отриманні листів:', error);
     throw new Error(`Помилка при отриманні листів: ${error.message}`); // Проброс помилки
   } finally {
     if (connection && connection.state !== 'disconnected') {
@@ -96,3 +110,6 @@ export const fetchEmails = async () => {
     activeConnections--;
   }
 };
+
+// **Автоматичний виклик через інтервал**
+setInterval(fetchEmails, CHECK_INTERVAL);
