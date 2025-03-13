@@ -7,11 +7,13 @@ import {
   orderBy,
   getDocs,
 } from 'firebase/firestore';
-import { getCollectionWhereKeyValue } from './firebaseControl';
+import { updateDocumentInCollection } from './firebaseControl';
 
 // Функція послідовного видачі першого вільного ордера
 export async function assignOrderToUser(db, requestId, userData) {
-  // const ordersSnapshot = getCollectionWhereKeyValue('orders', 'status', 'free');
+  if (!requestId) {
+    throw new Error('assignOrderToUser: requestId не може бути undefined!');
+  }
 
   const ordersRef = collection(db, 'orders');
   const q = query(

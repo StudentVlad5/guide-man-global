@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { generatePDFBuffer } from '../../../helpers/pdf';
 import {
   saveRequestToFirestore,
+  updateDocumentInCollection,
   uploadPDFToStorage,
 } from '../../../helpers/firebaseControl';
 import { assignOrderToUser } from '../../../helpers/assignOrder';
@@ -135,6 +136,12 @@ export default async function handler(req, res) {
         uid,
         formData,
         pdfUrls
+      );
+
+      await updateDocumentInCollection(
+        'userRequests',
+        { orderId: orderData.id },
+        formData.id
       );
 
       res.status(200).json({

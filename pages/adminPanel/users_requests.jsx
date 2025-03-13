@@ -149,11 +149,11 @@ export default function AdminOrders() {
 
   const sortedOrders = orders
     .map(order => ({ ...order, dateCreating: order.dateCreating }))
-    .sort((a, b) => {
-      const dateA = a.dateCreating.split('.').reverse().join('-'); // "YYYY-MM-DD"
-      const dateB = b.dateCreating.split('.').reverse().join('-');
-      return dateB.localeCompare(dateA); // Сортування за спаданням (новіші зверху)
-    });
+    .sort(
+      (a, b) =>
+        new Date(b.dateCreating.split('.').reverse().join('-')) -
+        new Date(a.dateCreating.split('.').reverse().join('-'))
+    );
 
   return (
     <div className={styles.main}>
@@ -178,9 +178,9 @@ export default function AdminOrders() {
                 <tr>
                   <th className={styles.tableHead}>Name</th>
                   <th className={`${styles.tableHead}`}>Date Creating</th>
-                  {/* <th className={`${styles.tableHead} ${styles.tableHide}`}>
-                    Email
-                  </th> */}
+                  <th className={`${styles.tableHead} ${styles.tableHide}`}>
+                    ID
+                  </th>
                   <th className={`${styles.tableHead}`}>Title</th>
                   <th className={`${styles.tableHead}`}>Status</th>
                   <th className={`${styles.tableHead}`}>LawyersRequest</th>
@@ -204,9 +204,9 @@ export default function AdminOrders() {
                       <td className={`${styles.tableHead}`}>
                         {order?.dateCreating}
                       </td>
-                      {/* <td className={`${styles.tableHead} ${styles.tableHide}`}>
-                        {order?.email}
-                      </td> */}
+                      <td className={`${styles.tableHead} ${styles.tableHide}`}>
+                        {order?.id}
+                      </td>
                       <td className={`${styles.tableHead}`}>{order?.title}</td>
                       <td
                         className={`${styles.tableHead}`}
