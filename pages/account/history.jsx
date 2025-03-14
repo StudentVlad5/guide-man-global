@@ -22,7 +22,6 @@ import Link from 'next/link';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useLawyerRequest } from '../../hooks/useLawyerRequest';
-import { assignOrderToUser } from '../../helpers/assignOrder';
 
 export default function HistoryPage() {
   const [userRequests, setUserRequests] = useState([]);
@@ -115,35 +114,10 @@ export default function HistoryPage() {
               `Статус запиту ${successfulRequest.id} оновлено на 'signed', ID конверта: ${envelop_id}}`
             );
 
-            // 2.Призначаємо ордер користувачу
-            const orderData = await assignOrderToUser(
-              db,
-              successfulRequest.id,
-              successfulRequest
-            );
-            if (orderData?.id) {
-              await updateDocumentInCollection(
-                'userRequests',
-                { orderId: orderData.id },
-                successfulRequest.id
-              );
-              console.log(`orderId ${orderData.id} збережено у userRequest`);
-
-              const updatedPDF = await handleUpdateOrder(
-                orderData.pdfUrl,
-                successfulRequest
-              );
-              if (updatedPDF) {
-                console.log('Ордер оновлено:', updatedPDF);
-              } else {
-                console.error('Не вдалося оновити ордер');
-              }
-            }
-
-            // 3. Надсилаємо email користувачу після підписання
+            // 2. Надсилаємо email користувачу після підписання
             await handleSendEmail(successfulRequest, 'signed');
 
-            // 4. Оновлюємо статус на 'sent' в Firestore
+            // 3. Оновлюємо статус на 'sent' в Firestore
             await updateDocumentInCollection(
               'userRequests',
               { status: 'sent' },
@@ -153,16 +127,19 @@ export default function HistoryPage() {
               `Статус запиту ${successfulRequest.id} оновлено на 'sent'`
             );
 
-            // 5. Надсилаємо email до держоргану після оновлення статусу на 'sent'
+            // 4. Надсилаємо email до держоргану після оновлення статусу на 'sent'
             await handleSendEmail(successfulRequest, 'sent');
           })
           .catch(error => console.error('Error signing document:', error));
-        handleSendEmail(successfulRequest, 'paid');
-        clearInterval(paymentCheckInterval);
+
+        await handleSendEmail(successfulRequest, 'paid');
+        // clearInterval(paymentCheckInterval);
+        return true; // Payment successful
       }
     } catch (error) {
       console.error('Error checking payment status:', error);
     }
+    return false; // Payment not successful
   };
 
   const handlePayment = async request => {
@@ -214,34 +191,22 @@ export default function HistoryPage() {
       paymentForm.submit();
       document.body.removeChild(paymentForm);
 
-      paymentCheckInterval = setInterval(
-        () => checkPaymentStatus(orderPayId),
-        5000
-      );
+      // paymentCheckInterval = setInterval(
+      //   () => checkPaymentStatus(orderPayId),
+      //   5000
+      // );
+      if (!paymentCheckInterval) {
+        paymentCheckInterval = setInterval(async () => {
+          const paymentSuccess = await checkPaymentStatus(orderPayId);
+          if (paymentSuccess) {
+            clearInterval(paymentCheckInterval);
+            paymentCheckInterval = null;
+          }
+        }, 5000);
+      }
     } catch (error) {
       console.error('Error processing payment:', error);
       setPaymentStatus('error');
-    }
-  };
-
-  const handleUpdateOrder = async (fileUrl, formData) => {
-    try {
-      const response = await fetch('/api/pdf/updateOrderPDF', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileUrl, formData }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Помилка сервера: ${await response.text()}`);
-      }
-
-      const data = await response.json();
-      console.log('Оновлений PDF:', data.pdf);
-
-      return data.pdf;
-    } catch (error) {
-      console.error('Помилка під час оновлення PDF:', error);
     }
   };
 
