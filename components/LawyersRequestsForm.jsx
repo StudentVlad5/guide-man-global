@@ -32,7 +32,6 @@ import {
   getCollectionWhereKeyValue,
   updateDocumentInCollection,
 } from '../helpers/firebaseControl';
-import { assignOrderToUser } from '../helpers/assignOrder';
 
 countries.registerLocale(ukLocale);
 countries.registerLocale(ruLocale);
@@ -447,21 +446,6 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
 
           // 4. Надсилаємо email користувачу після підписання
           await handleSendEmail(formData, 'signed');
-
-          // // 5. Призначаємо ордер користувачу
-          // const orderData = await assignOrderToUser(
-          //   db,
-          //   formData.id,
-          //   userRequest
-          // );
-          // if (orderData?.id) {
-          //   await updateDocumentInCollection(
-          //     'userRequests',
-          //     { orderId: orderData.id },
-          //     formData.id
-          //   );
-          //   console.log(`orderId ${orderData.id} збережено у userRequest`);
-          // }
 
           // 6. Оновлюємо статус на 'sent' у Firestore
           await updateDocumentInCollection(
