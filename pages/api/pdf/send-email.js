@@ -83,7 +83,7 @@ export default async function handler(req, res) {
     if (status === 'paid') {
       emailContent = `Ваш адвокатський запит "${title}" ID ${id} прийнято.`;
     } else if (status === 'signed') {
-      emailContent = `Ваш адвокатський запит "${title}" ID ${id} підписано та направлено до ${recipient.address}. Очікуйте на відповідь.`;
+      emailContent = `Ваш адвокатський запит "${title}" ID ${id} підписано та направлено до ${recipient.name}. Очікуйте на відповідь.`;
     } else if (status === 'sent') {
       emailContent = `Вітаю, направляю ${title} ID ${id}.`;
     }

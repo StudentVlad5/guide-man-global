@@ -24,7 +24,6 @@ export async function updateOrderPDF(fileUrl, formData) {
       throw new Error('Завантажений файл НЕ є дійсним PDF!');
     }
 
-    // const pdfDoc = await PDFDocument.load(buffer);
     const uint8Array = new Uint8Array(buffer);
     const pdfDoc = await PDFDocument.load(uint8Array);
 
@@ -78,10 +77,9 @@ export async function updateOrderPDF(fileUrl, formData) {
         .filter(i => i)
         .join(' ');
 
-    const date = new Date(formData.dateCreating);
-    const formattedDay = String(date.getDay()).padStart(2, '0');
-    const formattedMonth = String(date.getMonth() + 1).padStart(2, '0');
-    const currentYear = String(date.getFullYear()).slice(-2);
+    // const date = new Date(formData.dateCreating);
+    const [day, month, year] = formData.dateCreating.split('.'); // Розбиваємо дату
+    const currentYear = String(year.slice(-2));
     const birthday = String(formData.birthday.replace(/-/g, '.'));
 
     function setTextFieldWithWrap(fieldNames, text, maxLengthPerField) {
@@ -109,9 +107,9 @@ export async function updateOrderPDF(fileUrl, formData) {
     setTextField('firstname1', PIB());
     setTextField('firstname2', `${birthday} року народження`);
     setTextField('legal_assistance[number]', 'БН');
-    setTextField('legal_assistance[day]', String(date.getDate()));
-    setTextField('legal_assistance[month]', formattedMonth);
-    setTextField('legal_assistance[year]', String(date.getFullYear()));
+    setTextField('legal_assistance[day]', day);
+    setTextField('legal_assistance[month]', month);
+    setTextField('legal_assistance[year]', year);
     setTextFieldWithWrap(
       ['organs[0]', 'organs[1]'],
       formData.recipient.name,
@@ -121,9 +119,11 @@ export async function updateOrderPDF(fileUrl, formData) {
     setTextField('certificate[day]', '18');
     setTextField('certificate[month]', 'липня');
     setTextField('certificate[year]', '2005');
-    setTextField('ra[title]', 'Чернігівською обласною КДКА', 'left');
-    setTextField('current[day]', formattedDay);
-    setTextField('current[month]', formattedMonth);
+    setTextField('ra[title]', 'Чернігівською обласною КДКА', 'left', {
+      size: '10px',
+    });
+    setTextField('current[day]', day);
+    setTextField('current[month]', month);
     setTextField('current[year]', currentYear);
 
     form.flatten(); // Фіксуємо заповнені поля
