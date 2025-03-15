@@ -58,6 +58,7 @@ export default function HistoryPage() {
   // console.log(user)
   const [paymentStatus, setPaymentStatus] = useState(null);
   let paymentCheckInterval;
+  let emailSent = false; // Перевірка, чи вже надіслано email
 
   const checkPaymentStatus = async orderPayId => {
     if (!orderPayId) {
@@ -102,9 +103,16 @@ export default function HistoryPage() {
           }),
         });
         console.log('successfulRequest', successfulRequest);
-        handleDocuSign(successfulRequest)
-          .then(async envelop_id => {
-            // 1. Оновлюємо статус на 'signed' в Firestore перед відправкою email
+
+        if (!emailSent) {
+          emailSent = true; // Запобігаємо повторному виклику
+
+          // Надсилаємо email користувачу після оплати
+          await handleSendEmail(successfulRequest, 'paid');
+
+          // Запускаємо процес підписання документа
+          handleDocuSign(successfulRequest).then(async envelop_id => {
+            // Оновлюємо статус на 'signed' в Firestore перед відправкою email
             await updateDocumentInCollection(
               'userRequests',
               { envelop_id },
@@ -114,10 +122,10 @@ export default function HistoryPage() {
               `Статус запиту ${successfulRequest.id} оновлено на 'signed', ID конверта: ${envelop_id}}`
             );
 
-            // 2. Надсилаємо email користувачу після підписання
+            // Надсилаємо email користувачу після підписання
             await handleSendEmail(successfulRequest, 'signed');
 
-            // 3. Оновлюємо статус на 'sent' в Firestore
+            // Оновлюємо статус на 'sent' в Firestore
             await updateDocumentInCollection(
               'userRequests',
               { status: 'sent' },
@@ -127,19 +135,15 @@ export default function HistoryPage() {
               `Статус запиту ${successfulRequest.id} оновлено на 'sent'`
             );
 
-            // 4. Надсилаємо email до держоргану після оновлення статусу на 'sent'
+            // Надсилаємо email до держоргану після оновлення статусу на 'sent'
             await handleSendEmail(successfulRequest, 'sent');
-          })
-          .catch(error => console.error('Error signing document:', error));
-
-        await handleSendEmail(successfulRequest, 'paid');
-        // clearInterval(paymentCheckInterval);
-        return true; // Payment successful
+          });
+        }
+        clearInterval(paymentCheckInterval); // Зупиняємо перевірку
       }
     } catch (error) {
       console.error('Error checking payment status:', error);
     }
-    return false; // Payment not successful
   };
 
   const handlePayment = async request => {
