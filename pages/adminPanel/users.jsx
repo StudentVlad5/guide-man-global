@@ -271,7 +271,7 @@ export default function AdminUsers() {
               <form className={st.form}>
                 <ul className="flexWrap">
                   {Object.keys(editUser) &&
-                    Object.keys(editUser).sort.map(it => {
+                    Object.keys(editUser).map(it => {
                       return (
                         it !== 'id' &&
                         it !== 'uid' && (

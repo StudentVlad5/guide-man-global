@@ -179,7 +179,8 @@ export default function UploadOrders() {
   return (
     <div className={styles.main}>
       <h1>
-        <Link href="/adminPanel"> ← Панель администраторa</Link> / Вопросы
+        <Link href="/adminPanel"> ← Панель администраторa</Link> / Загрузка
+        ордеров
       </h1>
       <div className={styles.category}>
         <h2>Загрузка ордеров</h2>
