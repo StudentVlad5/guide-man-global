@@ -46,10 +46,10 @@ export async function updateOrderPDF(fileUrl, formData) {
 
     // Отримуємо доступ до форми у PDF
     const form = pdfDoc.getForm();
-    // console.log(
-    //   'Form fields:',
-    //   form.getFields().map(f => f.getName())
-    // );
+    console.log(
+      'Form fields:',
+      form.getFields().map(f => f.getName())
+    );
 
     // Функція для встановлення тексту у поле з використанням кастомного шрифту
     const setTextField = (fieldName, text, alignment = 'center') => {
@@ -125,6 +125,16 @@ export async function updateOrderPDF(fileUrl, formData) {
     setTextField('current[day]', day);
     setTextField('current[month]', month);
     setTextField('current[year]', currentYear);
+
+    const pages = pdfDoc.getPages();
+    const firstPage = pages[0];
+    firstPage.drawText('S5', {
+      x: 400,
+      y: 75,
+      size: 12,
+      font: customFont,
+      color: rgb(1, 1, 1),
+    });
 
     form.flatten(); // Фіксуємо заповнені поля
 
