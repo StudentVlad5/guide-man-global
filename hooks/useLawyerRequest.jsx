@@ -94,6 +94,9 @@ export const useLawyerRequest = request => {
         doc4File: userRequest?.request?.pdfLawyersRequest
           ? userRequest?.request?.pdfLawyersRequest
           : userRequest?.pdfLawyersRequest,
+        doc5File: userRequest?.request?.pdfOrder
+          ? userRequest?.request?.pdfOrder
+          : userRequest?.pdfOrder,
       }),
     });
 
