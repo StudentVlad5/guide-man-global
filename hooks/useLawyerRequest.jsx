@@ -70,45 +70,39 @@ export const useLawyerRequest = request => {
     setFormData(initialFormData);
   };
 
-  const handleDocuSign = async userRequest => {
-    const res = await fetch('/api/docusign', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        signerEmail: userRequest?.request?.userEmail
-          ? userRequest?.request?.userEmail
-          : userRequest?.userEmail,
-        signerName: userRequest?.request?.name
-          ? userRequest?.request?.name
-          : userRequest?.name,
-        ccEmail: 'julia.j.shcherban@gmail.com',
-        ccName: 'julia.j.shcherban',
-        // ccEmail: 'pcentr27@gmail.com',
-        // ccName: 'Строгий Валерій Федорович',
-        doc2File: userRequest?.request?.pdfAgreement
-          ? userRequest?.request?.pdfAgreement
-          : userRequest?.pdfAgreement,
-        doc3File: userRequest?.request?.pdfContract
-          ? userRequest?.request?.pdfContract
-          : userRequest?.pdfContract,
-        doc4File: userRequest?.request?.pdfLawyersRequest
-          ? userRequest?.request?.pdfLawyersRequest
-          : userRequest?.pdfLawyersRequest,
-        doc5File: userRequest?.request?.pdfOrder
-          ? userRequest?.request?.pdfOrder
-          : userRequest?.pdfOrder,
-      }),
-    });
+const handleDocuSign = async (userRequest) => {
+  const res = await fetch("/api/signnow", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      signerEmail: userRequest?.request?.userEmail || userRequest?.userEmail,
+      signerName: userRequest?.request?.name || userRequest?.name,
+      secondSignerEmail: userRequest?.request?.secondUserEmail || "", // ← обов'язково передати
+      secondSignerName: userRequest?.request?.secondUserName || "", // ← обов'язково передати
+      ccEmail: "vladnpopof@gmail.com",
+      doc2File: userRequest?.request?.pdfAgreement || userRequest?.pdfAgreement,
+      doc3File: userRequest?.request?.pdfContract || userRequest?.pdfContract,
+      doc4File:
+        userRequest?.request?.pdfLawyersRequest ||
+        userRequest?.pdfLawyersRequest,
+      doc5File: userRequest?.request?.pdfOrder || userRequest?.pdfOrder,
+    }),
+  });
 
-    const data = await res.json();
-    console.log('setMessage', data);
-    if (res.ok) {
-      setMessage(`Envelope sent successfully! Envelope ID: ${data.envelopeId}`);
-      return data.envelopeId;
-    } else {
-      setMessage(`Error: ${data.error}`);
-    }
-  };
+  const data = await res.json();
+  console.log("SignNow response:", data);
+
+  if (res.ok) {
+    setMessage(
+      `SignNow: Envelope sent successfully! Request ID: ${
+        data.result?.request_id || "✓"
+      }`
+    );
+    return data.result?.request_id || "";
+  } else {
+    setMessage(`SignNow Error: ${data.error || "Unknown error"}`);
+  }
+};
 
   const handleSendEmail = async (formData, status) => {
     try {
