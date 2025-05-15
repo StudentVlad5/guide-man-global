@@ -156,29 +156,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // const fields = [
-    //   {
-    //     x: 100,
-    //     y: 100,
-    //     page_number: 0,
-    //     role: "Signer 1",
-    //     required: true,
-    //     type: "signature",
-    //     height: 40,
-    //     width: 160,
-    //   },
-    //   {
-    //     x: 100,
-    //     y: 200,
-    //     page_number: 0,
-    //     role: "Signer 2",
-    //     required: true,
-    //     type: "signature",
-    //     height: 40,
-    //     width: 160,
-    //   },
-    // ];
-
     await fetch(`https://api.signnow.com/document/${documentId}`, {
       method: "PUT",
       headers: {
