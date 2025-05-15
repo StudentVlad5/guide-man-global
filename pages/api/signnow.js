@@ -112,40 +112,58 @@ export default async function handler(req, res) {
       throw new Error("Не вдалося завантажити документ в SignNow");
 
     // === Крок 7: Додаємо поля для підпису у документ ===
-    const fields = [
-      {
-        x: 100,
-        y: 100,
-        page_number: 0,
-        role: "Signer 1",
-        required: true,
-        type: "signature",
-        height: 40,
-        width: 160,
-      },
-      {
-        x: 100,
-        y: 200,
-        page_number: 0,
+    const totalPages = mergedPdf.getPageCount();
+    const pageCounts = []; // к-сть сторінок в кожному окремому документі
+
+    // Отримуємо к-сть сторінок кожного документа
+    for (const buffer of pdfBuffers) {
+      const pdf = await PDFDocument.load(buffer);
+      pageCounts.push(pdf.getPageCount());
+    }
+
+    // Визначаємо сторінки, що належать до останнього документу
+    const pagesInLastTwoDocs = pageCounts
+      .slice(-2)
+      .reduce((sum, count) => sum + count, 0);
+    const signer1LastPage = totalPages - pagesInLastTwoDocs;
+
+    const fields = [];
+    for (let i = 0; i < totalPages; i++) {
+      // Підписувач 2 підписує всі сторінки
+      fields.push({
+        x: 400,
+        y: 790,
+        page_number: i,
         role: "Signer 2",
         required: true,
         type: "signature",
         height: 40,
         width: 160,
-      },
-    ];
+      });
 
-    await fetch(
-      `https://api.signnow.com/document/${documentId}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fields }),
+      // Підписувач 1 підписує тільки сторінки, які НЕ належать до останнього документа
+      if (i < signer1LastPage) {
+        fields.push({
+          x: 40,
+          y: 790,
+          page_number: i,
+          role: "Signer 1",
+          required: true,
+          type: "signature",
+          height: 40,
+          width: 160,
+        });
       }
-    );
+    }
+
+    await fetch(`https://api.signnow.com/document/${documentId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fields }),
+    });
 
     // === Крок 8: Формуємо запрошення до підпису ===
     const toSigners = [{ email: signerEmail, role: "Signer 1", order: 1 }];
