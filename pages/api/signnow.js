@@ -122,16 +122,17 @@ export default async function handler(req, res) {
     }
 
     // Визначаємо сторінки, що належать до останнього документу
-    const lastDocPageStart = pageCounts
-      .slice(0, -1)
+    const pagesInLastTwoDocs = pageCounts
+      .slice(-2)
       .reduce((sum, count) => sum + count, 0);
+    const signer1LastPage = totalPages - pagesInLastTwoDocs;
 
     const fields = [];
     for (let i = 0; i < totalPages; i++) {
       // Підписувач 2 підписує всі сторінки
       fields.push({
         x: 400,
-        y: 740,
+        y: 790,
         page_number: i,
         role: "Signer 2",
         required: true,
@@ -141,10 +142,10 @@ export default async function handler(req, res) {
       });
 
       // Підписувач 1 підписує тільки сторінки, які НЕ належать до останнього документа
-      if (i < lastDocPageStart) {
+      if (i < signer1LastPage) {
         fields.push({
           x: 40,
-          y: 740,
+          y: 790,
           page_number: i,
           role: "Signer 1",
           required: true,
