@@ -115,8 +115,10 @@ const handleDocuSign = async (userRequest) => {
           userEmail: formData.email,
           // recipient: { address: formData.recipient.address, name: formData.recipient.name },
           recipient: {
-            address: 'julia_js@bigmir.net',
-            name: 'відповідного держоргану',
+            // address: '',
+            // name: 'відповідного держоргану',
+            address: formData.recipient.address,
+            name: formData.recipient.name,
           },
         }),
       });
