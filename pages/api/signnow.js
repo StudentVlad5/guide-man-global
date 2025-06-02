@@ -54,7 +54,7 @@ export default async function handler(req, res) {
   // === Крок 2: Встановлюємо значення другого підписанта ===
   const signer2Email =
     !secondSignerEmail || secondSignerEmail.trim() === ""
-      ? "vladnpopof@gmail.com"
+      ? "info.ggs.ua@gmail.com"
       : secondSignerEmail.trim();
 
   const signer2Name =
@@ -189,7 +189,7 @@ export default async function handler(req, res) {
           document_id: documentId,
           to: toSigners,
           cc: ccEmail ? [ccEmail] : [],
-          from: "vladnpopof@gmail.com",
+          from: "info.ggs.ua@gmail.com",
           subject: "Підпишіть, будь ласка, документ",
           message: "Це об’єднаний документ для підпису.",
         }),

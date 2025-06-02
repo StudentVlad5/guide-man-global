@@ -79,7 +79,7 @@ const handleDocuSign = async (userRequest) => {
       signerName: userRequest?.request?.name || userRequest?.name,
       secondSignerEmail: userRequest?.request?.secondUserEmail || "", // ← обов'язково передати
       secondSignerName: userRequest?.request?.secondUserName || "", // ← обов'язково передати
-      ccEmail: "vladnpopof@gmail.com",
+      ccEmail: "info.ggs.ua@gmail.com",
       doc2File: userRequest?.request?.pdfAgreement || userRequest?.pdfAgreement,
       doc3File: userRequest?.request?.pdfContract || userRequest?.pdfContract,
       doc4File:
