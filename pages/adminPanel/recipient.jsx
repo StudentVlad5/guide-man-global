@@ -293,12 +293,12 @@ export default function AdminRecipient() {
                 </ul>
                 <button
                   type="submit"
-                  className={`button ${st.form__button}`}
+                  className={styles.submitButton}
                   style={{ marginTop: '20px' }}
                   onClick={e => handleSubmit(e)}
                   disabled={validateStatus}
                 >
-                  {'submit'}
+                  {'Обновить'}
                 </button>
               </form>
             }
