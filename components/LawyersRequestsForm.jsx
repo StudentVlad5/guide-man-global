@@ -56,6 +56,8 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
   const language = currentLanguage === 'ua' ? 'uk' : currentLanguage;
   const { t } = useTranslation();
   const { user, userCredentials } = useContext(AppContext);
+  const { lawyerData } = useContext(AppContext);
+  // const [lawyerData, setLawyerData] = useState(null);
   const hasExecuted = useRef(false);
 
   const requestEnTitle = request.ua.title;
@@ -177,6 +179,27 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     getRecipient();
   }, [requestRecipient]);
 
+  // // Отримання даних адвоката
+  // useEffect(() => {
+  //   const fetchLawyerData = async () => {
+  //     try {
+  //       const lawyers = await getCollectionWhereKeyValue(
+  //         'lawyers',
+  //         'status',
+  //         'active'
+  //       );
+  //       if (lawyers && lawyers.length > 0) {
+  //         setLawyerData(lawyers[0]); // Беремо першого адвоката зі списку
+  //       } else {
+  //         console.error('Дані адвоката не знайдено');
+  //       }
+  //     } catch (err) {
+  //       console.error('Помилка завантаження даних адвоката:', err);
+  //     }
+  //   };
+  //   fetchLawyerData();
+  // }, []);
+
   useEffect(() => {
     const fetchCollection = async () => {
       try {
@@ -207,6 +230,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     try {
       const response = await axios.post('/api/pdf/preview-pdf', {
         formData,
+        lawyerData,
         type,
       });
       const pdfBase64 = response.data.pdfBase64;
@@ -230,7 +254,7 @@ export default function LawyersRequestForm({ currentLanguage, request }) {
     setError(null);
     try {
       const response = await axios.post('/api/pdf/save-pdf', {
-        // formData,
+        lawyerData,
         formData: {
           ...formData,
           idPost: orderPayId,

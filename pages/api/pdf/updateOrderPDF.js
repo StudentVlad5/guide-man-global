@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 
-export async function updateOrderPDF(fileUrl, formData) {
+export async function updateOrderPDF(fileUrl, formData, lawyerData) {
   try {
     // Завантажуємо оригінальний PDF ордеру
     const response = await fetch(fileUrl);
@@ -82,6 +82,31 @@ export async function updateOrderPDF(fileUrl, formData) {
     const currentYear = String(year.slice(-2));
     const birthday = String(formData.birthday.replace(/-/g, '.'));
 
+    const formatCertificateMonths = dateString => {
+      if (!dateString) return '';
+      const months = [
+        'січня',
+        'лютого',
+        'березня',
+        'квітня',
+        'травня',
+        'червня',
+        'липня',
+        'серпня',
+        'вересня',
+        'жовтня',
+        'листопада',
+        'грудня',
+      ];
+      const parts = dateString.split('.');
+      if (parts.length !== 3) return dateString; // Повертаємо як є, якщо формат невірний
+      const monthIndex = parseInt(parts[1], 10) - 1;
+
+      return `${months[monthIndex]}`;
+    };
+    const [dayCertificate, monthCertificate, yearCertificate] =
+      lawyerData?.certificate?.date.dateCreating.split('.');
+
     function setTextFieldWithWrap(fieldNames, text, maxLengthPerField) {
       let textParts = [];
       let currentPart = '';
@@ -115,13 +140,24 @@ export async function updateOrderPDF(fileUrl, formData) {
       formData.recipient.name,
       75
     );
-    setTextField('certificate[number]', '278');
-    setTextField('certificate[day]', '18');
-    setTextField('certificate[month]', 'липня');
-    setTextField('certificate[year]', '2005');
-    setTextField('ra[title]', 'Чернігівською обласною КДКА', 'left', {
-      size: '10px',
-    });
+    setTextField(
+      'certificate[number]',
+      lawyerData?.certificate?.number || '278'
+    );
+    setTextField('certificate[day]', dayCertificate || '18');
+    setTextField(
+      'certificate[month]',
+      formatCertificateMonths(lawyerData?.certificate?.date) || 'липня'
+    );
+    setTextField('certificate[year]', yearCertificate || '2005');
+    setTextField(
+      'ra[title]',
+      lawyerData?.certificate?.agency || 'Чернігівською обласною КДКА',
+      'left',
+      {
+        size: '10px',
+      }
+    );
     setTextField('current[day]', day);
     setTextField('current[month]', month);
     setTextField('current[year]', currentYear);
