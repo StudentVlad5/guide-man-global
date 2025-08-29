@@ -10,23 +10,23 @@ import Image from 'next/image';
 import { placeHolder, patternInput } from '../../helpers/constant';
 import { updateDocumentInCollection } from '../../helpers/firebaseControl';
 
-export default function AdminRecipient() {
-  const [recipient, setRecipient] = useState([]);
+export default function AdminLawyer() {
+  const [lawyer, setLawyer] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const [editRecipient, setEditRecipient] = useState(false);
+  const [editLawyer, setEditLawyer] = useState(false);
   const [validateStatus, setValidateStatus] = useState(false);
   const [checkFetch, setCheckFetch] = useState(false);
 
   useEffect(() => {
-    fetchRecipient();
+    fetchLawyer();
   }, [search]);
 
   useEffect(() => {
     if (checkFetch) {
       const renewFetch = setTimeout(() => {
-        fetchRecipient();
+        fetchLawyer();
       }, 2000);
       return () => {
         clearTimeout(renewFetch);
@@ -34,14 +34,14 @@ export default function AdminRecipient() {
     }
   }, [checkFetch, isModal]);
 
-  const fetchRecipient = async () => {
+  const fetchLawyer = async () => {
     setLoading(true);
-    const recipientRef = collection(db, 'recipient');
-    let q = query(recipientRef, orderBy('title'));
+    const lawyerRef = collection(db, 'lawyers');
+    let q = query(lawyerRef, orderBy('surname'));
 
     if (search) {
       q = query(
-        recipientRef,
+        lawyerRef,
         where('title', '>=', search),
         where('title', '<=', search + '\uf8ff'),
         orderBy('title')
@@ -49,24 +49,24 @@ export default function AdminRecipient() {
     }
 
     const querySnapshot = await getDocs(q);
-    const recipientList = querySnapshot.docs.map(doc => ({
+    const lawyerList = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
-    setRecipient([...recipientList]);
+    setLawyer([...lawyerList]);
     setLoading(false);
   };
-  // console.log(editRecipient);
+  // console.log(editLawyer);
 
   const handleEdit = id => {
     setIsModal(true);
-    setEditRecipient(recipient.find(it => it.id === id));
+    setEditLawyer(lawyer.find(it => it.id === id));
   };
 
   const handleDelete = async el => {
     try {
-      await removeDocumentFromCollection(`recipient`, el.id);
-      fetchRecipient();
+      await removeDocumentFromCollection(`lawyers`, el.id);
+      fetchLawyer();
     } catch (error) {
       alert(error);
     }
@@ -84,41 +84,45 @@ export default function AdminRecipient() {
   const handleSubmit = e => {
     e.preventDefault();
     const check = updateDocumentInCollection(
-      'recipient',
-      { ...editRecipient },
-      editRecipient.id
+      'lawyers',
+      { ...editLawyer },
+      editLawyer.id
     );
     if (check) {
       setIsModal(false);
-      setEditRecipient('');
+      setEditLawyer('');
     }
   };
+
   return (
     <div className={styles.main}>
       <h1>
-        <Link href="/adminPanel"> ← Панель администраторa</Link> / Адрес
-        госорганов
+        <Link href="/adminPanel"> ← Панель администраторa</Link> / Адвокат
       </h1>
       <div className={styles.category}>
         <div>
-          <h2>Поиск госоргана</h2>
+          <h2>Поиск адвоката</h2>
           <input
             type="text"
             value={search}
             className={styles.searchPanel}
             onChange={handleSearchChange}
-            placeholder="Поиск по названию"
+            placeholder="Поиск по фамилии"
           />
 
-          {/* Table displaying recipient data */}
-          {recipient && (
+          {/* Table displaying lawyer data */}
+          {lawyer && (
             <table className={styles.tablewidth}>
               <thead>
                 <tr>
-                  <th className={styles.tableHead}>Name</th>
-                  <th className={`${styles.tableHead}`}>Title</th>
+                  <th className={styles.tableHead}>Surname</th>
+                  <th className={`${styles.tableHead}`}>Name</th>
+                  <th className={`${styles.tableHead}`}>FathersName</th>
                   <th className={`${styles.tableHead}`}>Application</th>
                   <th className={`${styles.tableHead}`}>Address</th>
+                  <th className={`${styles.tableHead}`}>Telephone</th>
+                  <th className={`${styles.tableHead}`}>Email</th>
+                  <th className={`${styles.tableHead}`}>Certificate</th>
                   <th className={styles.tableHead}>Actions</th>
                 </tr>
               </thead>
@@ -128,24 +132,33 @@ export default function AdminRecipient() {
                     <td colSpan="3">Loading...</td>
                   </tr>
                 ) : (
-                  recipient.map(recipient => (
-                    <tr key={recipient.id}>
-                      <td className={styles.tableHead}>{recipient?.name}</td>
+                  lawyer.map(lawyer => (
+                    <tr key={lawyer.id}>
+                      <td className={styles.tableHead}>{lawyer?.surname}</td>
+                      <td className={`${styles.tableHead}`}>{lawyer?.name}</td>
                       <td className={`${styles.tableHead}`}>
-                        {recipient?.title}
+                        {lawyer?.fathersName}
                       </td>
                       <td className={`${styles.tableHead}`}>
-                        {recipient?.application}
+                        {lawyer?.application}
                       </td>
                       <td className={`${styles.tableHead}`}>
-                        {recipient?.address}
+                        {lawyer?.address}
+                      </td>
+                      <td className={`${styles.tableHead}`}>{lawyer?.tel}</td>
+                      <td className={`${styles.tableHead}`}>{lawyer?.email}</td>
+                      <td className={`${styles.tableHead}`}>
+                        № {lawyer?.certificate?.number}
+                        {' від'}
+                        {lawyer?.certificate?.date}
+                        {' виданий'} {lawyer?.certificate?.agency}
                       </td>
                       <td
                         className={styles.tableHead}
                         style={{ textAlign: 'center' }}
                       >
                         <button
-                          onClick={() => handleEdit(recipient.id)}
+                          onClick={() => handleEdit(lawyer.id)}
                           style={{ border: 'none' }}
                         >
                           <Image
@@ -156,7 +169,7 @@ export default function AdminRecipient() {
                           />
                         </button>
                         <button
-                          onClick={() => handleDelete(recipient)}
+                          onClick={() => handleDelete(lawyer)}
                           style={{ border: 'none', marginLeft: '10px' }}
                         >
                           <Image
@@ -176,19 +189,19 @@ export default function AdminRecipient() {
         </div>
         {isModal && (
           <Modal
-            title={'Редактировать данные госоргана'}
+            title={'Редактировать данные адвоката'}
             handleModal={handleModal}
             form={
               <form className={st.form}>
                 <ul className="flexWrap">
-                  {Object.keys(editRecipient) &&
-                    Object.keys(editRecipient).map(it => {
-                      return Array.isArray(editRecipient[it]) ||
-                        typeof editRecipient[it] === 'object'
-                        ? Object.keys(editRecipient[it]).map((i, ind) => {
+                  {Object.keys(editLawyer) &&
+                    Object.keys(editLawyer).map(it => {
+                      return Array.isArray(editLawyer[it]) ||
+                        typeof editLawyer[it] === 'object'
+                        ? Object.keys(editLawyer[it]).map((i, ind) => {
                             if (
-                              !Array.isArray(editRecipient[it[i]]) &&
-                              typeof editRecipient[it[i]] === 'object'
+                              !Array.isArray(editLawyer[it[i]]) &&
+                              typeof editLawyer[it[i]] === 'object'
                             )
                               return (
                                 <li key={ind} className={st.form__li}>
@@ -209,7 +222,7 @@ export default function AdminRecipient() {
                                     type="text"
                                     id={ind}
                                     name={i}
-                                    value={editRecipient[it[i]]}
+                                    value={editLawyer[it[i]]}
                                     pattern={patternInput[it[i]]?.source}
                                     placeholder={placeHolder[it[i]]}
                                     onChange={e => {
@@ -223,10 +236,10 @@ export default function AdminRecipient() {
                                       } else {
                                         setValidateStatus(false);
                                       }
-                                      setEditRecipient({
-                                        ...editRecipient,
+                                      setEditLawyer({
+                                        ...editLawyer,
                                         [it]: {
-                                          ...editRecipient[it],
+                                          ...editLawyer[it],
                                           [i]: e.currentTarget.value,
                                         },
                                       });
@@ -251,7 +264,7 @@ export default function AdminRecipient() {
                               <input
                                 className={
                                   patternInput[it] &&
-                                  !patternInput[it].test(editRecipient[it])
+                                  !patternInput[it].test(editLawyer[it])
                                     ? st.form__input__danger
                                     : styl.orderForm__form_input
                                 }
@@ -265,7 +278,7 @@ export default function AdminRecipient() {
                                 type="text"
                                 id={it}
                                 name={it}
-                                value={editRecipient[it]}
+                                value={editLawyer[it]}
                                 pattern={patternInput[it]?.source}
                                 placeholder={placeHolder[it]}
                                 onChange={e => {
@@ -277,8 +290,8 @@ export default function AdminRecipient() {
                                   } else {
                                     setValidateStatus(false);
                                   }
-                                  setEditRecipient({
-                                    ...editRecipient,
+                                  setEditLawyer({
+                                    ...editLawyer,
                                     [it]: e.currentTarget.value,
                                   });
                                 }}

@@ -86,8 +86,48 @@ const PIB = value =>
   [value?.surname, value?.name, value?.fatherName || '']
     .filter(i => i)
     .join(' ');
+const formatDate = dateString => {
+  if (!dateString) return '';
+  const months = [
+    'січня',
+    'лютого',
+    'березня',
+    'квітня',
+    'травня',
+    'червня',
+    'липня',
+    'серпня',
+    'вересня',
+    'жовтня',
+    'листопада',
+    'грудня',
+  ];
+  const parts = dateString.split('.');
+  if (parts.length !== 3) return dateString; // Повертаємо як є, якщо формат невірний
+  const day = parts[0];
+  const monthIndex = parseInt(parts[1], 10) - 1;
+  const year = parts[2];
+  if (isNaN(monthIndex)) return dateString;
 
-export const Contract = ({ data }) => {
+  return `${day} ${months[monthIndex]} ${year} року`;
+};
+
+export const Contract = ({ data, lawyer }) => {
+  const lawyerPIB = lawyer
+    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fathersName}`.trim()
+    : 'СТРОГИЙ ВАЛЕРІЙ ФЕДОРОВИЧ';
+  const lawyerApplication = lawyer ? lawyer.application : 'В.Ф.Строгий';
+  const lawyerAddress = lawyer
+    ? lawyer.address
+    : 'м.Харків, вул.Клочківська, 350';
+  const lawyerTel = lawyer ? lawyer.tel : '095-642-94-14';
+  const lawyerEmail = lawyer ? lawyer.email : 'info.ggs.ua@gmail.com';
+  const lawyerCertificate = lawyer
+    ? `свідоцтво №${lawyer.certificate?.number} яке видане ${formatDate(
+        lawyer.certificate?.date
+      )} ${lawyer.certificate?.agency}`
+    : 'свідоцтво №278 яке видане 18 липня 2005 року Радою адвокатів Чернігівської області';
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -105,10 +145,9 @@ export const Contract = ({ data }) => {
           <Text style={styles.text}>
             <Text style={[styles.bold, { textIndent: '30' }]}>АДВОКАТ</Text>,
             член Національної асоціації Адвокатів України,{' '}
-            <Text style={styles.bold}>СТРОГИЙ ВАЛЕРІЙ ФЕДОРОВИЧ,</Text> який діє
+            <Text style={styles.bold}>{lawyerPIB.toUpperCase()},</Text> який діє
             на підставі Свідоцтва про право на заняття адвокатською діяльністю
-            №278 яке видане 18 липня 2005 року Радою адвокатів Чернігівської
-            області, з одного боку,{' '}
+            {lawyerCertificate}, з одного боку,{' '}
           </Text>
           <Text style={styles.text}>
             <Text
@@ -248,7 +287,7 @@ export const Contract = ({ data }) => {
             </View>
             <View style={styles.list}>
               <Text style={styles.textNoIndent}>Адвокат</Text>
-              <Text style={styles.textNoIndent}>Строгий Валерій Федорович</Text>
+              <Text style={styles.textNoIndent}>{lawyerPIB}</Text>
               <Text style={styles.signaturePlaceholder}>S4</Text>
               {/* <Text style={styles.signaturePlaceholder}>D4</Text> */}
             </View>

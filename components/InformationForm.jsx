@@ -317,9 +317,9 @@ export const InformationForm = ({
                     },
                     currentInfoItem.idPost
                   )
-                : type === 'requests'
+                : type === 'request'
                 ? await updateDocumentInCollection(
-                    `${currentInfoItem.type}`,
+                    `requests`,
                     {
                       ...currentInfoItem,
                       ru: {
@@ -365,7 +365,7 @@ export const InformationForm = ({
 
                       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
                     },
-                    currentInfoItem.idPost
+                    currentInfoItem.id
                   )
                 : await updateDocumentInCollection(
                     `${currentInfoItem.type}`,

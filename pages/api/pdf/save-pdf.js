@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     console.log({ message: 'The API is working!' });
 
-    const { formData, selectedDocuments, uid } = req.body;
+    const { lawyerData, formData, selectedDocuments, uid } = req.body;
 
     try {
       if (!uid) {
@@ -72,20 +72,20 @@ export default async function handler(req, res) {
       // Генеруємо PDF-файли
       const generatedPDFs = {};
       const lawyersRequestPDF = await generatePDFBuffer(
-        <LawyersRequest data={formData} />
+        <LawyersRequest data={formData} lawyer={lawyerData} />
       );
       generatedPDFs.lawyersRequest = lawyersRequestPDF;
 
       if (selectedDocuments.agreement) {
         const agreementPDF = await generatePDFBuffer(
-          <Agreement data={formData} />
+          <Agreement data={formData} lawyer={lawyerData} />
         );
         generatedPDFs.agreement = agreementPDF;
       }
 
       if (selectedDocuments.contract) {
         const contractPDF = await generatePDFBuffer(
-          <Contract data={formData} />
+          <Contract data={formData} lawyer={lawyerData} />
         );
         generatedPDFs.contract = contractPDF;
       }
@@ -102,7 +102,8 @@ export default async function handler(req, res) {
       // Оновлюємо ордер із заповненими даними користувача
       const updatedOrderPdfBuffer = await updateOrderPDF(
         orderData.pdfUrl,
-        formData
+        formData,
+        lawyerData
       );
       const uploadedOrderUrl = await uploadPDFToStorage(
         updatedOrderPdfBuffer,

@@ -189,6 +189,15 @@ export default function AdminPanel() {
                 +
               </button> */}
             </div>
+
+            <div className={styles.body__item}>
+              <div
+                className={styles.body__item__content}
+                onClick={() => handleClickCategory('lawyers')}
+              >
+                Адвокат
+              </div>
+            </div>
           </div>
           <button className={styles.logout} onClick={handleSignOut}>
             Выход

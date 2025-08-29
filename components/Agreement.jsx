@@ -1,122 +1,122 @@
-"use client";
-import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+'use client';
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   page: {
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "white",
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'white',
     paddingVertical: 50,
     paddingLeft: 100,
     paddingRight: 50,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     fontSize: 11,
-    fontStyle: "normal",
+    fontStyle: 'normal',
     lineHeight: 1.3,
   },
   header: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: "auto",
-    width: "60%",
+    marginLeft: 'auto',
+    width: '60%',
     fontSize: 10,
-    textAlign: "left",
+    textAlign: 'left',
   },
   headerTitle: {
     paddingBottom: 5,
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   headerSubtitle: {
     paddingTop: 10,
     marginBottom: 30,
   },
   line: {
-    width: "100%",
+    width: '100%',
     marginBottom: 4,
-    borderBottomColor: "black",
-    borderBottomStyle: "solid",
+    borderBottomColor: 'black',
+    borderBottomStyle: 'solid',
     borderBottomWidth: 2,
   },
   section: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     marginBottom: 10,
   },
   sectionTitle: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     marginTop: 20,
     marginBottom: 15,
-    textAlign: "left",
+    textAlign: 'left',
   },
   title: {
     fontSize: 11,
-    textTransform: "uppercase",
-    textAlign: "center",
-    fontWeight: "bold",
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   subtitle: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   text: {
     textIndent: 30,
-    textAlign: "justify",
+    textAlign: 'justify',
   },
   textNoIndent: {
-    textAlign: "justify",
+    textAlign: 'justify',
   },
   italic: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   bold: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   boldItalic: {
-    fontStyle: "italic",
-    fontWeight: "bold",
+    fontStyle: 'italic',
+    fontWeight: 'bold',
   },
   underline: {
-    fontWeight: "bold",
-    textDecoration: "underline",
+    fontWeight: 'bold',
+    textDecoration: 'underline',
   },
   signature: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 60,
     paddingRight: 50,
   },
   signaturePlaceholder: {
     fontSize: 10,
     minWidth: 50,
-    textAlign: "left",
-    color: "white",
+    textAlign: 'left',
+    color: 'white',
   },
 });
 
-const getValue = (value, fallback = "") => value || fallback;
-const getBirthday = (value) => {
-  if (!value?.birthday) return "";
+const getValue = (value, fallback = '') => value || fallback;
+const getBirthday = value => {
+  if (!value?.birthday) return '';
   try {
     const date = new Date(value.birthday);
-    return isNaN(date) ? "" : date.toLocaleDateString("ru-RU");
+    return isNaN(date) ? '' : date.toLocaleDateString('ru-RU');
   } catch {
-    return "";
+    return '';
   }
 };
-const PIB = (value) =>
-  [value?.surname, value?.name, value?.fatherName || ""]
-    .filter((i) => i)
-    .join(" ");
-const getPassword = (value) =>
-  value?.abroadPassnum || value?.passport || value?.pmjNum || "";
+const PIB = value =>
+  [value?.surname, value?.name, value?.fatherName || '']
+    .filter(i => i)
+    .join(' ');
+const getPassword = value =>
+  value?.abroadPassnum || value?.passport || value?.pmjNum || '';
 
-export const Agreement = ({ data }) => {
+export const Agreement = ({ data, lawyer }) => {
   const buildDataString = () => {
     const parts = [
       getValue(data.citizenship),
@@ -126,8 +126,15 @@ export const Agreement = ({ data }) => {
     ];
 
     // Фільтруємо пусті значення та об'єднуємо через кому
-    return parts.filter((part) => part).join(", ");
+    return parts.filter(part => part).join(', ');
   };
+
+  const lawyerPIB = lawyer
+    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fathersName}`.trim()
+    : 'Строгому Валерію Федоровичу';
+  const lawyerCertificate = lawyer
+    ? `№${lawyer.certificate?.number} від ${lawyer.certificate?.date} р.`
+    : '№278 від 18.07.2005 р.';
 
   return (
     <Document>
@@ -143,12 +150,10 @@ export const Agreement = ({ data }) => {
           </View>
           <View style={styles.headerSubtitle}>
             <Text style={styles.textNoIndent}>Адвокату </Text>
+            <Text style={styles.textNoIndent}>{lawyerPIB},</Text>
             <Text style={styles.textNoIndent}>
-              Строгому Валерію Федоровичу,
-            </Text>
-            <Text style={styles.textNoIndent}>
-              Свідоцтво про право на зайняття адвокатською діяльністю №278 від
-              18.07.2005 р.
+              Свідоцтво про право на зайняття адвокатською діяльністю{' '}
+              {lawyerCertificate}
             </Text>
           </View>
         </View>

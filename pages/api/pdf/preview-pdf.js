@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { formData, type } = req.body;
+  const { lawyerData, formData, type } = req.body;
 
   try {
     // Зчитуємо зображення логотипу як Base64
@@ -59,11 +59,17 @@ export default async function handler(req, res) {
     let pdfBuffer;
 
     if (type === 'lawyersRequest') {
-      pdfBuffer = await generatePDFBuffer(<LawyersRequest data={formData} />);
+      pdfBuffer = await generatePDFBuffer(
+        <LawyersRequest data={formData} lawyer={lawyerData} />
+      );
     } else if (type === 'agreement') {
-      pdfBuffer = await generatePDFBuffer(<Agreement data={formData} />);
+      pdfBuffer = await generatePDFBuffer(
+        <Agreement data={formData} lawyer={lawyerData} />
+      );
     } else if (type === 'contract') {
-      pdfBuffer = await generatePDFBuffer(<Contract data={formData} />);
+      pdfBuffer = await generatePDFBuffer(
+        <Contract data={formData} lawyer={lawyerData} />
+      );
     } else {
       throw new Error('Unknown document type');
     }
