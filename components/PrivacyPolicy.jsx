@@ -1,11 +1,11 @@
-import { useTranslation } from "react-i18next";
-import styles from "../styles/privacyPolicy.module.scss";
+import { useTranslation } from 'react-i18next';
+import styles from '../styles/privacyPolicy.module.scss';
 
 export const PrivacyPolicy = () => {
     const {t} = useTranslation();
   return (
     <div className={styles.divBox}>
-      <h1 className={styles.divTitle}>{t("Security and privacy")}</h1>
+      <h1 className={styles.divTitle}>{t('Security and privacy')}</h1>
       <h2 className={styles.divTitle2}>
         ПУБЛІЧНИЙ ДОГОВІР (ОФЕРТА) <br />
         про надання послуг із оформлення та надсилання адвокатських запитів
@@ -13,10 +13,10 @@ export const PrivacyPolicy = () => {
 
       <div className={styles.divBox2}>
         <p>
-          Цей документ є офіційною публічною офертою (далі — "Оферта") від ТОВ
-          «Глобал Гід Сервіс», надалі — "Виконавець", адресованою будь-якій
+          Цей документ є офіційною публічною офертою (далі — 'Оферта') від ТОВ
+          «Глобал Гід Сервіс», надалі — 'Виконавець', адресованою будь-якій
           фізичній особі, що має намір отримати юридичну послугу з оформлення
-          адвокатського запиту, надалі — "Клієнт".
+          адвокатського запиту, надалі — 'Клієнт'.
         </p>
         <br />
         <p>
