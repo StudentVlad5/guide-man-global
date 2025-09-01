@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 
 export default function privacyPolicy() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
   return (
     <Layout type="service page" h1={t("Privacy & Policy")}>
       <div className="container">
