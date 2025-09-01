@@ -2,12 +2,10 @@ import React from "react";
 import { PrivacyPolicy } from "../components/PrivacyPolicy";
 import { Layout } from "../components/Layout";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "react-i18next";
 
 export default function privacyPolicy() {
-  const { t } = useTranslation();
   return (
-    <Layout type="service page" h1={t("Privacy & Policy")}>
+    <Layout type="service page" h1="Privacy & Policy">
       <div className="container">
         <PrivacyPolicy />
       </div>
