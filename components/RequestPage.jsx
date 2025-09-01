@@ -54,7 +54,9 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
             __html: getRightData(item, locale, "preview"),
           }}
         />
-        <p className={styles.itemPage__price}>{t("Price")}: 2000₴</p>
+        <p className={styles.itemPage__price}>
+          {t("Price")}: {item.price || 2000}₴  
+        </p>
         {user ? (
           <div className={styles.buttonDiv}>
             <button
@@ -117,7 +119,11 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                     <span className={styles.buttonDiv__text_bold}>
                       {t("Personalization")}
                     </span>{" "}
-                    - {t("your data is automatically used in requests, which simplifies the process of their processing")}.
+                    -{" "}
+                    {t(
+                      "your data is automatically used in requests, which simplifies the process of their processing"
+                    )}
+                    .
                   </p>
                 </li>
                 <li>
@@ -125,7 +131,11 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                     <span className={styles.buttonDiv__text_bold}>
                       {t("Saving requests history")}
                     </span>{" "}
-                    - {t("all your requests are stored in your personal account, and you can always return to them")}.
+                    -{" "}
+                    {t(
+                      "all your requests are stored in your personal account, and you can always return to them"
+                    )}
+                    .
                   </p>
                 </li>
                 <li>
@@ -136,7 +146,11 @@ export default function LawyersRequestPage({ item, buttonName, linkPath }) {
                     <span className={styles.buttonDiv__text_bold}>
                       {t("Security and privacy")}
                     </span>{" "}
-                    - {t("your data is securely protected, and only you and your lawyer have access to the information")}.
+                    -{" "}
+                    {t(
+                      "your data is securely protected, and only you and your lawyer have access to the information"
+                    )}
+                    .
                   </p>
                 </li>
               </ul>
