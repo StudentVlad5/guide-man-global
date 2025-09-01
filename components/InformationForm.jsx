@@ -54,7 +54,7 @@ export const InformationForm = ({
   const [file, setFile] = useState(null);
   const [dataModal, setDataModal] = useState({
     image: '',
-
+    price: '',
     ua: {
       title: '',
       preview: '',
@@ -269,6 +269,7 @@ export const InformationForm = ({
 
             path: dataModal.path,
             recipient: dataModal.recipient,
+            price: dataModal.price,
           });
 
           if (newData.some(el => el.length !== 0)) {
@@ -313,6 +314,10 @@ export const InformationForm = ({
                         dataModal.path.length > 0
                           ? dataModal.path
                           : currentInfoItem.path,
+                      price: 
+                        dataModal.price.length > 0
+                          ? dataModal.price
+                          : currentInfoItem.price || '2000',
                       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
                     },
                     currentInfoItem.idPost
@@ -362,7 +367,10 @@ export const InformationForm = ({
                         dataModal.recipient.length > 0
                           ? dataModal.recipient
                           : currentInfoItem.recipient,
-
+                      price:
+                        dataModal.price.length > 0
+                          ? dataModal.price
+                          : currentInfoItem.price || '2000',
                       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
                     },
                     currentInfoItem.id
@@ -418,6 +426,10 @@ export const InformationForm = ({
                         dataModal.path.length > 0
                           ? dataModal.path
                           : currentInfoItem.path,
+                      price:
+                        dataModal.price.length > 0
+                          ? dataModal.price
+                          : currentInfoItem.price || '2000',
                       dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
                     },
                     currentInfoItem.idPost
@@ -785,6 +797,22 @@ export const InformationForm = ({
             : dataModal.path
         }
         onChange={e => handleChangeModal('path', e.target.value)}
+      />
+
+      <input
+        className={styles.input}
+        type="number"
+        placeholder="цена в UAH (например: 2000)"
+        value={
+          dataModal.price.length > 0
+            ? dataModal.price
+            : currentInfoItem
+            ? currentInfoItem.price || '2000'
+            : dataModal.price
+        }
+        onChange={e => handleChangeModal('price', e.target.value)}
+        min="0"
+        step="1"
       />
 
       {(type === 'requests' || type === 'request') &&

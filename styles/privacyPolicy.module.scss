@@ -1,0 +1,38 @@
+@import './mixins';
+@import "./variables";
+
+.divBox{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.divTitle{
+margin-bottom: 10px;
+font-size: 27px;
+}
+
+.divTitle2{
+font-size: 23px;
+}
+
+.divBox2{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.list{
+    margin-bottom: 30px;
+    &:last-child{
+        margin-bottom: 0;
+    }
+}
+
+.listItem{
+    margin-bottom: 6px; 
+}
+
+.listTitle{
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+

@@ -71,7 +71,7 @@ export const Footer = () => {
 
         <section className={styles.footer__endDesktop}>
           <p>Created by Noname Digital</p>
-          <p>Privacy Policy</p>
+          <Link href='/privacyPolicy'>{t("Security and privacy")}</Link> 
         </section>
       </div>
     </footer>
