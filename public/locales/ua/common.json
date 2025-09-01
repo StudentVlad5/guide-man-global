@@ -36,7 +36,8 @@
     "account": "Кабінет",
     "profile": "Профайл",
     "history": "Історія звернень",
-    "docusign": "Електроне підписання документів✍"
+    "docusign": "Електроне підписання документів✍",
+    "privacy":"Політика конфіденційності"
   },
   "homePage": {
     "banner": {
@@ -224,5 +225,6 @@
   "Saving requests history": "Збереження історії запитів",
   "all your requests are stored in your personal account, and you can always return to them": "усі ваші звернення зберігаються у вашому особистому кабінеті, і ви завжди можете до них повернутися",
   "Security and privacy": "Безпеку та конфіденційність",
-  "your data is securely protected, and only you and your lawyer have access to the information": "ваші дані надійно захищені, а доступ до інформації мають лише ви та адвокат"
+  "your data is securely protected, and only you and your lawyer have access to the information": "ваші дані надійно захищені, а доступ до інформації мають лише ви та адвокат",
+  "Privacy Policy": "Політика конфіденційності"
 }

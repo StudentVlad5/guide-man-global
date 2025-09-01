@@ -36,7 +36,8 @@
     "account": " Account",
     "profile": "Profile",
     "history": "Request's History",
-    "docusign": "Electronic signature of documents✍"
+    "docusign": "Electronic signature of documents✍",
+    "privacy": "Privacy Policy"
   },
   "homePage": {
     "banner": {
@@ -224,5 +225,6 @@
   "Saving requests history": "Saving requests history",
   "all your requests are stored in your personal account, and you can always return to them": "all your requests are stored in your personal account, and you can always return to them",
   "Security and privacy": "Security and privacy",
-  "your data is securely protected, and only you and your lawyer have access to the information": "your data is securely protected, and only you and your lawyer have access to the information"
+  "your data is securely protected, and only you and your lawyer have access to the information": "your data is securely protected, and only you and your lawyer have access to the information",
+  "Privacy Policy": "Privacy Policy"
 }
