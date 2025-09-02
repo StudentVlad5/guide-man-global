@@ -105,7 +105,7 @@ export async function updateOrderPDF(fileUrl, formData, lawyerData) {
       return `${months[monthIndex]}`;
     };
     const [dayCertificate, monthCertificate, yearCertificate] =
-      lawyerData?.certificate?.date.dateCreating.split('.');
+      lawyerData?.certificate?.date.dateCreating.split('.') || [];
 
     function setTextFieldWithWrap(fieldNames, text, maxLengthPerField) {
       let textParts = [];
