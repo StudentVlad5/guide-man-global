@@ -71,16 +71,67 @@ export async function getTitleOfServices(locale) {
   });
 }
 
+// export const updateDocumentInCollection = async (
+//   collection,
+//   document,
+//   documentId
+// ) => {
+//   try {
+//     const documentRef = doc(db, collection, documentId); // Отримуємо посилання на документ
+//     await updateDoc(documentRef, document); // Оновлюємо документ
+//     console.log(
+//       `Документ ${documentId} успішно оновлено у колекції ${collection}.`
+//     );
+//   } catch (error) {
+//     console.error('Помилка під час оновлення документа:', error);
+//     throw error;
+//   }
+// };
 export const updateDocumentInCollection = async (
   collection,
   document,
   documentId
 ) => {
   try {
-    const documentRef = doc(db, collection, documentId); // Отримуємо посилання на документ
-    await updateDoc(documentRef, document); // Оновлюємо документ
-    console.log(
-      `Документ ${documentId} успішно оновлено у колекції ${collection}.`
+    const docIdStr = String(documentId);
+    // 1) спроба оновити за реальною id документа
+    const docRef = db.collection(collection).doc(docIdStr);
+    const snap = await docRef.get();
+    if (snap && snap.exists) {
+      await docRef.update(document);
+      console.log(
+        `Документ ${docIdStr} успішно оновлено у колекції ${collection}.`
+      );
+      return;
+    }
+
+    // 2) шукаємо по полю idPost
+    let query = await db
+      .collection(collection)
+      .where('idPost', '==', docIdStr)
+      .get();
+    if (!query.empty) {
+      const foundId = query.docs[0].id;
+      await db.collection(collection).doc(foundId).update(document);
+      console.log(
+        `Документ (by idPost) ${foundId} оновлено у колекції ${collection}.`
+      );
+      return;
+    }
+
+    // 3) пробуємо по полю id
+    query = await db.collection(collection).where('id', '==', docIdStr).get();
+    if (!query.empty) {
+      const foundId = query.docs[0].id;
+      await db.collection(collection).doc(foundId).update(document);
+      console.log(
+        `Документ (by id) ${foundId} оновлено у колекції ${collection}.`
+      );
+      return;
+    }
+
+    throw new Error(
+      `Документ для оновлення не знайдено: ${documentId} у колекції ${collection}`
     );
   } catch (error) {
     console.error('Помилка під час оновлення документа:', error);
@@ -171,51 +222,155 @@ export async function updateFieldInDocumentInCollection(
   return result;
 }
 
+// export function removeDocumentFromCollection(collection, docId) {
+//   return new Promise(function (resolve, reject) {
+//     try {
+//       db.collection(collection)
+//         .doc(docId)
+//         .delete()
+//         .then(r => {
+//           resolve(r);
+//         })
+//         .catch(e => {
+//           reject(e);
+//         });
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// }
+
 export function removeDocumentFromCollection(collection, docId) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(async (resolve, reject) => {
     try {
-      db.collection(collection)
-        .doc(docId)
-        .delete()
-        .then(r => {
-          resolve(r);
-        })
-        .catch(e => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
+      const docIdStr = String(docId);
+      // 1) спроба видалити за реальним id документа
+      const docRef = db.collection(collection).doc(docIdStr);
+      const snap = await docRef.get();
+      if (snap && snap.exists) {
+        await docRef.delete();
+        console.log(`Документ ${docIdStr} видалено з ${collection}.`);
+        return resolve(true);
+      }
+
+      // 2) шукаємо по полю idPost
+      let query = await db
+        .collection(collection)
+        .where('idPost', '==', docIdStr)
+        .get();
+      if (!query.empty) {
+        // видаляємо всі знайдені документи
+        const batch = db.batch();
+        query.docs.forEach(d =>
+          batch.delete(db.collection(collection).doc(d.id))
+        );
+        await batch.commit();
+        console.log(`Документи з idPost=${docIdStr} видалено з ${collection}.`);
+        return resolve(true);
+      }
+
+      // 3) шукаємо по полю id
+      query = await db.collection(collection).where('id', '==', docIdStr).get();
+      if (!query.empty) {
+        const batch = db.batch();
+        query.docs.forEach(d =>
+          batch.delete(db.collection(collection).doc(d.id))
+        );
+        await batch.commit();
+        console.log(`Документи з id=${docIdStr} видалено з ${collection}.`);
+        return resolve(true);
+      }
+
+      console.warn(
+        `Не знайдено документ для видалення: ${docIdStr} у ${collection}`
+      );
+      return resolve(false);
+    } catch (err) {
+      console.error('Помилка видалення документа:', err);
+      return reject(err);
     }
   });
 }
 
-export function uploadFileToStorage(file, id, postInfo) {
-  return new Promise(function (resolve, reject) {
-    storage
-      .ref(`${id}`)
-      .put(file)
-      .then(res => {
-        storage
-          .ref()
-          .child(id)
-          .getDownloadURL()
-          .then(r => {
-            updateFieldInDocumentInCollection(
-              `${postInfo.type}`,
-              id,
-              'image',
-              r
-            );
-            console.log('updateUrl');
-          })
-          .catch(er => {
-            alert(er);
-          });
-        resolve(res);
-      })
-      .catch(e => {
-        reject(e);
-      });
+// export function uploadFileToStorage(file, id, postInfo) {
+//   return new Promise(function (resolve, reject) {
+//     storage
+//       .ref(`${id}`)
+//       .put(file)
+//       .then(res => {
+//         storage
+//           .ref()
+//           .child(id)
+//           .getDownloadURL()
+//           .then(r => {
+//             updateFieldInDocumentInCollection(
+//               `${postInfo.type}`,
+//               id,
+//               'image',
+//               r
+//             );
+//             console.log('updateUrl');
+//           })
+//           .catch(er => {
+//             alert(er);
+//           });
+//         resolve(res);
+//       })
+//       .catch(e => {
+//         reject(e);
+//       });
+//   });
+// }
+
+export function uploadFileToStorage(file, id, postInfo = {}) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      if (!file) return reject(new Error('No file provided'));
+      // Визначаємо шлях у сховищі. Якщо потрібна інша структура — передайте postInfo.path
+      const storagePath =
+        postInfo.path ||
+        (postInfo.type === 'lawyers'
+          ? `certificates/certificate_${id}`
+          : `${postInfo.type ?? 'files'}/${id}`);
+
+      const storageRefObj = ref(storage, storagePath);
+
+      // Завантажуємо файл (modular API)
+      await uploadBytes(storageRefObj, file);
+
+      // Отримуємо URL
+      const downloadUrl = await getDownloadURL(storageRefObj);
+
+      // Визначаємо колекцію та поле для оновлення
+      const collection = postInfo.type || 'posts';
+      // Якщо передано targetField — оновлюємо його, інакше для 'lawyers' оновлюємо certificate.fileUrl, для інших — image
+      const targetField =
+        postInfo.targetField ||
+        (collection === 'lawyers' ? 'certificate.fileUrl' : 'image');
+
+      // Підтримуємо оновлення вкладеного поля через точкову нотацію
+      if (typeof updateFieldInDocumentInCollection === 'function') {
+        await updateFieldInDocumentInCollection(
+          collection,
+          id,
+          targetField,
+          downloadUrl
+        );
+      } else {
+        // fallback: використаємо updateDocumentInCollection для простого поля або вкладеного (якщо updateDocumentInCollection підтримує dot-notation)
+        const payload = {};
+        payload[targetField] = downloadUrl;
+        await updateDocumentInCollection(collection, payload, id);
+      }
+
+      console.log(
+        `File uploaded to ${storagePath} and updated ${collection}.${targetField}`
+      );
+      resolve({ url: downloadUrl });
+    } catch (err) {
+      console.error('uploadFileToStorage error:', err);
+      reject(err);
+    }
   });
 }
 

@@ -319,7 +319,7 @@ export const LawyersRequest = ({ data, lawyer }) => {
     : { introText: [], listItems: [] };
 
   const lawyerPIB = lawyer
-    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fathersName}`.trim()
+    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fatherName}`.trim()
     : 'СТРОГИЙ ВАЛЕРІЙ ФЕДОРОВИЧ';
   const lawyerApplication = lawyer ? lawyer.application : 'В.Ф.Строгий';
   const lawyerAddress = lawyer

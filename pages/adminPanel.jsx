@@ -197,6 +197,13 @@ export default function AdminPanel() {
               >
                 Адвокат
               </div>
+              {/* <button
+                name="lawyer"
+                className={styles.body__item__button}
+                onClick={e => handleClick(e, 'адвоката')}
+              >
+                +
+              </button> */}
             </div>
           </div>
           <button className={styles.logout} onClick={handleSignOut}>

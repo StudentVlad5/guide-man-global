@@ -130,7 +130,7 @@ export const Agreement = ({ data, lawyer }) => {
   };
 
   const lawyerPIB = lawyer
-    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fathersName}`.trim()
+    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fatherName}`.trim()
     : 'Строгому Валерію Федоровичу';
   const lawyerCertificate = lawyer
     ? `№${lawyer.certificate?.number} від ${lawyer.certificate?.date} р.`
