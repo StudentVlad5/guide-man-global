@@ -59,14 +59,36 @@ export default async function handler(req, res) {
         pdfFiles.push({ name: 'file.pdf', url: requesterFile.url });
       }
 
-      const certificatePath = path.join(
-        process.cwd(),
-        'public',
-        'images',
-        'certificate.pdf'
-      );
-      if (fs.existsSync(certificatePath)) {
-        pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
+      // const certificatePath = path.join(
+      //   process.cwd(),
+      //   'public',
+      //   'images',
+      //   'certificate.pdf'
+      // );
+      // if (fs.existsSync(certificatePath)) {
+      //   pdfFiles.push({ name: 'certificate.pdf', path: certificatePath });
+      // }
+
+      try {
+        const lawyers = await getCollectionWhereKeyValue(
+          'lawyers',
+          'status',
+          'active'
+        );
+
+        const activeLawyer = lawyers && lawyers.length > 0 ? lawyers[0] : null;
+
+        if (activeLawyer && activeLawyer.certificate?.fileUrl) {
+          pdfFiles.push({
+            name: 'certificate.pdf',
+            url: activeLawyer.certificate?.fileUrl,
+          });
+          console.log(`Додано сертифікат адвоката: ${activeLawyer.surname}`);
+        } else {
+          console.warn('Сертифікат адвоката не знайдено або URL відсутній.');
+        }
+      } catch (e) {
+        console.error('Помилка отримання даних адвоката для сертифікату:', e);
       }
     }
 

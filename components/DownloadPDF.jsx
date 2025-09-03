@@ -319,7 +319,7 @@ export const LawyersRequest = ({ data, lawyer }) => {
     : { introText: [], listItems: [] };
 
   const lawyerPIB = lawyer
-    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fathersName}`.trim()
+    ? `${lawyer.surname} ${lawyer.name} ${lawyer.fatherName}`.trim()
     : 'СТРОГИЙ ВАЛЕРІЙ ФЕДОРОВИЧ';
   const lawyerApplication = lawyer ? lawyer.application : 'В.Ф.Строгий';
   const lawyerAddress = lawyer
@@ -422,8 +422,8 @@ export const LawyersRequest = ({ data, lawyer }) => {
           <Text style={styles.textNoIndent}>
             <Text style={styles.bold}>
               Відповідь на даний запит надіслати електронною поштою на адресу:{' '}
-              <Text style={styles.italic}>info.ggs.ua@gmail.com</Text> в
-              п’ятиденний термін з дня отримання даного запиту.
+              <Text style={styles.italic}>{lawyerEmail}</Text> в п’ятиденний
+              термін з дня отримання даного запиту.
             </Text>
           </Text>
         </View>
