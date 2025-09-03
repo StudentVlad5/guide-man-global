@@ -427,7 +427,11 @@ export default function AdminLawyer() {
 
       {isModal && editLawyer && (
         <Modal
-          title={'Редактировать данные адвоката'}
+          title={
+            func === 'updateInfo'
+              ? 'Редактировать данные адвоката'
+              : 'Добавить нового адвоката'
+          }
           handleModal={handleModal}
           form={
             <form className={st.form}>

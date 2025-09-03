@@ -422,8 +422,8 @@ export const LawyersRequest = ({ data, lawyer }) => {
           <Text style={styles.textNoIndent}>
             <Text style={styles.bold}>
               Відповідь на даний запит надіслати електронною поштою на адресу:{' '}
-              <Text style={styles.italic}>info.ggs.ua@gmail.com</Text> в
-              п’ятиденний термін з дня отримання даного запиту.
+              <Text style={styles.italic}>{lawyerEmail}</Text> в п’ятиденний
+              термін з дня отримання даного запиту.
             </Text>
           </Text>
         </View>
