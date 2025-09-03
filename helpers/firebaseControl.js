@@ -435,9 +435,9 @@ export function createNewPost(postInfo, file, type, serviceType) {
             path: postInfo.path.length > 0 ? postInfo.path : id,
             type: postInfo.type,
             requestType: {
-              ua: postInfo.serviceType.ua || '',
-              ru: postInfo.serviceType.ru || '',
-              en: postInfo.serviceType.en || '',
+              ua: serviceType.ua || '',
+              ru: serviceType.ru || '',
+              en: serviceType.en || '',
             },
             recipient: postInfo.recipient || '',
             dateCreating: format(new Date(), 'yyyy-MM-dd HH:mm'),
