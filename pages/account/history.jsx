@@ -155,11 +155,13 @@ export default function HistoryPage() {
         return;
       }
 
+      const amount = request?.price || "2000";
+
       const paymentResponse = await fetch('/api/liqpay/liqpay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: '2000',
+          amount: amount,
           currency: 'UAH',
           description: title || 'Payment',
           order_id: orderPayId,
