@@ -46,10 +46,6 @@ export async function updateOrderPDF(fileUrl, formData, lawyerData) {
 
     // Отримуємо доступ до форми у PDF
     const form = pdfDoc.getForm();
-    console.log(
-      'Form fields:',
-      form.getFields().map(f => f.getName())
-    );
 
     // Функція для встановлення тексту у поле з використанням кастомного шрифту
     const setTextField = (fieldName, text, alignment = 'center') => {
@@ -77,10 +73,57 @@ export async function updateOrderPDF(fileUrl, formData, lawyerData) {
         .filter(i => i)
         .join(' ');
 
-    // const date = new Date(formData.dateCreating);
-    const [day, month, year] = formData.dateCreating.split('.'); // Розбиваємо дату
-    const currentYear = String(year.slice(-2));
-    const birthday = String(formData.birthday.replace(/-/g, '.'));
+    // Отримати [day, month, year] з різних форматів або повернути сьогоднішню дату
+    const getDMY = dateValue => {
+      if (!dateValue) {
+        const d = new Date();
+        return [
+          String(d.getDate()).padStart(2, '0'),
+          String(d.getMonth() + 1).padStart(2, '0'),
+          String(d.getFullYear()),
+        ];
+      }
+      if (typeof dateValue === 'string') {
+        if (dateValue.includes('.')) {
+          const parts = dateValue.split('.');
+          if (parts.length === 3) return parts;
+        }
+        if (dateValue.includes('-')) {
+          const parts = dateValue.split('-');
+          if (parts.length >= 3) return [parts[2], parts[1], parts[0]];
+        }
+        const parsed = new Date(dateValue);
+        if (!Number.isNaN(parsed.getTime())) {
+          return [
+            String(parsed.getDate()).padStart(2, '0'),
+            String(parsed.getMonth() + 1).padStart(2, '0'),
+            String(parsed.getFullYear()),
+          ];
+        }
+      } else if (
+        dateValue instanceof Date &&
+        !Number.isNaN(dateValue.getTime())
+      ) {
+        return [
+          String(dateValue.getDate()).padStart(2, '0'),
+          String(dateValue.getMonth() + 1).padStart(2, '0'),
+          String(dateValue.getFullYear()),
+        ];
+      }
+      // fallback
+      const d = new Date();
+      return [
+        String(d.getDate()).padStart(2, '0'),
+        String(d.getMonth() + 1).padStart(2, '0'),
+        String(d.getFullYear()),
+      ];
+    };
+
+    const [day, month, year] = getDMY(formData?.dateCreating);
+    const currentYear = String((year || '').slice(-2));
+
+    const birthdayRaw = formData?.birthday ?? '';
+    const birthday = birthdayRaw ? String(birthdayRaw).replace(/-/g, '.') : '';
 
     const formatCertificateMonths = dateString => {
       if (!dateString) return '';
@@ -98,14 +141,15 @@ export async function updateOrderPDF(fileUrl, formData, lawyerData) {
         'листопада',
         'грудня',
       ];
-      const parts = dateString.split('.');
-      if (parts.length !== 3) return dateString; // Повертаємо як є, якщо формат невірний
+      const parts = String(dateString).split('.');
+      if (parts.length !== 3) return dateString;
       const monthIndex = parseInt(parts[1], 10) - 1;
-
-      return `${months[monthIndex]}`;
+      if (monthIndex < 0 || monthIndex > 11) return dateString;
+      return months[monthIndex];
     };
+
     const [dayCertificate, monthCertificate, yearCertificate] =
-      lawyerData?.certificate?.date.dateCreating.split('.') || [];
+      getDMY(lawyerData?.certificate?.date) || [];
 
     function setTextFieldWithWrap(fieldNames, text, maxLengthPerField) {
       let textParts = [];
@@ -162,15 +206,15 @@ export async function updateOrderPDF(fileUrl, formData, lawyerData) {
     setTextField('current[month]', month);
     setTextField('current[year]', currentYear);
 
-    const pages = pdfDoc.getPages();
-    const firstPage = pages[0];
-    firstPage.drawText('S5', {
-      x: 400,
-      y: 75,
-      size: 12,
-      font: customFont,
-      color: rgb(1, 1, 1),
-    });
+    // const pages = pdfDoc.getPages();
+    // const firstPage = pages[0];
+    // firstPage.drawText('', {
+    //   x: 400,
+    //   y: 75,
+    //   size: 12,
+    //   font: customFont,
+    //   color: rgb(1, 1, 1),
+    // });
 
     form.flatten(); // Фіксуємо заповнені поля
 
