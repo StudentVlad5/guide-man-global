@@ -799,7 +799,9 @@ export const InformationForm = ({
         onChange={e => handleChangeModal('path', e.target.value)}
       />
 
-      <input
+        {(type === 'requests' || type === 'request') &&
+        (func === 'addItem' || func === 'updateInfo') && (
+        <input
         className={styles.input}
         type="number"
         placeholder="цена в UAH (например: 2000)"
@@ -814,6 +816,7 @@ export const InformationForm = ({
         min="0"
         step="1"
       />
+        )}
 
       {(type === 'requests' || type === 'request') &&
         (func === 'addItem' || func === 'updateInfo') && (

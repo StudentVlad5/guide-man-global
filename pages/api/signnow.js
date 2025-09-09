@@ -129,25 +129,64 @@ export default async function handler(req, res) {
 
     const fields = [];
     for (let i = 0; i < totalPages; i++) {
-      // Підписувач 2 підписує всі сторінки
-      fields.push({
-        x: 390,
-        y: 750,
-        page_number: i,
-        role: 'Signer 2',
-        required: true,
-        type: 'signature',
-        height: 20,
-        width: 100,
-      });
-
-      // Підписувач 1 підписує тільки сторінки, які НЕ належать до останнього документа
-      if (i < signer1LastPage) {
+      // Сторінка 1 (індекс 0): лише Підписувач 1
+      if (i === 0) {
         fields.push({
-          x: 40,
-          y: 790,
+          x: 390,
+          y: 550,
           page_number: i,
           role: 'Signer 1',
+          required: true,
+          type: 'signature',
+          height: 20,
+          width: 100,
+        });
+      }
+      // Сторінка 2 (індекс 1): ніхто
+      // Сторінка 3 (індекс 2): обидва
+      if (i === 2) {
+        fields.push({
+          x: 120,
+          y: 500,
+          page_number: i,
+          role: 'Signer 1',
+          required: true,
+          type: 'signature',
+          height: 20,
+          width: 100,
+        });
+        fields.push({
+          x: 390,
+          y: 500,
+          page_number: i,
+          role: 'Signer 2',
+          required: true,
+          type: 'signature',
+          height: 20,
+          width: 100,
+        });
+      }
+      // Сторінка 4 (індекс 3): ніхто
+      // Сторінка 5 (індекс 4): лише Підписувач 2
+      if (i === 4) {
+        fields.push({
+          x: 390,
+          y: 530,
+          page_number: i,
+          role: 'Signer 2',
+          required: true,
+          type: 'signature',
+          height: 20,
+          width: 100,
+        });
+      }
+      // Сторінка 6 (індекс 5): лише Підписувач 2
+      if (i === 5) {
+        fields.push({
+          x: 390,
+          y: 745,
+          page_number: i,
+          role: 'Signer 2',
           required: true,
           type: 'signature',
           height: 20,
